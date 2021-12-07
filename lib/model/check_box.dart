@@ -1,22 +1,21 @@
-
-
-
 import 'package:flutter/widgets.dart';
 
-class CheckBoxModal{
-
+class CheckBoxModal {
   String title;
-  bool value ;
+  bool value;
 
-  CheckBoxModal({required this.title,this.value = false});
-
+  CheckBoxModal({required this.title, this.value = false});
 }
 
-class WidgetCheckBoxModel{
-
+class WidgetCheckBoxModel {
   String title;
-  bool value ;
+  String plot;
+  String trial;
+  bool value;
 
-  WidgetCheckBoxModel({required this.title,this.value = false});
-
+  WidgetCheckBoxModel(
+      {required this.title,
+      required this.plot,
+      required this.trial,
+      this.value = false});
 }

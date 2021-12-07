@@ -18,8 +18,6 @@ import 'package:der/model/check_box.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-List<Trial> allTrials = [];
-
 int i = 0;
 int j = 0;
 
@@ -34,11 +32,14 @@ class DownloadScreen extends StatefulWidget {
 }
 
 class _DownloadScreen extends State<DownloadScreen> {
-  late Box _TrialBox;
+  Box? _TrialBox;
   void initState() {
     super.initState();
-    Hive.registerAdapter(OnSiteTrialAdapter());
-    Hive.registerAdapter(OnSitePlotAdapter());
+    if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId))
+      Hive.registerAdapter(OnSiteTrialAdapter());
+    if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId))
+      Hive.registerAdapter(OnSitePlotAdapter());
+
     _openBox();
     dowloadTrial();
 
@@ -98,7 +99,7 @@ class _DownloadScreen extends State<DownloadScreen> {
       });
       OnSiteTrial ost = OnSiteTrial(e.trialId, e.trialId, e.trialActive,
           e.trialStatus, DateTime(2021), DateTime(2021), onSitePlots);
-      await _TrialBox.put(e.trialId, ost);
+      await _TrialBox?.put(e.trialId, ost);
     });
     // _TrialBox.values.forEach((element) {
     //   OnSiteTrial t = element;
@@ -110,8 +111,6 @@ class _DownloadScreen extends State<DownloadScreen> {
     //     print(element.barcode);
     //   });
     // });
-
-    allTrials = trials;
   }
 
   void _openBox() async {
@@ -134,7 +133,7 @@ class _DownloadScreen extends State<DownloadScreen> {
   _LoadDataScreen() {}
 
   Future _loadData() async {
-    await new Future.delayed(new Duration(seconds: 0));
+    await new Future.delayed(new Duration(seconds: 1));
 
     //print("load more");
     // update data and loading status
@@ -143,11 +142,23 @@ class _DownloadScreen extends State<DownloadScreen> {
 
       experimentItems!.addAll([
         WidgetCheckBoxModel(
-            title: '${_TrialBox.getAt(i).onSitePlots[j].plotId.toString()}')
+            //title: '${_TrialBox?.getAt(i).onSitePlots[j].plotId.toString()}')
+            title: '$page',
+            plot: '${_TrialBox?.getAt(i).onSitePlots[j].plotId}',
+            trial: '${_TrialBox?.getAt(i).trialId}')
       ]);
 
       page++;
-
+      if (_TrialBox!.length > i) {
+        if (_TrialBox?.getAt(i).onSitePlots.length > j + 1) {
+          j++;
+          // print("MOVE Row");
+        } else {
+          j = 0;
+          i++;
+        }
+      }
+      //print("page : $page    index : $index      i: $i   j:$j   ");
       //experimentItems!.removeAt(experimentItems!.length-1);
       //print('push');
 
@@ -214,8 +225,16 @@ class _DownloadScreen extends State<DownloadScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Text(
+                  //   userName,
+                  //   style: TextStyle(
+                  //       fontSize: 15,
+                  //       color: Colors.grey[800],
+                  //       height: 1.5,
+                  //       letterSpacing: .7),
+                  // ),
                   Text(
-                    userName,
+                    "Plot No. = " + experimentItems![index].title,
                     style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[800],
@@ -223,29 +242,23 @@ class _DownloadScreen extends State<DownloadScreen> {
                         letterSpacing: .7),
                   ),
                   Text(
-                    "Title = " + experimentItems![index].title,
+                    //trial ID
+                    "plot Id :"
+                    '${experimentItems![index].plot}',
                     style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[800],
                         height: 1.5,
                         letterSpacing: .7),
                   ),
-                  // Text(
-                  //   allTrials[index].plots.,
-                  //   style: TextStyle(
-                  //       fontSize: 15,
-                  //       color: Colors.grey[800],
-                  //       height: 1.5,
-                  //       letterSpacing: .7),
-                  // ),
-                  // Text(
-                  //   allTrials[index].aliasName.toString(),
-                  //   style: TextStyle(
-                  //       fontSize: 15,
-                  //       color: Colors.grey[800],
-                  //       height: 1.5,
-                  //       letterSpacing: .7),
-                  // ),
+                  Text(
+                    experimentItems![index].trial,
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey[800],
+                        height: 1.5,
+                        letterSpacing: .7),
+                  ),
                 ],
               ),
             ],
@@ -384,45 +397,25 @@ class _DownloadScreen extends State<DownloadScreen> {
                           if (!isLoading &&
                               scrollInfo.metrics.pixels ==
                                   scrollInfo.metrics.maxScrollExtent) {
-                            _loadData();
-
-                            //start loading data
-
-                            int m = 0;
-                            int n = 0;
-
-                            // for (m = 0; m < _TrialBox.length; m++) {
-                            //   print("Trail ID = " +
-                            //       _TrialBox.getAt(m).trialId.toString());
-                            //   for (n = 0;
-                            //       n < _TrialBox.getAt(m).onSitePlots.length;
-                            //       n++) {
-                            //     print("Plot ID = " +
-                            //         _TrialBox.getAt(m)
-                            //             .onSitePlots[n]
-                            //             .plotId
-                            //             .toString());
+                            if (i < _TrialBox!.length) {
+                              if (j < _TrialBox!.getAt(i).onSitePlots.length) {
+                                _loadData();
+                                setState(() {
+                                  isLoading = true;
+                                });
+                              }
+                            }
+                            // if ((_TrialBox!.length) > i) {
+                            //   if (_TrialBox?.getAt(i).onSitePlots.length > j) {
+                            //     j++;
+                            //   } else {
+                            //     if ((_TrialBox!.length) > i + 1) {
+                            //       i++;
+                            //       j = 0;
+                            //     }
                             //   }
-                            //   print("/////////////");
                             // }
 
-                            setState(() {
-                              isLoading = true;
-                            });
-
-                            //print("I = $i");
-                            //print("J = $j");
-                            if (_TrialBox.getAt(i).onSitePlots.length ==
-                                j + 1) {
-                              i++;
-                              j = 0;
-
-                              print("MOVE COLUMN");
-                            } else {
-                              j++;
-                            }
-
-                            page++;
                           }
                           return isLoading;
                         },
@@ -446,9 +439,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                                   makeExperiment(
                                     //userImage: 'assets/images/corn.png',
                                     //experimentImage: 'assets/images/corn.png',
-                                    userName: "= " +
-                                        _TrialBox.getAt(i).trialId.toString(),
-                                    //experimentItems![index].title,
+                                    userName: experimentItems![index].title,
                                     index: index,
                                   ),
                                 ],
@@ -527,3 +518,5 @@ getTokenFromSF() async {
   String tokenValue = prefs.getString('token').toString();
   return tokenValue;
 }
+
+getUserName() {}
