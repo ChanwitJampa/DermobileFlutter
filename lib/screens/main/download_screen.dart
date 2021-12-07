@@ -20,6 +20,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 List<Trial> allTrials = [];
 
+int i = 0;
+int j = 0;
+
 class DownloadScreen extends StatefulWidget {
   @override
   _DownloadScreen createState() => _DownloadScreen();
@@ -119,7 +122,7 @@ class _DownloadScreen extends State<DownloadScreen> {
   }
 
   int page = 1;
-  int i = 1;
+
   bool isLoading = false;
 
   Widget makeMe() {
@@ -131,29 +134,19 @@ class _DownloadScreen extends State<DownloadScreen> {
   _LoadDataScreen() {}
 
   Future _loadData() async {
-    await new Future.delayed(new Duration(seconds: 2));
+    await new Future.delayed(new Duration(seconds: 0));
 
     //print("load more");
     // update data and loading status
     setState(() {
       //Rest Service
 
-      OnSiteTrial t = _TrialBox.getAt(page - 1);
-      print("trial :" +
-          t.trialId.toString() +
-          "\n     number of plot : " +
-          t.onSitePlots.length.toString());
-      t.onSitePlots.forEach((e) {
-        print("         plots: " + e.plotId.toString());
-        experimentItems!.addAll([
-          WidgetCheckBoxModel(
-            //title: '${allTrials[page - 1].trialId}',
+      experimentItems!.addAll([
+        WidgetCheckBoxModel(
+            title: '${_TrialBox.getAt(i).onSitePlots[j].plotId.toString()}')
+      ]);
 
-            title: 'Plot NO. = ${[i]}\nPlotId is: ${e.plotId}',
-          )
-        ]);
-        i++;
-      });
+      page++;
 
       //experimentItems!.removeAt(experimentItems!.length-1);
       //print('push');
@@ -230,7 +223,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                         letterSpacing: .7),
                   ),
                   Text(
-                    _TrialBox.getAt(index).trialId,
+                    "Title = " + experimentItems![index].title,
                     style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[800],
@@ -391,14 +384,45 @@ class _DownloadScreen extends State<DownloadScreen> {
                           if (!isLoading &&
                               scrollInfo.metrics.pixels ==
                                   scrollInfo.metrics.maxScrollExtent) {
-                            if (allTrials.length >= page) {
-                              _loadData();
-                              // start loading data
-                              setState(() {
-                                isLoading = true;
-                              });
-                              page++;
+                            _loadData();
+
+                            //start loading data
+
+                            int m = 0;
+                            int n = 0;
+
+                            // for (m = 0; m < _TrialBox.length; m++) {
+                            //   print("Trail ID = " +
+                            //       _TrialBox.getAt(m).trialId.toString());
+                            //   for (n = 0;
+                            //       n < _TrialBox.getAt(m).onSitePlots.length;
+                            //       n++) {
+                            //     print("Plot ID = " +
+                            //         _TrialBox.getAt(m)
+                            //             .onSitePlots[n]
+                            //             .plotId
+                            //             .toString());
+                            //   }
+                            //   print("/////////////");
+                            // }
+
+                            setState(() {
+                              isLoading = true;
+                            });
+
+                            //print("I = $i");
+                            //print("J = $j");
+                            if (_TrialBox.getAt(i).onSitePlots.length ==
+                                j + 1) {
+                              i++;
+                              j = 0;
+
+                              print("MOVE COLUMN");
+                            } else {
+                              j++;
                             }
+
+                            page++;
                           }
                           return isLoading;
                         },
@@ -422,7 +446,9 @@ class _DownloadScreen extends State<DownloadScreen> {
                                   makeExperiment(
                                     //userImage: 'assets/images/corn.png',
                                     //experimentImage: 'assets/images/corn.png',
-                                    userName: experimentItems![index].title,
+                                    userName: "= " +
+                                        _TrialBox.getAt(i).trialId.toString(),
+                                    //experimentItems![index].title,
                                     index: index,
                                   ),
                                 ],
@@ -481,9 +507,9 @@ class _DownloadScreen extends State<DownloadScreen> {
     await new Future.delayed(new Duration(seconds: 2));
 
     setState(() {
-      for (int i = 0; i < experimentItems!.length; i++) {
-        if (experimentItems![i].value) {
-          experimentItems!.removeAt(i--);
+      for (int k = 0; k < experimentItems!.length; k++) {
+        if (experimentItems![k].value) {
+          experimentItems!.removeAt(k--);
         }
       }
     });

@@ -168,7 +168,7 @@ class _SignupScreen extends State<SignupScreen> {
     print("-----------------------get token---------------------");
 
     loginService dc = loginService();
-    var res = await dc.attemptLogIn(username.toString(), password.toString());
+    var res = await dc.attemptLogIn("Test", "Test");
     if (res.statusCode != 200) {
       print("fails to  join");
       return false;
