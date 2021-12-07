@@ -21,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 int i = 0;
 int j = 0;
 int page = 1;
+Box? _TrialBox;
 
 class DownloadScreen extends StatefulWidget {
   @override
@@ -33,18 +34,20 @@ class DownloadScreen extends StatefulWidget {
 }
 
 class _DownloadScreen extends State<DownloadScreen> {
-  Box? _TrialBox;
   void initState() {
     super.initState();
-    if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId))
+    if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
       Hive.registerAdapter(OnSiteTrialAdapter());
-    if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId))
+    }
+    if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
       Hive.registerAdapter(OnSitePlotAdapter());
+    }
 
-    _openBox();
-    dowloadTrial();
-
-    print("-----now is dowload sceen---- #initState");
+    if (_TrialBox?.length == null) {
+      _openBox();
+      dowloadTrial();
+    }
+    //print("-----now is dowload sceen---- #initState");
   }
 
   dowloadTrial() async {
@@ -138,7 +141,7 @@ class _DownloadScreen extends State<DownloadScreen> {
     // update data and loading status
     setState(() {
       //Rest Service
-      print("page : $page    index : $index      i: $i   j:$j   ");
+      //print("page : $page    index : $index      i: $i   j:$j   ");
 
       experimentItems!.addAll([
         WidgetCheckBoxModel(
@@ -398,7 +401,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                               scrollInfo.metrics.pixels ==
                                   scrollInfo.metrics.maxScrollExtent) {
                             if (i < _TrialBox!.length) {
-                              print(">>${i < _TrialBox!.length}<<");
+                              //print(">>${i < _TrialBox!.length}<<");
                               if (j < _TrialBox!.getAt(i).onSitePlots.length) {
                                 _loadData();
                                 setState(() {
