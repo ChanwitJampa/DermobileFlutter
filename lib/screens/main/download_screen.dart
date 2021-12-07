@@ -1,11 +1,26 @@
+//use to dowload data from http
+import 'package:http/http.dart' as Http;
+import 'dart:convert';
+import 'package:der/entities/objectlist.dart';
+import 'package:der/entities/trial.dart';
 
+//hive
+import 'package:hive/hive.dart';
+import 'package:der/entities/site/trial.dart';
+import 'package:der/entities/site/plot.dart';
+import 'package:der/entities/site/enum.dart';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:der/main.dart';
 import 'package:flutter/material.dart';
 import 'package:der/model/check_box.dart';
 import 'package:der/screens/plot/plot_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class DownloadScreen extends StatefulWidget{
+List<Trial> allTrials = [];
+
+class DownloadScreen extends StatefulWidget {
   @override
   _DownloadScreen createState() => _DownloadScreen();
 
@@ -15,128 +30,238 @@ class DownloadScreen extends StatefulWidget{
 
 }
 
-class _DownloadScreen extends State<DownloadScreen>{
+class _DownloadScreen extends State<DownloadScreen> {
+  late Box _TrialBox;
+  void initState() {
+    super.initState();
+    Hive.registerAdapter(OnSiteTrialAdapter());
+    Hive.registerAdapter(OnSitePlotAdapter());
+    _openBox();
+    dowloadTrial();
+
+    print("-----now is dowload sceen---- #initState");
+  }
+
+  dowloadTrial() async {
+    var token = await getTokenFromSF();
+    print("token :" + token.toString());
+    var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
+    var response = await Http.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    var json = jsonDecode(response.body);
+
+    print(response.body);
+
+    List<Trial> trials = ObjectList<Trial>.fromJson(
+        jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
+
+    print("Trial length :");
+    print(trials.length);
+
+    trials.forEach((e) async {
+      List<OnSitePlot> onSitePlots = [];
+      e.plots.forEach((pt) {
+        OnSitePlot osp = OnSitePlot(
+            pt.plotId,
+            pt.barcode,
+            pt.pltId,
+            pt.repNo,
+            pt.abbrc,
+            pt.entno,
+            pt.notet,
+            pt.plotImgPath,
+            pt.plotImgPathS,
+            pt.plotImgBoxPath,
+            pt.plotImgBoxPathS,
+            pt.uploadDate,
+            pt.eartnA,
+            pt.dlernA,
+            pt.dlerpA,
+            pt.drwapA,
+            pt.eartnM,
+            pt.dlernM,
+            pt.dlerpM,
+            pt.drwapM,
+            pt.approveDate,
+            pt.plotProgress,
+            pt.plotStatus,
+            pt.plotActive);
+        onSitePlots.add(osp);
+      });
+      OnSiteTrial ost = OnSiteTrial(e.trialId, e.trialId, e.trialActive,
+          e.trialStatus, DateTime(2021), DateTime(2021), onSitePlots);
+      await _TrialBox.put(e.trialId, ost);
+    });
+    // _TrialBox.values.forEach((element) {
+    //   OnSiteTrial t = element;
+
+    //   print(">${t.trialId}");
+
+    //   t.onSitePlots.forEach((element) {
+    //     print(element.plotId);
+    //     print(element.barcode);
+    //   });
+    // });
+
+    allTrials = trials;
+  }
+
+  void _openBox() async {
+    var dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    // print('[Debug] Hive path: ${dir.path}');
+    _TrialBox = await Hive.openBox('BoxTrial');
+  }
 
   int page = 1;
-
+  int i = 1;
   bool isLoading = false;
 
   Widget makeMe() {
     return Column();
   }
 
+  static List<WidgetCheckBoxModel>? experimentItems = [];
 
-  static List<WidgetCheckBoxModel>? experimentItems = []  ;
+  _LoadDataScreen() {}
 
-  _LoadDataScreen(){
-
-  }
-
-  Future _loadData() async{
-
+  Future _loadData() async {
     await new Future.delayed(new Duration(seconds: 2));
 
     //print("load more");
     // update data and loading status
     setState(() {
       //Rest Service
-      experimentItems!.addAll( [WidgetCheckBoxModel(title:'$page')]);
-      page++;
+
+      OnSiteTrial t = _TrialBox.getAt(page - 1);
+      print("trial :" +
+          t.trialId.toString() +
+          "\n     number of plot : " +
+          t.onSitePlots.length.toString());
+      t.onSitePlots.forEach((e) {
+        print("         plots: " + e.plotId.toString());
+        experimentItems!.addAll([
+          WidgetCheckBoxModel(
+            //title: '${allTrials[page - 1].trialId}',
+
+            title: 'Plot NO. = ${[i]}\nPlotId is: ${e.plotId}',
+          )
+        ]);
+        i++;
+      });
+
       //experimentItems!.removeAt(experimentItems!.length-1);
       //print('push');
+
       isLoading = false;
     });
   }
 
   late List<bool> _isChecked;
 
-  Widget makeExperiment({userImage="assets/images/unknown_user.png", experimentImage="assets/images/corn.png", userName, index}) {
-
+  Widget makeExperiment(
+      {userImage = "assets/images/unknown_user.png",
+      experimentImage = "assets/images/corn.png",
+      userName,
+      index = 0}) {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          //borderRadius: BorderRadius.circular(100),
-                          image: DecorationImage(
-                              image: AssetImage(userImage),
-                              fit: BoxFit.cover
-                          )
-                      ),
-                    ),
-                  ],
-              ),
-
-
-              Container(
-                child: Checkbox(
-                    value: experimentItems![index].value,
-                    checkColor: Colors.grey[200],
-                    onChanged: (value) {
-
-                    setState(() {
-                      experimentItems![index].value = !experimentItems![index].value ;
-                    });
-                    }
-                ),
-              ),
-            ],
-
-          ),
-          Container(
-            height: 150,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-
-              children: <Widget> [
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
                 Container(
-                  height: 150,
-                  width: 150,
+                  height: 50,
+                  width: 50,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       //borderRadius: BorderRadius.circular(100),
                       image: DecorationImage(
-                          image: AssetImage(experimentImage),
-                          fit: BoxFit.cover
-                      )
-                  ),
+                          image: AssetImage(userImage), fit: BoxFit.cover)),
                 ),
-                SizedBox(width: 5,),
-
-               Column(
-
-                 crossAxisAlignment: CrossAxisAlignment.start,
-
-                 children: [
-                   Text(userName, style: TextStyle(fontSize: 15, color: Colors.grey[800], height: 1.5, letterSpacing: .7),),
-
-                   Text(experimentItems![index].title, style: TextStyle(fontSize: 15, color: Colors.grey[800], height: 1.5, letterSpacing: .7),),
-
-                   Text('tddest', style: TextStyle(fontSize: 15, color: Colors.grey[800], height: 1.5, letterSpacing: .7),),
-
-                   Text('tddest', style: TextStyle(fontSize: 15, color: Colors.grey[800], height: 1.5, letterSpacing: .7),),
-
-
-
-                 ],
-               ),
               ],
             ),
-
+            Container(
+              child: Checkbox(
+                  value: experimentItems![index].value,
+                  checkColor: Colors.grey[200],
+                  onChanged: (value) {
+                    setState(() {
+                      experimentItems![index].value =
+                          !experimentItems![index].value;
+                    });
+                  }),
+            ),
+          ],
+        ),
+        Container(
+          height: 150,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    //borderRadius: BorderRadius.circular(100),
+                    image: DecorationImage(
+                        image: AssetImage(experimentImage), fit: BoxFit.cover)),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    userName,
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey[800],
+                        height: 1.5,
+                        letterSpacing: .7),
+                  ),
+                  Text(
+                    _TrialBox.getAt(index).trialId,
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey[800],
+                        height: 1.5,
+                        letterSpacing: .7),
+                  ),
+                  // Text(
+                  //   allTrials[index].plots.,
+                  //   style: TextStyle(
+                  //       fontSize: 15,
+                  //       color: Colors.grey[800],
+                  //       height: 1.5,
+                  //       letterSpacing: .7),
+                  // ),
+                  // Text(
+                  //   allTrials[index].aliasName.toString(),
+                  //   style: TextStyle(
+                  //       fontSize: 15,
+                  //       color: Colors.grey[800],
+                  //       height: 1.5,
+                  //       letterSpacing: .7),
+                  // ),
+                ],
+              ),
+            ],
           ),
-
-        ],
+        ),
+      ],
     );
   }
+
 /*
   Widget loadNewData(){
     return Expanded(
@@ -179,22 +304,20 @@ class _DownloadScreen extends State<DownloadScreen>{
   }
 
  */
-  final allChecked = CheckBoxModal(title:'All Checked');
+  final allChecked = CheckBoxModal(title: 'All Checked');
 
-  int index = 0 ;
-
+  int index = 0;
 
   Future<void> _pullRefresh() async {
     //List<WordPair> freshWords = await WordDataSource().getFutureWords(delay: 2);
     setState(() {
-     print('pull');
+      print('pull');
     });
     // why use freshWords var? https://stackoverflow.com/a/52992836/2301224
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -206,22 +329,23 @@ class _DownloadScreen extends State<DownloadScreen>{
             padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 10),
             child: Row(
               children: <Widget>[
-                  Expanded(
-                      child: Container(
-                         decoration: BoxDecoration(
-                             borderRadius: BorderRadius.circular(50),
-                             color: Colors.grey[200]
-                         ),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.search, color: Colors.grey,),
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(color: Colors.grey),
-                            hintText: "Search",
-                          ),
-                        ),
-                      )
+                Expanded(
+                    child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.grey[200]),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.grey,
+                      ),
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(color: Colors.grey),
+                      hintText: "Search",
+                    ),
                   ),
+                )),
                 //SizedBox(width: 10,),
               ],
             ),
@@ -239,16 +363,20 @@ class _DownloadScreen extends State<DownloadScreen>{
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
-                        Text("Experiment", style: TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold, fontSize: 24 , letterSpacing: 1.2),),
+                        Text(
+                          "Experiment",
+                          style: TextStyle(
+                              color: Colors.grey[900],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                              letterSpacing: 1.2),
+                        ),
                         Container(
                           child: Checkbox(
                               value: allChecked.value,
                               checkColor: Colors.grey[200],
-                              onChanged: (value) => onAllClicked(allChecked)
-                          ),
+                              onChanged: (value) => onAllClicked(allChecked)),
                         ),
-
-
                       ],
                     ),
                     Container(
@@ -258,47 +386,50 @@ class _DownloadScreen extends State<DownloadScreen>{
                     //SizedBox(height: 20,),
                     Container(
                       height: 500,
-                      child:NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification scrollInfo)  {
-
-                            if (!isLoading && scrollInfo.metrics.pixels ==
-                                scrollInfo.metrics.maxScrollExtent) {
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification scrollInfo) {
+                          if (!isLoading &&
+                              scrollInfo.metrics.pixels ==
+                                  scrollInfo.metrics.maxScrollExtent) {
+                            if (allTrials.length >= page) {
                               _loadData();
                               // start loading data
                               setState(() {
                                 isLoading = true;
                               });
+                              page++;
                             }
-                            return isLoading;
-                          },
-                          child: RefreshIndicator(
-                            onRefresh: _pullRefresh,
-                            child: ListView.separated(
-                              separatorBuilder: (context, index) => Divider(
-                                color: Colors.black,
-                              ),
-                              itemCount: experimentItems!.length,
-                              itemBuilder: (context, index) => Padding(
-                                padding: EdgeInsets.all(8.0),
-                                /*child: makeExperiment(
+                          }
+                          return isLoading;
+                        },
+                        child: RefreshIndicator(
+                          onRefresh: _pullRefresh,
+                          child: ListView.separated(
+                            separatorBuilder: (context, index) => Divider(
+                              color: Colors.black,
+                            ),
+                            itemCount: experimentItems!.length,
+                            itemBuilder: (context, index) => Padding(
+                              padding: EdgeInsets.all(8.0),
+                              /*child: makeExperiment(
                                 storyImage: 'assets/images/story/story-1.jpg',
                                 userImage: 'assets/images/corn.png',
                                 userName: 'Aatik Tasneem',
                                 index:index ),
                               ),*/
-                                child: Column(
-                                  children: [
-                                    makeExperiment(
-                                      //userImage: 'assets/images/corn.png',
-                                      //experimentImage: 'assets/images/corn.png',
-                                      userName: experimentItems![index].title,
-                                      index:index,
-                                    ),
-                                  ],
-                                ),
+                              child: Column(
+                                children: [
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
+                        ),
                       ),
                     ),
                   ],
@@ -316,20 +447,17 @@ class _DownloadScreen extends State<DownloadScreen>{
           ),
         ],
       ),
-      bottomNavigationBar:  ConvexAppBar(
+      bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,
         items: [
-
-          TabItem(icon: Icons.home,title: 'Home'),
-          TabItem(icon: Icons.download, title:'Download'),
-          TabItem(icon: Icons.qr_code, title:'Scan'),
-          TabItem(icon: Icons.art_track, title:'Experiment'),
-          TabItem(icon: Icons.bar_chart,title:'Report'),
-
+          TabItem(icon: Icons.home, title: 'Home'),
+          TabItem(icon: Icons.download, title: 'Download'),
+          TabItem(icon: Icons.qr_code, title: 'Scan'),
+          TabItem(icon: Icons.art_track, title: 'Experiment'),
+          TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 1,
         onTap: (int i) => Navigator.of(context).pushNamed('$i'),
-
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: onDownload,
@@ -339,39 +467,37 @@ class _DownloadScreen extends State<DownloadScreen>{
     );
   }
 
-  onAllClicked(CheckBoxModal item){
-    final newValue =  !item.value;
+  onAllClicked(CheckBoxModal item) {
+    final newValue = !item.value;
     setState(() {
-      allChecked.value = !allChecked.value ;
+      allChecked.value = !allChecked.value;
       experimentItems!.forEach((element) {
-        element.value = newValue ;
+        element.value = newValue;
       });
     });
   }
 
-  Future onDownload() async{
-
+  Future onDownload() async {
     await new Future.delayed(new Duration(seconds: 2));
 
     setState(() {
-
-      for(int i=0;i<experimentItems!.length;i++){
-
-        if(experimentItems![i].value){
-            experimentItems!.removeAt(i--);
-
+      for (int i = 0; i < experimentItems!.length; i++) {
+        if (experimentItems![i].value) {
+          experimentItems!.removeAt(i--);
         }
-
       }
-
-
     });
   }
 
-  onItemClicked(CheckBoxModal item){
+  onItemClicked(CheckBoxModal item) {
     setState(() {
-      item.value = !item.value ;
+      item.value = !item.value;
     });
   }
+}
 
+getTokenFromSF() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String tokenValue = prefs.getString('token').toString();
+  return tokenValue;
 }

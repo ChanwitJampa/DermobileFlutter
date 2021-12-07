@@ -1,16 +1,16 @@
-class Token {
-  Token({
-    required this.token,
-  });
-  late final String token;
+import 'package:json_annotation/json_annotation.dart';
 
-  Token.fromJson(Map<String, dynamic> json) {
-    token = json['data'];
-  }
+part 'token.g.dart';
 
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['data'] = token;
-    return _data;
-  }
+@JsonSerializable()
+class Token{
+
+  final String token ;
+
+  Token(this.token);
+
+  factory Token.fromJson(Map<String, dynamic> json) => _$TokenFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TokenToJson(this);
+
 }

@@ -1,5 +1,5 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors
-
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,6 +7,13 @@ import 'package:der/utils/constants.dart';
 import 'package:http/http.dart' as Http;
 import 'package:der/entities/token.dart';
 import 'package:der/entities/user.dart';
+import 'package:der/entities/objectlist.dart';
+
+import 'package:der/entities/response.dart';
+import 'package:der/entities/trial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const SERVER_IP = 'http://10.0.2.2:8080';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -159,36 +166,42 @@ class _SignupScreen extends State<SignupScreen> {
     print("username : " + username + " password : " + password);
 
     print("-----------------------get token---------------------");
-    var url = "http://10.0.2.2:8080/syngenta/api/authenticate";
-    var response = await Http.post(
+
+    loginService dc = loginService();
+    var res = await dc.attemptLogIn(username.toString(), password.toString());
+    if (res.statusCode != 200) {
+      print("fails to  join");
+      return false;
+    }
+    Response<Token> t = Response<Token>.fromJson(
+        jsonDecode(res.body), (body) => Token.fromJson(body));
+
+    var token = t.body.token;
+
+    //share token to other page
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
+    print("sigin token is : " + token);
+
+    return true;
+  }
+}
+
+class loginService {
+  static late String token = "";
+
+  attemptLogIn(String username, String password) async {
+    var url = "$SERVER_IP/syngenta/api/authenticate";
+
+    var res = await Http.post(
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(
-          <String, String>{'username': '$username', 'password': '$password'}),
+          <String, String>{'username': username, 'password': password}),
     );
-    if (response.statusCode == 200) {
-      var responseJson = jsonDecode(response.body);
-      print("Response status: ${response.body}");
-      Token t = Token.fromJson(responseJson);
-      print("TOKEN FROM T.TOKEN " + t.token);
 
-      print("------------------------send token------------------------");
-      var token = t.token;
-      var url2 = "http://10.0.2.2:8080/syngenta/api/trial/user/findAll";
-      var response2 = await Http.get(Uri.parse(url2), headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      });
-      var response2Json = jsonDecode(response2.body);
-      print("Response status: ${response2.body}");
-      User u = User.fromJson(response2Json);
-      return true;
-    } else {
-      print("wrong username or password ");
-      return false;
-    }
+    return res;
   }
 }
