@@ -20,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 int i = 0;
 int j = 0;
+int page = 1;
 
 class DownloadScreen extends StatefulWidget {
   @override
@@ -120,8 +121,6 @@ class _DownloadScreen extends State<DownloadScreen> {
     _TrialBox = await Hive.openBox('BoxTrial');
   }
 
-  int page = 1;
-
   bool isLoading = false;
 
   Widget makeMe() {
@@ -139,6 +138,7 @@ class _DownloadScreen extends State<DownloadScreen> {
     // update data and loading status
     setState(() {
       //Rest Service
+      print("page : $page    index : $index      i: $i   j:$j   ");
 
       experimentItems!.addAll([
         WidgetCheckBoxModel(
@@ -158,7 +158,7 @@ class _DownloadScreen extends State<DownloadScreen> {
           i++;
         }
       }
-      //print("page : $page    index : $index      i: $i   j:$j   ");
+
       //experimentItems!.removeAt(experimentItems!.length-1);
       //print('push');
 
@@ -398,6 +398,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                               scrollInfo.metrics.pixels ==
                                   scrollInfo.metrics.maxScrollExtent) {
                             if (i < _TrialBox!.length) {
+                              print(">>${i < _TrialBox!.length}<<");
                               if (j < _TrialBox!.getAt(i).onSitePlots.length) {
                                 _loadData();
                                 setState(() {
