@@ -35,17 +35,9 @@ class DownloadScreen extends StatefulWidget {
 class _DownloadScreen extends State<DownloadScreen> {
   void initState() {
     super.initState();
-    if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
-      Hive.registerAdapter(OnSiteTrialAdapter());
-    }
-    if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
-      Hive.registerAdapter(OnSitePlotAdapter());
-    }
 
-    if (_TrialBox?.length == null) {
-      _openBox();
-      dowloadTrial();
-    }
+    dowloadTrial();
+
     //print("-----now is dowload sceen---- #initState");
   }
 
@@ -86,13 +78,6 @@ class _DownloadScreen extends State<DownloadScreen> {
     // });
   }
 
-  void _openBox() async {
-    var dir = await getApplicationDocumentsDirectory();
-    Hive.init(dir.path);
-    // print('[Debug] Hive path: ${dir.path}');
-    _TrialBox = await Hive.openBox('BoxTrial');
-  }
-
   bool isLoading = false;
 
   Widget makeMe() {
@@ -121,7 +106,7 @@ class _DownloadScreen extends State<DownloadScreen> {
 
     List<Trial> trials = ObjectList<Trial>.fromJson(
         jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
-
+    print(trials[0].plots.length);
     print("Trial length :");
     print(trials.length);
     await new Future.delayed(new Duration(seconds: 1));

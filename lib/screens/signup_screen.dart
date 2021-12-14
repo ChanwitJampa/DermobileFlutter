@@ -2,8 +2,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:der/entities/site/plot.dart';
+import 'package:der/entities/site/trial.dart';
+import 'package:der/entities/site/user.dart';
 import 'package:flutter/material.dart';
 import 'package:der/utils/constants.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as Http;
 import 'package:der/entities/token.dart';
 import 'package:der/entities/user.dart';
@@ -11,8 +15,10 @@ import 'package:der/entities/objectlist.dart';
 
 import 'package:der/entities/response.dart';
 import 'package:der/entities/trial.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+Box? _TrialBox;
 const SERVER_IP = 'http://10.0.2.2:8080';
 
 class SignupScreen extends StatefulWidget {
@@ -21,6 +27,19 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreen extends State<SignupScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
+      Hive.registerAdapter(OnSiteTrialAdapter());
+    }
+    if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
+      Hive.registerAdapter(OnSitePlotAdapter());
+    }
+
+    _openBox();
+  }
+
   @override
   TextEditingController usernameController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
@@ -173,15 +192,30 @@ class _SignupScreen extends State<SignupScreen> {
       print("fails to  join");
       return false;
     }
+
     Response<Token> t = Response<Token>.fromJson(
         jsonDecode(res.body), (body) => Token.fromJson(body));
 
     var token = t.body.token;
-
     //share token to other page
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
     print("sigin token is : " + token);
+
+    var url = 'http://10.0.2.2:8080/syngenta/api/findAll';
+    var response = await Http.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    var json = jsonDecode(response.body);
+
+    print(response.body);
+
+    List<User> users = ObjectList<User>.fromJson(
+        jsonDecode(response.body), (body) => User.fromJson(body)).list;
 
     return true;
   }
@@ -204,4 +238,11 @@ class loginService {
 
     return res;
   }
+}
+
+void _openBox() async {
+  var dir = await getApplicationDocumentsDirectory();
+  Hive.init(dir.path);
+  // print('[Debug] Hive path: ${dir.path}');
+  _TrialBox = await Hive.openBox('BoxTrial');
 }
