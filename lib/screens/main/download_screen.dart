@@ -19,8 +19,7 @@ import 'package:der/screens/plot/plot_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 int i = 0;
-int j = 0;
-int page = 1;
+
 Box? _TrialBox;
 
 class DownloadScreen extends StatefulWidget {
@@ -51,69 +50,39 @@ class _DownloadScreen extends State<DownloadScreen> {
   }
 
   dowloadTrial() async {
-    var token = await getTokenFromSF();
-    print("token :" + token.toString());
-    var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
-    var response = await Http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token'
-      },
-    );
-    var json = jsonDecode(response.body);
-
-    print(response.body);
-
-    List<Trial> trials = ObjectList<Trial>.fromJson(
-        jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
-
-    print("Trial length :");
-    print(trials.length);
-
-    trials.forEach((e) async {
-      List<OnSitePlot> onSitePlots = [];
-      e.plots.forEach((pt) {
-        OnSitePlot osp = OnSitePlot(
-            pt.plotId,
-            pt.barcode,
-            pt.pltId,
-            pt.repNo,
-            pt.abbrc,
-            pt.entno,
-            pt.notet,
-            pt.plotImgPath,
-            pt.plotImgPathS,
-            pt.plotImgBoxPath,
-            pt.plotImgBoxPathS,
-            pt.uploadDate,
-            pt.eartnA,
-            pt.dlernA,
-            pt.dlerpA,
-            pt.drwapA,
-            pt.eartnM,
-            pt.dlernM,
-            pt.dlerpM,
-            pt.drwapM,
-            pt.approveDate,
-            pt.plotProgress,
-            pt.plotStatus,
-            pt.plotActive);
-        onSitePlots.add(osp);
-      });
-      OnSiteTrial ost = OnSiteTrial(e.trialId, e.trialId, e.trialActive,
-          e.trialStatus, DateTime(2021), DateTime(2021), onSitePlots);
-      await _TrialBox?.put(e.trialId, ost);
-    });
-    // _TrialBox.values.forEach((element) {
-    //   OnSiteTrial t = element;
-
-    //   print(">${t.trialId}");
-
-    //   t.onSitePlots.forEach((element) {
-    //     print(element.plotId);
-    //     print(element.barcode);
+    // trials.forEach((e) async {
+    //   List<OnSitePlot> onSitePlots = [];
+    //   e.plots.forEach((pt) {
+    //     OnSitePlot osp = OnSitePlot(
+    //         pt.plotId,
+    //         pt.barcode,
+    //         pt.pltId,
+    //         pt.repNo,
+    //         pt.abbrc,
+    //         pt.entno,
+    //         pt.notet,
+    //         pt.plotImgPath,
+    //         pt.plotImgPathS,
+    //         pt.plotImgBoxPath,
+    //         pt.plotImgBoxPathS,
+    //         pt.uploadDate,
+    //         pt.eartnA,
+    //         pt.dlernA,
+    //         pt.dlerpA,
+    //         pt.drwapA,
+    //         pt.eartnM,
+    //         pt.dlernM,
+    //         pt.dlerpM,
+    //         pt.drwapM,
+    //         pt.approveDate,
+    //         pt.plotProgress,
+    //         pt.plotStatus,
+    //         pt.plotActive);
+    //     onSitePlots.add(osp);
     //   });
+    //   OnSiteTrial ost = OnSiteTrial(e.trialId, e.trialId, e.trialActive,
+    //       e.trialStatus, DateTime(2021), DateTime(2021), onSitePlots);
+    //   await _TrialBox?.put(e.trialId, ost);
     // });
   }
 
@@ -135,33 +104,45 @@ class _DownloadScreen extends State<DownloadScreen> {
   _LoadDataScreen() {}
 
   Future _loadData() async {
+    int i, page = 1;
+    var token = await getTokenFromSF();
+    print("token :" + token.toString());
+    var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
+    var response = await Http.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    var json = jsonDecode(response.body);
+
+    print(response.body);
+
+    List<Trial> trials = ObjectList<Trial>.fromJson(
+        jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
+
+    print("Trial length :");
+    print(trials.length);
     await new Future.delayed(new Duration(seconds: 1));
 
     //print("load more");
     // update data and loading status
     setState(() {
+      experimentItems!.clear();
+
       //Rest Service
       //print("page : $page    index : $index      i: $i   j:$j   ");
+      for (i = 0; i < trials.length; i++) {
+        experimentItems!.addAll([
+          WidgetCheckBoxModel(
+              //title: '${_TrialBox?.getAt(i).onSitePlots[j].plotId.toString()}')
+              title: '$page',
+              trial: '${trials[i].trialId}')
+        ]);
 
-      experimentItems!.addAll([
-        WidgetCheckBoxModel(
-            //title: '${_TrialBox?.getAt(i).onSitePlots[j].plotId.toString()}')
-            title: '$page',
-            plot: '${_TrialBox?.getAt(i).onSitePlots[j].plotId}',
-            trial: '${_TrialBox?.getAt(i).trialId}')
-      ]);
-
-      page++;
-      if (_TrialBox!.length > i) {
-        if (_TrialBox?.getAt(i).onSitePlots.length > j + 1) {
-          j++;
-          // print("MOVE Row");
-        } else {
-          j = 0;
-          i++;
-        }
+        page++;
       }
-
       //experimentItems!.removeAt(experimentItems!.length-1);
       //print('push');
 
@@ -237,23 +218,23 @@ class _DownloadScreen extends State<DownloadScreen> {
                   //       letterSpacing: .7),
                   // ),
                   Text(
-                    "Plot No. = " + experimentItems![index].title,
+                    "Trial No. = " + experimentItems![index].title,
                     style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[800],
                         height: 1.5,
                         letterSpacing: .7),
                   ),
-                  Text(
-                    //trial ID
-                    "plot Id :"
-                    '${experimentItems![index].plot}',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey[800],
-                        height: 1.5,
-                        letterSpacing: .7),
-                  ),
+                  // Text(
+                  //   //trial ID
+                  //   "plot Id :"
+                  //   '${experimentItems![index].plot}',
+                  //   style: TextStyle(
+                  //       fontSize: 15,
+                  //       color: Colors.grey[800],
+                  //       height: 1.5,
+                  //       letterSpacing: .7),
+                  // ),
                   Text(
                     experimentItems![index].trial,
                     style: TextStyle(
@@ -373,7 +354,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
                         Text(
-                          "Experiment",
+                          "Trial",
                           style: TextStyle(
                               color: Colors.grey[900],
                               fontWeight: FontWeight.bold,
@@ -400,26 +381,10 @@ class _DownloadScreen extends State<DownloadScreen> {
                           if (!isLoading &&
                               scrollInfo.metrics.pixels ==
                                   scrollInfo.metrics.maxScrollExtent) {
-                            if (i < _TrialBox!.length) {
-                              //print(">>${i < _TrialBox!.length}<<");
-                              if (j < _TrialBox!.getAt(i).onSitePlots.length) {
-                                _loadData();
-                                setState(() {
-                                  isLoading = true;
-                                });
-                              }
-                            }
-                            // if ((_TrialBox!.length) > i) {
-                            //   if (_TrialBox?.getAt(i).onSitePlots.length > j) {
-                            //     j++;
-                            //   } else {
-                            //     if ((_TrialBox!.length) > i + 1) {
-                            //       i++;
-                            //       j = 0;
-                            //     }
-                            //   }
-                            // }
-
+                            _loadData();
+                            setState(() {
+                              isLoading = true;
+                            });
                           }
                           return isLoading;
                         },
@@ -474,7 +439,7 @@ class _DownloadScreen extends State<DownloadScreen> {
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),
           TabItem(icon: Icons.qr_code, title: 'Scan'),
-          TabItem(icon: Icons.art_track, title: 'Experiment'),
+          TabItem(icon: Icons.art_track, title: 'Trial'),
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 1,
@@ -483,7 +448,7 @@ class _DownloadScreen extends State<DownloadScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: onDownload,
         icon: Icon(Icons.save),
-        label: Text("Load"),
+        label: Text("Load1"),
       ),
     );
   }
@@ -522,5 +487,3 @@ getTokenFromSF() async {
   String tokenValue = prefs.getString('token').toString();
   return tokenValue;
 }
-
-getUserName() {}

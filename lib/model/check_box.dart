@@ -9,13 +9,9 @@ class CheckBoxModal {
 
 class WidgetCheckBoxModel {
   String title;
-  String plot;
   String trial;
   bool value;
 
   WidgetCheckBoxModel(
-      {required this.title,
-      required this.plot,
-      required this.trial,
-      this.value = false});
+      {required this.title, required this.trial, this.value = false});
 }
