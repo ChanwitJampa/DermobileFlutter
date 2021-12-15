@@ -7,17 +7,37 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-      json['userName'] == null ? "null" : json['userName'] as String,
-      json['lastName'] == null ? "null" : json['lastName'] as String,
-      json['trials'] == null
-          ? []
-          : (json['trials'] as List<dynamic>)
-              .map((e) => Trial.fromJson(e as Map<String, dynamic>))
-              .toList(),
+      json['userId'] as int,
+      json['firstName'] as String,
+      json['lastName'] as String,
+      json['picture'] as String,
+      json['adminRole'] as String,
+      json['createDate'] as int,
+      json['lastAccess'] as int,
+      json['userStatus'] as String,
+      json['tokenDateTime'] as String,
+      json['plotsForApproveBy'] as String,
+      json['usertrials'] as String,
+      json['countryadmins'] as String,
+      (json['trials'] as List<dynamic>)
+          .map((e) => Trial.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      json['plotsForUploadBy'] as String,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'userName': instance.userName,
+      'userId': instance.userId,
+      'firstName': instance.firstName,
       'lastName': instance.lastName,
+      'picture': instance.picture,
+      'adminRole': instance.adminRole,
+      'createDate': instance.createDate,
+      'lastAccess': instance.lastAccess,
+      'userStatus': instance.userStatus,
+      'tokenDateTime': instance.tokenDateTime,
+      'plotsForApproveBy': instance.plotsForApproveBy,
+      'usertrials': instance.usertrials,
+      'countryadmins': instance.countryadmins,
       'trials': instance.trials,
+      'plotsForUploadBy': instance.plotsForUploadBy,
     };
