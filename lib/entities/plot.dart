@@ -5,7 +5,7 @@ import 'package:der/entities/ear.dart';
 
 part 'plot.g.dart';
 
-//@JsonSerializable()
+@JsonSerializable()
 class Plot {
   final int plotId;
 

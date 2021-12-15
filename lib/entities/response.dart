@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:der/entities/token.dart';
 part 'response.g.dart';
 
-//@JsonSerializable(genericArgumentFactories: true,nullable: true)
+@JsonSerializable(genericArgumentFactories: true, nullable: true)
 class Response<T> {
   final int status;
 

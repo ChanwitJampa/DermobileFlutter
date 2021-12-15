@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'ear.g.dart';
 
-//@JsonSerializable()
+@JsonSerializable()
 class Ear {
   int cornId;
 

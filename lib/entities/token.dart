@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'token.g.dart';
 
-//@JsonSerializable()
+@JsonSerializable()
 class Token {
   final String token;
 

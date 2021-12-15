@@ -3,7 +3,7 @@ import 'package:der/entities/plot.dart';
 import 'package:der/entities/site/enum.dart';
 part 'trial.g.dart';
 
-//@JsonSerializable()
+@JsonSerializable()
 class Trial {
   final String trialId;
 
