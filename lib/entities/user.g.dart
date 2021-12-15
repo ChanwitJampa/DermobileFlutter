@@ -7,41 +7,19 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-      json['userId'] == null ? 0 : json['userId'] as int,
-      json['firstName'] == null ? "null" : json['firstName'] as String,
-      json['lastName'] == null ? "null" : json['lastName'] as String,
-      json['picture'] == null ? "null" : json['picture'] as String,
-      json['adminRole'] == null ? "null" : json['adminRole'] as String,
-      json['createDate'] == null ? 0 : json['createDate'] as int,
-      json['lastAccess'] == null ? 0 : json['lastAccess'] as int,
-      json['userStatus'] == null ? "null" : json['userStatus'] as String,
-      json['tokenDateTime'] == null ? "null" : json['tokenDateTime'] as String,
-      json['plotsForApproveBy'] == null
-          ? "null"
-          : json['plotsForApproveBy'] as String,
-      json['usertrials'] == null ? "null" : json['usertrials'] as String,
-      json['countryadmins'] == null ? "null" : json['countryadmins'] as String,
-      json['trials'] == null
-          ? []
-          : (json['trials'] as List<dynamic>)
-              .map((e) => Trial.fromJson(e as Map<String, dynamic>))
-              .toList(),
-      json['plotsForUploadBy'] as String,
+      json['userName'] == null ? "" : json['userName'] as String,
+      json['firstName'] as String,
+      json['lastName'] as String,
+      json['picture'] == null ? "" :json['picture'] as String,
+        (json['trials'] == null ? [] :json['trials']  as List<dynamic>)
+          .map((e) => Trial.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'userId': instance.userId,
+      'userName': instance.userName,
       'firstName': instance.firstName,
       'lastName': instance.lastName,
-      'picture': instance.picture,
-      'adminRole': instance.adminRole,
-      'createDate': instance.createDate,
-      'lastAccess': instance.lastAccess,
-      'userStatus': instance.userStatus,
-      'tokenDateTime': instance.tokenDateTime,
-      'plotsForApproveBy': instance.plotsForApproveBy,
-      'usertrials': instance.usertrials,
-      'countryadmins': instance.countryadmins,
+      'picture': instance.lastName,
       'trials': instance.trials,
-      'plotsForUploadBy': instance.plotsForUploadBy,
     };

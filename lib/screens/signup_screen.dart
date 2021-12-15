@@ -13,6 +13,9 @@ import 'package:der/entities/token.dart';
 import 'package:der/entities/user.dart';
 import 'package:der/entities/objectlist.dart';
 
+//hive
+import 'package:der/entities/site/user.dart';
+
 import 'package:der/entities/response.dart';
 import 'package:der/entities/trial.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,6 +33,9 @@ class _SignupScreen extends State<SignupScreen> {
   @override
   void initState() {
     super.initState();
+    if (!Hive.isAdapterRegistered(OnSiteUserAdapter().typeId)) {
+      Hive.registerAdapter(OnSiteUserAdapter());
+    }
     if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
       Hive.registerAdapter(OnSiteTrialAdapter());
     }
@@ -197,25 +203,12 @@ class _SignupScreen extends State<SignupScreen> {
         jsonDecode(res.body), (body) => Token.fromJson(body));
 
     var token = t.body.token;
+    User user = t.body.user;
+    user.userName = username;
     //share token to other page
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
     print("sigin token is : " + token);
-
-    var url = 'http://10.0.2.2:8080/syngenta/api/findAll';
-    var response = await Http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token'
-      },
-    );
-    var json = jsonDecode(response.body);
-
-    print(response.body);
-
-    List<User> users = ObjectList<User>.fromJson(
-        jsonDecode(response.body), (body) => User.fromJson(body)).list;
 
     return true;
   }
