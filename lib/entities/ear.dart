@@ -1,12 +1,9 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'ear.g.dart';
 
-@JsonSerializable()
-class Ear{
-
+//@JsonSerializable()
+class Ear {
   int cornId;
 
   String earImgPath;
@@ -20,7 +17,6 @@ class Ear{
   String cornDetectType;
   String earProgress;
   DateTime lastUpdate;
-
 
   Ear(
       this.cornId,
@@ -38,8 +34,5 @@ class Ear{
 
   factory Ear.fromJson(Map<String, dynamic> json) => _$EarFromJson(json);
 
-
-
   Map<String, dynamic> toJson() => _$EarToJson(this);
-
 }

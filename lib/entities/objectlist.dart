@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'objectlist.g.dart';
 
-@JsonSerializable(genericArgumentFactories: true)
+//@JsonSerializable(genericArgumentFactories: true)
 class ObjectList<T> {
   final List<T> list;
 

@@ -1,4 +1,3 @@
-
 import 'dart:ffi';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -6,10 +5,9 @@ import 'package:der/entities/ear.dart';
 
 part 'plot.g.dart';
 
-@JsonSerializable()
-class Plot{
-
-  final int plotId ;
+//@JsonSerializable()
+class Plot {
+  final int plotId;
 
   String barcode;
   String pltId;
@@ -64,11 +62,9 @@ class Plot{
       this.lastUpdate,
       this.ears);
 
-  List<Ear> ears ;
+  List<Ear> ears;
 
   factory Plot.fromJson(Map<String, dynamic> json) => _$PlotFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlotToJson(this);
-
-
 }

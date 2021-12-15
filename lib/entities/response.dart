@@ -2,22 +2,20 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:der/entities/token.dart';
 part 'response.g.dart';
 
+//@JsonSerializable(genericArgumentFactories: true,nullable: true)
+class Response<T> {
+  final int status;
 
-@JsonSerializable(genericArgumentFactories: true,nullable: true)
-class Response<T>{
+  final T body;
 
-  final int status ;
+  final String message;
 
-  final T body ;
-
-  final String message ;
-
-  Response( this.status,this.body, this.message);
+  Response(this.status, this.body, this.message);
 
   factory Response.fromJson(Map<String, dynamic> json, fromJsonT) {
     return _$ResponseFromJson(json, fromJsonT);
   }
 
-  Map<String, dynamic> toJson(Object Function(T value) toJsonT) =>  _$ResponseToJson(this, toJsonT);
+  Map<String, dynamic> toJson(Object Function(T value) toJsonT) =>
+      _$ResponseToJson(this, toJsonT);
 }
-
