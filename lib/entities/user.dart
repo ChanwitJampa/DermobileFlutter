@@ -6,19 +6,19 @@ part 'user.g.dart';
 @JsonSerializable()
 class User {
   final int userId;
-  final String? firstName;
-  final String? lastName;
-  final String? picture;
-  final String? adminRole;
-  final int? createDate;
-  final int? lastAccess;
-  final String? userStatus;
-  final String? tokenDateTime;
-  final String? plotsForApproveBy;
-  final String? usertrials;
-  final String? countryadmins;
-  final List<Trial>? trials;
-  final String? plotsForUploadBy;
+  final String firstName;
+  final String lastName;
+  final String picture;
+  final String adminRole;
+  final int createDate;
+  final int lastAccess;
+  final String userStatus;
+  final String tokenDateTime;
+  final String plotsForApproveBy;
+  final String usertrials;
+  final String countryadmins;
+  final List<Trial> trials;
+  final String plotsForUploadBy;
 
   User(
       this.userId,
