@@ -20,6 +20,7 @@ import 'package:der/screens/plot/plot_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:der/screens/signup_screen.dart' as a;
+import 'package:der/screens/main/qr_screen.dart';
 
 int i = 0;
 // Box? _UserBox;
@@ -83,7 +84,7 @@ class _DownloadScreen extends State<DownloadScreen> {
         jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
     //print(trials[0].plots.length);
     print("Trial length : " + trials.length.toString());
-    print(_UserBox?.length.toString());
+    // print(_UserBox?.length.toString());
 
     await new Future.delayed(new Duration(seconds: 1));
 
@@ -315,7 +316,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
                         Text(
-                          "Trial",
+                          "Plot ID = " + dataCode,
                           style: TextStyle(
                               color: Colors.grey[900],
                               fontWeight: FontWeight.bold,

@@ -9,6 +9,8 @@ import 'dart:io';
 import 'package:der/screens/select_Image.dart';
 import 'package:der/utils/constants.dart';
 
+var dataCode = "";
+
 class QRScreen extends StatefulWidget {
   @override
   _QRScreen createState() => _QRScreen();
@@ -19,12 +21,12 @@ class _QRScreen extends State<QRScreen> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-  List<bool> _isSelected = [false, false, false];
+  List<bool> _isSelected = [false, false];
 
   List<Widget> toggleButton = [
     Icon(Icons.flash_on),
-    Icon(Icons.flip_camera_ios),
-    Icon(Icons.pause)
+    Icon(Icons.flip_camera_ios)
+    // Icon(Icons.pause)
   ];
 
   void reassemble() {
@@ -51,9 +53,9 @@ class _QRScreen extends State<QRScreen> {
                 children: <Widget>[
                   if (result != null)
                     Text(
-                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  else
-                    Icon(Icons.qr_code_outlined, color: Colors.white),
+                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}'),
+                  // else
+                  //   Icon(Icons.qr_code_outlined, color: Colors.white),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,16 +82,16 @@ class _QRScreen extends State<QRScreen> {
                                 case 1:
                                   controller?.flipCamera();
                                   break;
-                                case 2:
-                                  toggleButton.removeAt(2);
-                                  if (_isSelected[index]) {
-                                    controller?.pauseCamera();
-                                    toggleButton.add(Icon(Icons.pause));
-                                  } else {
-                                    controller?.resumeCamera();
-                                    toggleButton.add(Icon(Icons.play_arrow));
-                                  }
-                                  break;
+                                // case 2:
+                                //   toggleButton.removeAt(2);
+                                //   if (_isSelected[index]) {
+                                //     controller?.pauseCamera();
+                                //     toggleButton.add(Icon(Icons.pause));
+                                //   } else {
+                                //     controller?.resumeCamera();
+                                //     toggleButton.add(Icon(Icons.play_arrow));
+                                //   }
+                                //   break;
                               }
                             });
                           },
@@ -97,37 +99,37 @@ class _QRScreen extends State<QRScreen> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          border: Border.all(color: Colors.black, width: 1.0),
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            controller?.pauseCamera();
-                            Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
-                          },
-                          child: Text('MATCH'),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          border: Border.all(color: Colors.black, width: 1.0),
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text('NOT MATCH'),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: <Widget>[
+                  //     Container(
+                  //       decoration: BoxDecoration(
+                  //         color: Colors.blue,
+                  //         border: Border.all(color: Colors.black, width: 1.0),
+                  //         borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  //       ),
+                  //       child: ElevatedButton(
+                  //         onPressed: () {
+                  //           controller?.pauseCamera();
+                  //           Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
+                  //         },
+                  //         child: Text('MATCH'),
+                  //       ),
+                  //     ),
+                  //     Container(
+                  //       decoration: BoxDecoration(
+                  //         color: Colors.blue,
+                  //         border: Border.all(color: Colors.black, width: 1.0),
+                  //         borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  //       ),
+                  //       child: ElevatedButton(
+                  //         onPressed: () {},
+                  //         child: Text('NOT MATCH'),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -170,7 +172,9 @@ class _QRScreen extends State<QRScreen> {
         print("resule = " + result.toString());
         print(
             'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}');
-        Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
+        dataCode = result!.code;
+        Navigator.of(context).pushNamed(DOWNLOAD_ROUTE);
+        controller.pauseCamera();
       });
     });
   }
