@@ -43,9 +43,9 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    final _UserBox = ModalRoute.of(context)!.settings.arguments as Box;
-    print("User Box len:" + _UserBox.length.toString());
-    print(_UserBox.get("Users").userName);
+    // final _UserBox = ModalRoute.of(context)!.settings.arguments as Box;
+    // print("User Box len:" + _UserBox.length.toString());
+    // print(_UserBox.get("Users").userName);
   }
 
   @override

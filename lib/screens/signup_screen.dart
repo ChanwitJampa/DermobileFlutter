@@ -122,8 +122,7 @@ class _SignupScreen extends State<SignupScreen> {
                               onTap: () async {
                                 if (await signIn(usernameController.text,
                                     passwordController.text)) {
-                                  Navigator.of(context).pushNamed(HOME_ROUTE,
-                                      arguments: _UserBox);
+                                  Navigator.of(context).pushNamed(HOME_ROUTE);
                                 } else {
                                   usernameController.clear();
                                   passwordController.clear();
@@ -219,7 +218,8 @@ class _SignupScreen extends State<SignupScreen> {
 
     OnSiteUser user =
         OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);
-    _UserBox!.close();
+    await _UserBox?.put(1, user);
+    //_UserBox!.close();
     return true;
   }
 }

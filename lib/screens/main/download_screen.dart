@@ -19,8 +19,10 @@ import 'package:der/model/check_box.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:der/screens/signup_screen.dart' as a;
+
 int i = 0;
-Box? _UserBox;
+// Box? _UserBox;
 
 class DownloadScreen extends StatefulWidget {
   @override
@@ -35,21 +37,21 @@ class DownloadScreen extends StatefulWidget {
 class _DownloadScreen extends State<DownloadScreen> {
   void initState() {
     super.initState();
-    final _UserBox = ModalRoute.of(context)?.settings.arguments as Box;
-    _openBox();
-    print(_UserBox?.length);
-    _UserBox?.get("Users");
-    print("userName IS:");
-    print(_UserBox?.getAt(0).userName.toString());
+    // final _UserBox = ModalRoute.of(context)?.settings.arguments as Box;
+    // _openBox();
+    // print(_UserBox?.length);
+    // _UserBox?.get("Users");
+    // print("userName IS:");
+    // print(_UserBox?.getAt(0).userName.toString());
     //print("-----now is dowload sceen---- #initState");
   }
 
-  void _openBox() async {
-    var dir = await getApplicationDocumentsDirectory();
-    Hive.init(dir.path);
-    // print('[Debug] Hive path: ${dir.path}');
-    _UserBox = await Hive.openBox('User');
-  }
+  // void _openBox() async {
+  //   var dir = await getApplicationDocumentsDirectory();
+  //   Hive.init(dir.path);
+  //   // print('[Debug] Hive path: ${dir.path}');
+  //   // _UserBox = await Hive.openBox('User');
+  // }
 
   bool isLoading = false;
 
@@ -79,9 +81,10 @@ class _DownloadScreen extends State<DownloadScreen> {
 
     List<Trial> trials = ObjectList<Trial>.fromJson(
         jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
-    print(trials[0].plots.length);
-    print("Trial length :");
-    print(trials.length);
+    //print(trials[0].plots.length);
+    print("Trial length : " + trials.length.toString());
+    print(_UserBox?.length.toString());
+
     await new Future.delayed(new Duration(seconds: 1));
 
     //print("load more");
