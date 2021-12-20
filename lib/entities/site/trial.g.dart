@@ -21,8 +21,8 @@ class OnSiteTrialAdapter extends TypeAdapter<OnSiteTrial> {
       fields[1] as String,
       fields[2] as String,
       fields[3] as String,
-      fields[4] as DateTime,
-      fields[5] as DateTime,
+      fields[4] as int,
+      fields[5] as int,
       (fields[6] as List).cast<OnSitePlot>(),
     );
   }

@@ -5,40 +5,20 @@ part 'user.g.dart';
 @HiveType(typeId: 0)
 class OnSiteUser {
   @HiveField(0)
-  int userId;
-
-  @HiveField(1)
   String userName;
 
-  @HiveField(2)
+  @HiveField(1)
   String firstName;
 
-  @HiveField(3)
+  @HiveField(2)
   String lastName;
 
-  @HiveField(4)
+  @HiveField(3)
   String picture;
 
-  @HiveField(5)
-  String token;
-
-  @HiveField(6)
-  DateTime tokenDateTime;
-
-  @HiveField(7)
-  String passwordDigit;
-
-  @HiveField(8)
+  @HiveField(4)
   List<OnSiteTrial> onSiteTrials;
 
-  OnSiteUser(
-      this.userId,
-      this.userName,
-      this.firstName,
-      this.lastName,
-      this.picture,
-      this.token,
-      this.tokenDateTime,
-      this.passwordDigit,
+  OnSiteUser(this.userName, this.firstName, this.lastName, this.picture,
       this.onSiteTrials);
 }

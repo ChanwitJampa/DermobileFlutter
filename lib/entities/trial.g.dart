@@ -13,7 +13,7 @@ Trial _$TrialFromJson(Map<String, dynamic> json) => Trial(
       json['trialStatus'] as String,
       json['plotSettingAutoLockUpload'] as int,
       json['plotSettingAutoLockApproved'] as int,
-      json['createDate'] as int,
+      json['createDate'] == null ? 0 : json['createDate'] as int,
       json['lastUpdate'] as int,
       (json['plots'] as List<dynamic>)
           .map((e) => Plot.fromJson(e as Map<String, dynamic>))

@@ -20,10 +20,10 @@ class OnSiteTrial {
   String trialStatus;
 
   @HiveField(4)
-  DateTime createDate;
+  int createDate;
 
   @HiveField(5)
-  DateTime lastUpdate;
+  int lastUpdate;
 
   @HiveField(6)
   List<OnSitePlot> onSitePlots;

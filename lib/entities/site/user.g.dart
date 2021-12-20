@@ -17,16 +17,11 @@ class OnSiteUserAdapter extends TypeAdapter<OnSiteUser> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return OnSiteUser(
-      fields[0] as int,
-      fields[1] as String,
-      fields[2] as String,
-      fields[3] as String,
-      fields[4] as String,
-      fields[5] as String,
-      fields[6] as DateTime,
-      fields[7] as String,
-      (fields[8] as List).cast<OnSiteTrial>(),
-    );
+        fields[0] as String,
+        fields[1] as String,
+        fields[2] as String,
+        fields[3] as String,
+        (fields[8] as List).cast<OnSiteTrial>());
   }
 
   @override
@@ -34,22 +29,14 @@ class OnSiteUserAdapter extends TypeAdapter<OnSiteUser> {
     writer
       ..writeByte(9)
       ..writeByte(0)
-      ..write(obj.userId)
-      ..writeByte(1)
       ..write(obj.userName)
-      ..writeByte(2)
+      ..writeByte(1)
       ..write(obj.firstName)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.lastName)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.picture)
-      ..writeByte(5)
-      ..write(obj.token)
-      ..writeByte(6)
-      ..write(obj.tokenDateTime)
-      ..writeByte(7)
-      ..write(obj.passwordDigit)
-      ..writeByte(8)
+      ..writeByte(4)
       ..write(obj.onSiteTrials);
   }
 

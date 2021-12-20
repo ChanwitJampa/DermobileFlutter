@@ -9,6 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:der/entities/site/trial.dart';
 import 'package:der/entities/site/plot.dart';
 import 'package:der/entities/site/enum.dart';
+import 'package:der/screens/signup_screen.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -19,8 +20,7 @@ import 'package:der/screens/plot/plot_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 int i = 0;
-
-Box? _TrialBox;
+Box? _UserBox;
 
 class DownloadScreen extends StatefulWidget {
   @override
@@ -35,47 +35,20 @@ class DownloadScreen extends StatefulWidget {
 class _DownloadScreen extends State<DownloadScreen> {
   void initState() {
     super.initState();
-
-    dowloadTrial();
-
+    final _UserBox = ModalRoute.of(context)?.settings.arguments as Box;
+    _openBox();
+    print(_UserBox?.length);
+    _UserBox?.get("Users");
+    print("userName IS:");
+    print(_UserBox?.getAt(0).userName.toString());
     //print("-----now is dowload sceen---- #initState");
   }
 
-  dowloadTrial() async {
-    // trials.forEach((e) async {
-    //   List<OnSitePlot> onSitePlots = [];
-    //   e.plots.forEach((pt) {
-    //     OnSitePlot osp = OnSitePlot(
-    //         pt.plotId,
-    //         pt.barcode,
-    //         pt.pltId,
-    //         pt.repNo,
-    //         pt.abbrc,
-    //         pt.entno,
-    //         pt.notet,
-    //         pt.plotImgPath,
-    //         pt.plotImgPathS,
-    //         pt.plotImgBoxPath,
-    //         pt.plotImgBoxPathS,
-    //         pt.uploadDate,
-    //         pt.eartnA,
-    //         pt.dlernA,
-    //         pt.dlerpA,
-    //         pt.drwapA,
-    //         pt.eartnM,
-    //         pt.dlernM,
-    //         pt.dlerpM,
-    //         pt.drwapM,
-    //         pt.approveDate,
-    //         pt.plotProgress,
-    //         pt.plotStatus,
-    //         pt.plotActive);
-    //     onSitePlots.add(osp);
-    //   });
-    //   OnSiteTrial ost = OnSiteTrial(e.trialId, e.trialId, e.trialActive,
-    //       e.trialStatus, DateTime(2021), DateTime(2021), onSitePlots);
-    //   await _TrialBox?.put(e.trialId, ost);
-    // });
+  void _openBox() async {
+    var dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    // print('[Debug] Hive path: ${dir.path}');
+    _UserBox = await Hive.openBox('User');
   }
 
   bool isLoading = false;

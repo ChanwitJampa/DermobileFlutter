@@ -21,7 +21,7 @@ import 'package:der/entities/trial.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Box? _TrialBox;
+Box? _UserBox;
 const SERVER_IP = 'http://10.0.2.2:8080';
 
 class SignupScreen extends StatefulWidget {
@@ -122,7 +122,8 @@ class _SignupScreen extends State<SignupScreen> {
                               onTap: () async {
                                 if (await signIn(usernameController.text,
                                     passwordController.text)) {
-                                  Navigator.of(context).pushNamed(HOME_ROUTE);
+                                  Navigator.of(context).pushNamed(HOME_ROUTE,
+                                      arguments: _UserBox);
                                 } else {
                                   usernameController.clear();
                                   passwordController.clear();
@@ -203,13 +204,22 @@ class _SignupScreen extends State<SignupScreen> {
         jsonDecode(res.body), (body) => Token.fromJson(body));
 
     var token = t.body.token;
-    User user = t.body.user;
-    user.userName = username;
+    User u = t.body.user;
+    u.userName = username;
     //share token to other page
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
     print("sigin token is : " + token);
 
+    // u.trials.forEach((e) {
+    //   List<OnSiteTrial> ost = [];
+    //   OnSiteTrial t = OnSiteTrial(e.trialId, e.aliasName, e.trialActive, e.trialStatus,
+    //       e.createDate, e.lastUpdate, e.onSitePlots);
+    // });
+
+    OnSiteUser user =
+        OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);
+    _UserBox!.close();
     return true;
   }
 }
@@ -237,5 +247,5 @@ void _openBox() async {
   var dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);
   // print('[Debug] Hive path: ${dir.path}');
-  _TrialBox = await Hive.openBox('BoxTrial');
+  _UserBox = await Hive.openBox<OnSiteUser>('Users');
 }

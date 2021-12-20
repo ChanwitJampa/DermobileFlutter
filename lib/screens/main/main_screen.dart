@@ -1,6 +1,6 @@
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spincircle_bottom_bar/modals.dart';
 import 'package:spincircle_bottom_bar/spincircle_bottom_bar.dart';
@@ -14,12 +14,13 @@ import 'package:der/ui/widgets/label_below_icon.dart';
 import '../../main.dart';
 import 'qr_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart' ;
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:der/utils/constants.dart';
 import 'package:der/utils/router.dart';
 
-class MainScreen extends StatefulWidget {
+Box? _UserBox;
 
+class MainScreen extends StatefulWidget {
   //final List<CameraDescription> cameras;
 
   //({required this.cameras});
@@ -28,8 +29,7 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen>{
-
+class _MainScreenState extends State<MainScreen> {
   Size? deviceSize;
 
   //final List<CameraDescription> cameras;
@@ -43,6 +43,9 @@ class _MainScreenState extends State<MainScreen>{
   void initState() {
     super.initState();
     _pageController = PageController();
+    final _UserBox = ModalRoute.of(context)!.settings.arguments as Box;
+    print("User Box len:" + _UserBox.length.toString());
+    print(_UserBox.get("Users").userName);
   }
 
   @override
@@ -69,14 +72,11 @@ class _MainScreenState extends State<MainScreen>{
 
   Future<void> _onImageButtonPressed(ImageSource source,
       {BuildContext? context, bool isMultiImage = false}) async {
-
-
     try {
       final pickedFile = await _picker.pickImage(
         source: source,
-
       );
-      setState(()   {
+      setState(() {
         final _imageFile = pickedFile;
 
         Navigator.of(context!).push(
@@ -88,115 +88,111 @@ class _MainScreenState extends State<MainScreen>{
             ),
           ),
         );
-
-    });}catch (e) {
-      setState(()  {
+      });
+    } catch (e) {
+      setState(() {
         _pickImageError = e;
       });
     }
   }
 
-  Widget makeDoughnutProgress({double? inProgress,double? finished}){
+  Widget makeDoughnutProgress({double? inProgress, double? finished}) {
+    int fin = (finished! * 100).round();
 
-        int fin = (finished! * 100).round() ;
+    return Stack(children: <Widget>[
+      CircularProgressIndicator(
+        value: 1,
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+      ),
+      Center(
+        child: Text('$fin' + ' '),
+      ),
+      CircularProgressIndicator(
+        value: inProgress,
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
+      ),
+      CircularProgressIndicator(
+        value: finished,
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+      ),
+    ]);
+  }
 
-        return Stack(
-            children: <Widget>[
-              CircularProgressIndicator(
-                value: 1,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-              ),
-              Center(
-                child: Text('$fin'+' '),
-              ),
-              CircularProgressIndicator(
-                value: inProgress,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent),
-              ),
-              CircularProgressIndicator(
-                value: finished,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-              ),
-            ]
-        );
-
-    }
-
-
-  Widget makeMenu({required String menuName,required String subMenuName,String? imageName,double? inProgress=0,double? finished=0,double? third=0}){
-
+  Widget makeMenu(
+      {required String menuName,
+      required String subMenuName,
+      String? imageName,
+      double? inProgress = 0,
+      double? finished = 0,
+      double? third = 0}) {
     return Container(
-              height: 100,
-              //width: 164,
-              padding: EdgeInsets.all(12),
-              margin: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Color(0xFFEEEEEE),
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
+      height: 100,
+      //width: 164,
+      padding: EdgeInsets.all(12),
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color(0xFFEEEEEE),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 100,
+            width: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xFFEEEEEE).withOpacity(0.5),
+            ),
+            child: Center(
+              child: SizedBox(
+                height: 40,
+                width: 40,
+                child: (imageName != null
+                    ? Image.asset(
+                        imageName,
+                        fit: BoxFit.fitHeight,
+                      )
+                    : makeDoughnutProgress(
+                        inProgress: inProgress, finished: finished)),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                menuName,
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              child: Row(
-                children: [
-                    Container(
-                      height: 100,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFFEEEEEE).withOpacity(0.5),
-                      ),
-                      child: Center(
-                        child: SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: (imageName != null
-                                      ? Image.asset(imageName, fit: BoxFit.fitHeight,)
-                                      :   makeDoughnutProgress (inProgress: inProgress,finished: finished)
-                            ),
-                          ),
-                        ),
-                      ),
-
-
-                  SizedBox(
-                    width: 10,
-                  ),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-
-                      Text(menuName,
-                        style: TextStyle(
-                          color: Colors.grey[800],
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                      Text(subMenuName,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                    ],
-                  ),
-
-                ],
+              Text(
+                subMenuName,
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  Widget makeMenuCard(){
-
+  Widget makeMenuCard() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 4.0),
       child: Card(
@@ -204,242 +200,225 @@ class _MainScreenState extends State<MainScreen>{
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
-
             children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: Text('Menu',
-                    style: TextStyle(
-                      color: Colors.blue[600],
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-
+              Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: Colors.blue[600],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
                   ),
                 ),
-
-                Row(
-                  mainAxisAlignment:  MainAxisAlignment.spaceAround,
-                  children: [
-                    
-                    Expanded(
-
-                      child: Row(
-                        mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
-                        children: [
-
-                          Container(
-                              width: 175,
-                              child:InkWell(
-                                onTap: (){
-                                  Navigator.of(context).pushNamed(PRETEST_PLOT_ROUTE);
-                                },
-                                child:makeMenu(menuName:"PreTest",subMenuName: "Rating",imageName:"assets/images/unknown_user.png"),
-                              )
-                          ),
-                          Container(
-                              width: 175,
-                              child:InkWell(
-                                onTap: (){
-                                  Navigator.of(context).pushNamed(UNMATCH_PLOT_ROUTE);
-                              },
-                                child:makeMenu(menuName:"UnMatch",subMenuName: "Plot",imageName:"assets/images/unknown_user.png"),
-                              )
-
-
-                          ),
-                        ],
-                      ),
-
-                    )
-                  ],
-                ),
-
-                
-                Row(
-                  mainAxisAlignment:  MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                        child: Row(
-                          mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              width: 175,
-                              child: InkWell(
-                                child: makeMenu(menuName:"Experiment",subMenuName: "Progress",inProgress:0.8,finished:0.3),
-                                onTap: (){
-
-                                  Navigator.of(context).pushNamed(EXPERIMENT_DASHBOARD_ROUTE);
-                                },
-
-                              ),
-                            ),
-                            Container(
-                              width: 175,
-                              child: InkWell(
-                                  child: makeMenu(menuName:"Plot",subMenuName: "Progress",finished:0.6),
-                                  onTap: (){
-                                    Navigator.of(context).pushNamed(PLOT_ROUTE);
-                                  },
-                              ),
-                            ),
-                          ],
-                        )),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment:  MainAxisAlignment.spaceAround,
-                  children: [
-
-                    Row(
-                      mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-
                         Container(
-                          width: 175,
-                          child: InkWell(
-                            child: makeMenu(menuName:"Uploaded",subMenuName: "",finished:0.2),
-                            onTap: (){
-                              Navigator.of(context).pushNamed(NONE_UPLOAD_ROUTE);
-                            },
-                          ),
-                        ),
-
+                            width: 175,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(PRETEST_PLOT_ROUTE);
+                              },
+                              child: makeMenu(
+                                  menuName: "PreTest",
+                                  subMenuName: "Rating",
+                                  imageName: "assets/images/unknown_user.png"),
+                            )),
                         Container(
-                          width: 175,
-                          child: InkWell(
-                            child:makeMenu(menuName:"Info",subMenuName: "SYNDER\nRARA",imageName:"assets/images/unknown_user.png"),
-                            onTap: (){
-                              //Navigator.of(context).pushNamed(UNMATCH_PLOT_ROUTE);
-                            },
-
-                          ),
-                        )
-
-
-
+                            width: 175,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(UNMATCH_PLOT_ROUTE);
+                              },
+                              child: makeMenu(
+                                  menuName: "UnMatch",
+                                  subMenuName: "Plot",
+                                  imageName: "assets/images/unknown_user.png"),
+                            )),
                       ],
-
-                    )
-
-
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-    )
-    ;
-  }
-
-  Widget actionMenuCard() => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-    child: Card(
-      elevation: 2.0,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-
-
-
-              DashboardMenuRow(
-                firstIcon: FontAwesomeIcons.solidUser,
-                firstLabel: "Friends",
-                firstIconCircleColor: Colors.blue,
-                secondIcon: FontAwesomeIcons.userFriends,
-                secondLabel: "Groups",
-                secondIconCircleColor: Colors.orange,
-                thirdIcon: FontAwesomeIcons.mapMarkerAlt,
-                thirdLabel: "Nearby",
-                thirdIconCircleColor: Colors.purple,
-                fourthIcon: FontAwesomeIcons.locationArrow,
-                fourthLabel: "Moment",
-                fourthIconCircleColor: Colors.indigo,
+                    ),
+                  )
+                ],
               ),
-              DashboardMenuRow(
-                firstIcon: FontAwesomeIcons.images,
-                firstLabel: "Albums",
-                firstIconCircleColor: Colors.red,
-                secondIcon: FontAwesomeIcons.solidHeart,
-                secondLabel: "Likes",
-                secondIconCircleColor: Colors.teal,
-                thirdIcon: FontAwesomeIcons.solidNewspaper,
-                thirdLabel: "Articles",
-                thirdIconCircleColor: Colors.lime,
-                fourthIcon: FontAwesomeIcons.solidCommentDots,
-                fourthLabel: "Reviews",
-                fourthIconCircleColor: Colors.amber,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: 175,
+                        child: InkWell(
+                          child: makeMenu(
+                              menuName: "Experiment",
+                              subMenuName: "Progress",
+                              inProgress: 0.8,
+                              finished: 0.3),
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(EXPERIMENT_DASHBOARD_ROUTE);
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: 175,
+                        child: InkWell(
+                          child: makeMenu(
+                              menuName: "Plot",
+                              subMenuName: "Progress",
+                              finished: 0.6),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(PLOT_ROUTE);
+                          },
+                        ),
+                      ),
+                    ],
+                  )),
+                ],
               ),
-              DashboardMenuRow(
-                firstIcon: FontAwesomeIcons.footballBall,
-                firstLabel: "Sports",
-                firstIconCircleColor: Colors.cyan,
-                secondIcon: FontAwesomeIcons.solidStar,
-                secondLabel: "Fav",
-                secondIconCircleColor: Colors.redAccent,
-                thirdIcon: FontAwesomeIcons.blogger,
-                thirdLabel: "Blogs",
-                thirdIconCircleColor: Colors.pink,
-                fourthIcon: FontAwesomeIcons.wallet,
-                fourthLabel: "Wallet",
-                fourthIconCircleColor: Colors.brown,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: 175,
+                        child: InkWell(
+                          child: makeMenu(
+                              menuName: "Uploaded",
+                              subMenuName: "",
+                              finished: 0.2),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(NONE_UPLOAD_ROUTE);
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: 175,
+                        child: InkWell(
+                          child: makeMenu(
+                              menuName: "Info",
+                              subMenuName: "SYNDER\nRARA",
+                              imageName: "assets/images/unknown_user.png"),
+                          onTap: () {
+                            //Navigator.of(context).pushNamed(UNMATCH_PLOT_ROUTE);
+                          },
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
             ],
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 
+  Widget actionMenuCard() => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Card(
+          elevation: 2.0,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  DashboardMenuRow(
+                    firstIcon: FontAwesomeIcons.solidUser,
+                    firstLabel: "Friends",
+                    firstIconCircleColor: Colors.blue,
+                    secondIcon: FontAwesomeIcons.userFriends,
+                    secondLabel: "Groups",
+                    secondIconCircleColor: Colors.orange,
+                    thirdIcon: FontAwesomeIcons.mapMarkerAlt,
+                    thirdLabel: "Nearby",
+                    thirdIconCircleColor: Colors.purple,
+                    fourthIcon: FontAwesomeIcons.locationArrow,
+                    fourthLabel: "Moment",
+                    fourthIconCircleColor: Colors.indigo,
+                  ),
+                  DashboardMenuRow(
+                    firstIcon: FontAwesomeIcons.images,
+                    firstLabel: "Albums",
+                    firstIconCircleColor: Colors.red,
+                    secondIcon: FontAwesomeIcons.solidHeart,
+                    secondLabel: "Likes",
+                    secondIconCircleColor: Colors.teal,
+                    thirdIcon: FontAwesomeIcons.solidNewspaper,
+                    thirdLabel: "Articles",
+                    thirdIconCircleColor: Colors.lime,
+                    fourthIcon: FontAwesomeIcons.solidCommentDots,
+                    fourthLabel: "Reviews",
+                    fourthIconCircleColor: Colors.amber,
+                  ),
+                  DashboardMenuRow(
+                    firstIcon: FontAwesomeIcons.footballBall,
+                    firstLabel: "Sports",
+                    firstIconCircleColor: Colors.cyan,
+                    secondIcon: FontAwesomeIcons.solidStar,
+                    secondLabel: "Fav",
+                    secondIconCircleColor: Colors.redAccent,
+                    thirdIcon: FontAwesomeIcons.blogger,
+                    thirdLabel: "Blogs",
+                    thirdIconCircleColor: Colors.pink,
+                    fourthIcon: FontAwesomeIcons.wallet,
+                    fourthLabel: "Wallet",
+                    fourthIconCircleColor: Colors.brown,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
 
   Widget allCards(BuildContext context) => SingleChildScrollView(
-    child: Column(
-      children: <Widget>[
-
-        SizedBox(
-        height: deviceSize!.height * 0.01,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: deviceSize!.height * 0.01,
+            ),
+            actionMenuCard(),
+            SizedBox(
+              height: deviceSize!.height * 0.01,
+            ),
+            //balanceCard(),
+          ],
         ),
-        actionMenuCard(),
-        SizedBox(
-          height: deviceSize!.height * 0.01,
-        ),
-        //balanceCard(),
-      ],
-    ),
-  );
+      );
 
-
-  Widget makeRecentExperiment({storyImage,userImage,userName}){
-
+  Widget makeRecentExperiment({storyImage, userImage, userName}) {
     return GestureDetector(
-
       child: AspectRatio(
-        aspectRatio: 1.6/2,
+        aspectRatio: 1.6 / 2,
         child: Container(
           margin: EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             image: DecorationImage(
-                image: AssetImage(storyImage),
-                fit: BoxFit.cover
-            ),
+                image: AssetImage(storyImage), fit: BoxFit.cover),
           ),
           child: Container(
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                gradient: LinearGradient(
-                    begin: Alignment.bottomRight,
-                    colors: [
-                      Colors.black.withOpacity(.9),
-                      Colors.black.withOpacity(.1),
-                    ]
-                )
-            ),
+                gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
+                  Colors.black.withOpacity(.9),
+                  Colors.black.withOpacity(.1),
+                ])),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -451,22 +430,15 @@ class _MainScreenState extends State<MainScreen>{
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
                       image: DecorationImage(
-                          image: AssetImage(userImage),
-                          fit: BoxFit.cover
-                      )
-                  ),
+                          image: AssetImage(userImage), fit: BoxFit.cover)),
                 ),
-
-
               ],
             ),
           ),
         ),
-
       ),
-
     );
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -485,58 +457,51 @@ class _MainScreenState extends State<MainScreen>{
       body: Stack(
         fit: StackFit.expand,
         //child: Stack(
-          children: <Widget> [
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                color: Colors.blue,
+                height: 120,
+                padding:
+                    EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                  height: 200,
+                  //color:Colors.red,
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        makeRecentExperiment(
+                            storyImage: 'assets/images/corn.png',
+                            userImage: 'assets/images/unknown_user.png',
+                            userName: 'Aatik Tasneem'),
+                        makeRecentExperiment(
+                            storyImage: 'assets/images/corn.png',
+                            userImage: 'assets/images/unknown_user.png',
+                            userName: 'Aiony Haust'),
+                        makeRecentExperiment(
+                            storyImage: 'assets/images/corn.png',
+                            userImage: 'assets/images/unknown_user.png',
+                            userName: 'Aiony Haust'),
+                        makeRecentExperiment(
+                            storyImage: 'assets/images/corn.png',
+                            userImage: 'assets/images/unknown_user.png',
+                            userName: 'Aiony Haust'),
+                      ],
+                    ),
+                  )),
+              SizedBox(
+                width: 20,
+              ),
 
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    color: Colors.blue,
-                    height: 120,
-                    padding: EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
-                  ),
-                  SizedBox(height: 10 ,
-                  ),
-                  Container(
-                    height: 200,
-                    //color:Colors.red,
-                    child: Padding(
-                      padding: EdgeInsets.all(8),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-
-                          makeRecentExperiment(
-                              storyImage: 'assets/images/corn.png',
-                              userImage: 'assets/images/unknown_user.png',
-                              userName: 'Aatik Tasneem'
-                          ),
-                          makeRecentExperiment(
-                              storyImage: 'assets/images/corn.png',
-                              userImage: 'assets/images/unknown_user.png',
-                              userName: 'Aiony Haust'
-                          ),
-                          makeRecentExperiment(
-                              storyImage: 'assets/images/corn.png',
-                              userImage: 'assets/images/unknown_user.png',
-                              userName: 'Aiony Haust'
-                          ),
-                          makeRecentExperiment(
-                              storyImage: 'assets/images/corn.png',
-                              userImage: 'assets/images/unknown_user.png',
-                              userName: 'Aiony Haust'
-                          ),
-
-                        ],
-                      ),
-                    )
-                  ),
-
-                  SizedBox(width: 20,),
-
-
-
-                  /*Container(
+              /*Container(
                     height: 150,
                     child: TextButton(
                       child: Text('Click to show full example'),
@@ -544,32 +509,24 @@ class _MainScreenState extends State<MainScreen>{
                     ),
                   ),*/
 
-                  makeMenuCard(),
-
-
-                ],
-
-            ),
-
-
-          ],
-        ),
-      bottomNavigationBar:  ConvexAppBar(
+              makeMenuCard(),
+            ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,
         items: [
-
-          TabItem(icon: Icons.home,title: 'Home'),
-          TabItem(icon: Icons.download, title:'Download'),
-          TabItem(icon: Icons.qr_code, title:'Scan'),
-          TabItem(icon: Icons.art_track, title:'Experiment'),
-          TabItem(icon: Icons.bar_chart,title:'Report'),
-
+          TabItem(icon: Icons.home, title: 'Home'),
+          TabItem(icon: Icons.download, title: 'Download'),
+          TabItem(icon: Icons.qr_code, title: 'Scan'),
+          TabItem(icon: Icons.art_track, title: 'Experiment'),
+          TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 0,
-        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
-
+        onTap: (int i) =>
+            Navigator.of(context).pushNamed('$i', arguments: _UserBox),
       ),
-
 
       /*(
         bottomNavigationBar: SCBottomBarDetails(
@@ -645,7 +602,6 @@ class _MainScreenState extends State<MainScreen>{
       ),*/
 
       //),
-
     );
     // TODO: implement build
     throw UnimplementedError();
