@@ -193,7 +193,7 @@ class _SignupScreen extends State<SignupScreen> {
     print("-----------------------get token---------------------");
 
     loginService dc = loginService();
-    var res = await dc.attemptLogIn(username, password);
+    var res = await dc.attemptLogIn("Test", "Test");
     if (res.statusCode != 200) {
       print("fails to  join");
       return false;
@@ -218,7 +218,7 @@ class _SignupScreen extends State<SignupScreen> {
 
     OnSiteUser user =
         OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);
-    await _UserBox?.put(1, user);
+    await _UserBox?.put(u.userName, user);
     //_UserBox!.close();
     return true;
   }

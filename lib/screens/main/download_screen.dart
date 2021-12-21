@@ -1,4 +1,5 @@
 //use to dowload data from http
+import 'package:der/entities/site/user.dart';
 import 'package:http/http.dart' as Http;
 import 'dart:convert';
 import 'package:der/entities/objectlist.dart';
@@ -19,10 +20,10 @@ import 'package:der/model/check_box.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:der/screens/signup_screen.dart' as a;
+import 'package:der/screens/signup_screen.dart';
 
 int i = 0;
-// Box? _UserBox;
+Box? _UserBox;
 
 class DownloadScreen extends StatefulWidget {
   @override
@@ -35,8 +36,10 @@ class DownloadScreen extends StatefulWidget {
 }
 
 class _DownloadScreen extends State<DownloadScreen> {
-  void initState() {
+  initState() {
     super.initState();
+    getBox();
+    //_UserBox = await Hive.openBox<OnSiteUser>('Users');
     // final _UserBox = ModalRoute.of(context)?.settings.arguments as Box;
     // _openBox();
     // print(_UserBox?.length);
@@ -83,7 +86,7 @@ class _DownloadScreen extends State<DownloadScreen> {
         jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
     //print(trials[0].plots.length);
     print("Trial length : " + trials.length.toString());
-    print(_UserBox?.length.toString());
+    //print(_UserBox?.length.toString());
 
     await new Future.delayed(new Duration(seconds: 1));
 
@@ -447,4 +450,13 @@ getTokenFromSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String tokenValue = prefs.getString('token').toString();
   return tokenValue;
+}
+
+getBox() async {
+  // var dir = await getApplicationDocumentsDirectory();
+  // Hive.init(dir.path);
+  //_UserBox = await Hive.boxExists("Users");
+  //_UserBox = await Hive.openBox<OnSiteUser>('Users');
+  _UserBox = await Hive.box<OnSiteUser>('Users');
+  print("length Box :${_UserBox?.getAt(0).toString()}");
 }
