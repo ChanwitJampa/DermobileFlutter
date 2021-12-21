@@ -20,7 +20,12 @@ import 'package:der/model/check_box.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+<<<<<<< HEAD
 import 'package:der/screens/signup_screen.dart';
+=======
+import 'package:der/screens/signup_screen.dart' as a;
+import 'package:der/screens/main/qr_screen.dart';
+>>>>>>> b35b7f4e1a05042402e2ea000f0f0f5bf4b57781
 
 int i = 0;
 Box? _UserBox;
@@ -86,7 +91,11 @@ class _DownloadScreen extends State<DownloadScreen> {
         jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
     //print(trials[0].plots.length);
     print("Trial length : " + trials.length.toString());
+<<<<<<< HEAD
     //print(_UserBox?.length.toString());
+=======
+    // print(_UserBox?.length.toString());
+>>>>>>> b35b7f4e1a05042402e2ea000f0f0f5bf4b57781
 
     await new Future.delayed(new Duration(seconds: 1));
 
@@ -319,6 +328,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                       children: <Widget>[
                         Text(
                           "Trial",
+                          "Plot ID = " + dataCode,
                           style: TextStyle(
                               color: Colors.grey[900],
                               fontWeight: FontWeight.bold,
