@@ -327,6 +327,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
                         Text(
+                          "Trial",
                           "Plot ID = " + dataCode,
                           style: TextStyle(
                               color: Colors.grey[900],
