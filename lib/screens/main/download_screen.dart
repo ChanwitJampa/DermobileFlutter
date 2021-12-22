@@ -20,15 +20,12 @@ import 'package:der/model/check_box.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-<<<<<<< HEAD
-import 'package:der/screens/signup_screen.dart';
-=======
-import 'package:der/screens/signup_screen.dart' as a;
 import 'package:der/screens/main/qr_screen.dart';
->>>>>>> b35b7f4e1a05042402e2ea000f0f0f5bf4b57781
 
 int i = 0;
 Box? _UserBox;
+List<Trial>? trials;
+//String? userNameNow;
 
 class DownloadScreen extends StatefulWidget {
   @override
@@ -43,23 +40,11 @@ class DownloadScreen extends StatefulWidget {
 class _DownloadScreen extends State<DownloadScreen> {
   initState() {
     super.initState();
-    getBox();
-    //_UserBox = await Hive.openBox<OnSiteUser>('Users');
-    // final _UserBox = ModalRoute.of(context)?.settings.arguments as Box;
-    // _openBox();
-    // print(_UserBox?.length);
-    // _UserBox?.get("Users");
-    // print("userName IS:");
-    // print(_UserBox?.getAt(0).userName.toString());
-    //print("-----now is dowload sceen---- #initState");
-  }
 
-  // void _openBox() async {
-  //   var dir = await getApplicationDocumentsDirectory();
-  //   Hive.init(dir.path);
-  //   // print('[Debug] Hive path: ${dir.path}');
-  //   // _UserBox = await Hive.openBox('User');
-  // }
+    //getUserFromSF();
+
+    getBox();
+  }
 
   bool isLoading = false;
 
@@ -73,51 +58,63 @@ class _DownloadScreen extends State<DownloadScreen> {
 
   Future _loadData() async {
     int i, page = 1;
-    var token = await getTokenFromSF();
-    print("token :" + token.toString());
+    String userNameNow = await getUserFromSF();
+
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String token = prefs.getString('token').toString();
+
     var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
+
+    String token = _UserBox!.get(userNameNow).token;
+
+    // print("----------------------------------");
+    // print(token);
+    // print("-------------------------------");
+    // print(token1);
+    // print("------------------------------");
+    // if (token1 == token) {
+    //   print("-------------yes----------");
+    // }
     var response = await Http.get(
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Bearer ${token}'
       },
     );
     var json = jsonDecode(response.body);
 
-    print(response.body);
+    //print(response.body);
 
-    List<Trial> trials = ObjectList<Trial>.fromJson(
+    trials = ObjectList<Trial>.fromJson(
         jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
     //print(trials[0].plots.length);
-    print("Trial length : " + trials.length.toString());
-<<<<<<< HEAD
-    //print(_UserBox?.length.toString());
-=======
-    // print(_UserBox?.length.toString());
->>>>>>> b35b7f4e1a05042402e2ea000f0f0f5bf4b57781
 
+    List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
+    //print("trials User ---${trialsUser.length}---");
+    /////////////////////////////more faster if sorting////////////////////////////////////////////////////////////////////////////////////
+    trialsUser.forEach((e) {
+      //  print(e.trialId);
+      for (int i = 0; i < trials!.length; i++) {
+        // print("       " + trials![i].trialId.toString());
+        if (trials![i].trialId == e.trialId) {
+          trials!.removeAt(i);
+        }
+      }
+    });
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    print("Trial length : " + trials!.length.toString());
     await new Future.delayed(new Duration(seconds: 1));
-
-    //print("load more");
-    // update data and loading status
     setState(() {
       experimentItems!.clear();
 
-      //Rest Service
-      //print("page : $page    index : $index      i: $i   j:$j   ");
-      for (i = 0; i < trials.length; i++) {
+      for (i = 0; i < trials!.length; i++) {
         experimentItems!.addAll([
-          WidgetCheckBoxModel(
-              //title: '${_TrialBox?.getAt(i).onSitePlots[j].plotId.toString()}')
-              title: '$page',
-              trial: '${trials[i].trialId}')
+          WidgetCheckBoxModel(title: '$page', trial: '${trials![i].trialId}')
         ]);
 
         page++;
       }
-      //experimentItems!.removeAt(experimentItems!.length-1);
-      //print('push');
 
       isLoading = false;
     });
@@ -328,7 +325,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                       children: <Widget>[
                         Text(
                           "Trial",
-                          "Plot ID = " + dataCode,
+                          //"Plot ID = " + dataCode,
                           style: TextStyle(
                               color: Colors.grey[900],
                               fontWeight: FontWeight.bold,
@@ -422,13 +419,14 @@ class _DownloadScreen extends State<DownloadScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: onDownload,
         icon: Icon(Icons.save),
-        label: Text("Load1"),
+        label: Text("Load"),
       ),
     );
   }
 
   onAllClicked(CheckBoxModal item) {
     final newValue = !item.value;
+
     setState(() {
       allChecked.value = !allChecked.value;
       experimentItems!.forEach((element) {
@@ -438,11 +436,27 @@ class _DownloadScreen extends State<DownloadScreen> {
   }
 
   Future onDownload() async {
+    String userNameNow = await getUserFromSF();
     await new Future.delayed(new Duration(seconds: 2));
-
+    ////////////////////////////more faster if sorting with "value" //////////////////////////////
+    for (int k = 0; k < experimentItems!.length; k++) {
+      if (experimentItems![k].value) {
+        OnSiteTrial ost = OnSiteTrial(
+            trials![k].trialId,
+            trials![k].aliasName,
+            trials![k].trialActive,
+            trials![k].trialStatus,
+            trials![k].createDate,
+            trials![k].lastUpdate);
+        _UserBox?.get(userNameNow).onSiteTrials.add(ost);
+      }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////
     setState(() {
       for (int k = 0; k < experimentItems!.length; k++) {
         if (experimentItems![k].value) {
+          // print("${trials?[k].trialId} -- " +experimentItems![k].trial.toString());
+          //print("remove is :" + experimentItems![k].trial.toString());
           experimentItems!.removeAt(k--);
         }
       }
@@ -456,17 +470,19 @@ class _DownloadScreen extends State<DownloadScreen> {
   }
 }
 
-getTokenFromSF() async {
+getUserFromSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String tokenValue = prefs.getString('token').toString();
-  return tokenValue;
+  String username = prefs.getString('userNow').toString();
+  //print("get userName :" + username);
+  return username;
 }
 
 getBox() async {
-  // var dir = await getApplicationDocumentsDirectory();
-  // Hive.init(dir.path);
-  //_UserBox = await Hive.boxExists("Users");
-  //_UserBox = await Hive.openBox<OnSiteUser>('Users');
-  _UserBox = await Hive.box<OnSiteUser>('Users');
-  print("length Box :${_UserBox?.getAt(0).toString()}");
+  //String user = await getUserFromSF();
+  String userNameNow = await getUserFromSF();
+
+  _UserBox = await Hive.box<OnSiteUser>("Users");
+
+  // print(
+  //     "OpenBox username $userNameNow:${_UserBox?.get(userNameNow).userName.toString()}");
 }

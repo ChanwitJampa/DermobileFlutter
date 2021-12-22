@@ -25,9 +25,16 @@ class OnSiteTrial {
   @HiveField(5)
   int lastUpdate;
 
-  @HiveField(6)
-  List<OnSitePlot> onSitePlots;
+  // @HiveField(6)
+  // List<OnSitePlot> onSitePlots;
 
-  OnSiteTrial(this.trialId, this.aliasName, this.trialActive, this.trialStatus,
-      this.createDate, this.lastUpdate, this.onSitePlots);
+  OnSiteTrial(
+    this.trialId,
+    this.aliasName,
+    this.trialActive,
+    this.trialStatus,
+    this.createDate,
+    this.lastUpdate,
+    //this.onSitePlots
+  );
 }

@@ -7,63 +7,60 @@ part 'plot.g.dart';
 @HiveType(typeId: 2)
 class OnSitePlot {
   @HiveField(0)
-  int plotId;
+  int pltId;
 
   @HiveField(1)
   String barcode;
 
   @HiveField(2)
-  String pltId;
-
-  @HiveField(3)
   int repNo;
 
-  @HiveField(4)
+  @HiveField(3)
   String abbrc;
 
-  @HiveField(5)
+  @HiveField(4)
   int entno;
 
-  @HiveField(6)
+  @HiveField(5)
   String notet;
 
-  @HiveField(7)
+  @HiveField(6)
   String plotImgPath;
 
-  @HiveField(8)
+  @HiveField(7)
   String plotImgPathS;
 
-  @HiveField(9)
+  @HiveField(8)
   String plotImgBoxPath;
 
-  @HiveField(10)
+  @HiveField(9)
   String plotImgBoxPathS;
 
-  @HiveField(11)
+  @HiveField(10)
   int uploadDate;
 
-  @HiveField(12)
+  @HiveField(11)
   int eartnA;
 
-  @HiveField(13)
+  @HiveField(12)
   int dlernA;
 
-  @HiveField(14)
+  @HiveField(13)
   double dlerpA;
 
-  @HiveField(15)
+  @HiveField(14)
   double drwapA;
 
-  @HiveField(16)
+  @HiveField(15)
   int eartnM;
 
-  @HiveField(17)
+  @HiveField(16)
   int dlernM;
 
-  @HiveField(18)
+  @HiveField(17)
   double dlerpM;
 
-  @HiveField(19)
+  @HiveField(18)
   double drwapM;
 
   @HiveField(20)
@@ -79,9 +76,8 @@ class OnSitePlot {
   String plotActive;
 
   OnSitePlot(
-      this.plotId,
-      this.barcode,
       this.pltId,
+      this.barcode,
       this.repNo,
       this.abbrc,
       this.entno,

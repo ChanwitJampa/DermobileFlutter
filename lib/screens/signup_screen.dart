@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors
 import 'dart:async';
 import 'dart:convert';
+//import 'dart:html';
 
 import 'package:der/entities/site/plot.dart';
 import 'package:der/entities/site/trial.dart';
@@ -32,18 +33,8 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreen extends State<SignupScreen> {
   @override
   void initState() {
-    super.initState();
-    if (!Hive.isAdapterRegistered(OnSiteUserAdapter().typeId)) {
-      Hive.registerAdapter(OnSiteUserAdapter());
-    }
-    if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
-      Hive.registerAdapter(OnSiteTrialAdapter());
-    }
-    if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
-      Hive.registerAdapter(OnSitePlotAdapter());
-    }
-
     _openBox();
+    super.initState();
   }
 
   @override
@@ -188,12 +179,13 @@ class _SignupScreen extends State<SignupScreen> {
   }
 
   static Future<bool> signIn(String username, String password) async {
-    print("username : " + username + " password : " + password);
-
-    print("-----------------------get token---------------------");
-
+    // print("-----------------------get token---------------------");
+    username = "Test";
+    password = "Test";
     loginService dc = loginService();
-    var res = await dc.attemptLogIn("Test", "Test");
+    var res = await dc.attemptLogIn(username, password);
+
+    // print("username : " + username + " password : " + password);
     if (res.statusCode != 200) {
       print("fails to  join");
       return false;
@@ -202,24 +194,26 @@ class _SignupScreen extends State<SignupScreen> {
     Response<Token> t = Response<Token>.fromJson(
         jsonDecode(res.body), (body) => Token.fromJson(body));
 
-    var token = t.body.token;
+    //print(res.body);
+    String token = t.body.token;
     User u = t.body.user;
     u.userName = username;
-    //share token to other page
+    //username token to other page
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', token);
+    prefs.setString('userNow', username);
+    //prefs.setString('token', token);
     print("sigin token is : " + token);
 
-    // u.trials.forEach((e) {
-    //   List<OnSiteTrial> ost = [];
-    //   OnSiteTrial t = OnSiteTrial(e.trialId, e.aliasName, e.trialActive, e.trialStatus,
-    //       e.createDate, e.lastUpdate, e.onSitePlots);
-    // });
+    OnSiteUser user = OnSiteUser(
+        u.userName, u.firstName, u.lastName, u.picture, token, 123, "", []);
+    // print("---------------test-----------");
 
-    OnSiteUser user =
-        OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);
-    await _UserBox?.put(u.userName, user);
+    // OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);
+    //if (Hive.box("User").getAt(0).userName == username)
+    _UserBox?.put(u.userName, user);
     //_UserBox!.close();
+    // print(_UserBox?.length);
+
     return true;
   }
 }
@@ -244,8 +238,21 @@ class loginService {
 }
 
 void _openBox() async {
+  if (!Hive.isAdapterRegistered(OnSiteUserAdapter().typeId)) {
+    Hive.registerAdapter(OnSiteUserAdapter());
+  }
+  if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
+    Hive.registerAdapter(OnSiteTrialAdapter());
+  }
+  if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
+    Hive.registerAdapter(OnSitePlotAdapter());
+  }
   var dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);
-  // print('[Debug] Hive path: ${dir.path}');
-  _UserBox = await Hive.openBox<OnSiteUser>('Users');
+
+  await Hive.openBox<OnSiteUser>('Users');
+  _UserBox = Hive.box<OnSiteUser>('Users');
+  // print("GG:" +
+  //     Hive.box<OnSiteUser>("Test").length.toString() +
+  //     Hive.box<OnSiteUser>("Test").getAt(0)!.token.toString());
 }
