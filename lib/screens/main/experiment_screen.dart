@@ -1,8 +1,12 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:der/entities/site/trial.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:der/utils/constants.dart';
 import 'package:hive/hive.dart';
+
+import 'package:der/entities/site/trial.dart';
+import 'package:der/entities/trial.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,12 +16,28 @@ class ExperimentScreen extends StatefulWidget {
 
 Box? _UserBox;
 String? userNameNow = "Test";
+List<Widget> makeExperiments = [];
 
 class _ExperimentScreen extends State<ExperimentScreen> {
+  List<OnSiteTrial>? ost;
   initState() {
     super.initState();
-    // getUserFromSF();
+    getUserFromSF();
     _UserBox = Hive.box("Users");
+
+    ost = _UserBox?.get(userNameNow).onSiteTrials;
+    ost?.forEach((e) {
+      makeExperiments.addAll([
+        makeExperiment(
+            experimentID: e.trialId,
+            userImage: 'assets/images/aiony-haust.jpg',
+            feedTime: '1 hr ago',
+            feedText:
+                'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+            feedImage: 'assets/images/corn.png')
+      ]);
+    });
+
     // print(userNameNow);
     // print(_UserBox?.get(userNameNow).onSiteTrials[0].trialId.toString());
   }
@@ -227,33 +247,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
               child: Padding(
                 padding: EdgeInsets.all(5),
                 child: Column(
-                  children: [
-                    makeExperiment(
-                        //experimentID: userNameNow,
-                        experimentID:
-                            _UserBox?.get(userNameNow).onSiteTrials.length.toString(),
-                        userImage: 'assets/images/aiony-haust.jpg',
-                        feedTime: '1 hr ago',
-                        feedText:
-                            'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                        feedImage: 'assets/images/corn.png'),
-
-                    // makeExperiment(
-                    //     experimentID: '54156',
-                    //     //userImage: 'assets/images/aiony-haust.jpg',
-                    //     feedTime: '1 hr ago',
-                    //     feedText: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                    //     feedImage: 'assets/images/corn.png'
-                    // ),
-
-                    // makeExperiment(
-                    //     experimentID: '54159',
-                    //     //userImage: 'assets/images/aiony-haust.jpg',
-                    //     feedTime: '1 hr ago',
-                    //     feedText: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                    //     feedImage: 'assets/images/corn.png'
-                    // ),
-                  ],
+                  children: makeExperiments,
                 ),
               ),
             ),
