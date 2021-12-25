@@ -63,6 +63,10 @@ class _DownloadScreen extends State<DownloadScreen> {
     //SharedPreferences prefs = await SharedPreferences.getInstance();
     // String token = prefs.getString('token').toString();
 
+    //var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
+
+    // var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
+    var url = 'http://192.168.3.198:8080/syngenta/api/trial/user/trials';
 
     String token = _UserBox!.get(userNameNow).token;
 
