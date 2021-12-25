@@ -2,12 +2,26 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:der/utils/constants.dart';
+import 'package:hive/hive.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExperimentScreen extends StatefulWidget {
   _ExperimentScreen createState() => _ExperimentScreen();
 }
 
+Box? _UserBox;
+String? userNameNow = "Test";
+
 class _ExperimentScreen extends State<ExperimentScreen> {
+  initState() {
+    super.initState();
+    // getUserFromSF();
+    _UserBox = Hive.box("Users");
+    // print(userNameNow);
+    // print(_UserBox?.get(userNameNow).onSiteTrials[0].trialId.toString());
+  }
+
   Widget makeDoughnutProgress({double? inProgress, double? finished}) {
     int fin = (finished! * 100).round();
 
@@ -215,8 +229,10 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                 child: Column(
                   children: [
                     makeExperiment(
-                        experimentID: '54155',
-                        //userImage: 'assets/images/aiony-haust.jpg',
+                        //experimentID: userNameNow,
+                        experimentID:
+                            _UserBox?.get(userNameNow).onSiteTrials.length.toString(),
+                        userImage: 'assets/images/aiony-haust.jpg',
                         feedTime: '1 hr ago',
                         feedText:
                             'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
@@ -258,4 +274,11 @@ class _ExperimentScreen extends State<ExperimentScreen> {
       ),
     );
   }
+}
+
+getUserFromSF() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  userNameNow = prefs.getString('userNow').toString();
+  print("Test: ${userNameNow}");
+  // return username;
 }
