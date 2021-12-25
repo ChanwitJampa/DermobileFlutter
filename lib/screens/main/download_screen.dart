@@ -106,7 +106,11 @@ class _DownloadScreen extends State<DownloadScreen> {
       }
     });
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    print("Trial length : " + trials!.length.toString());
+    print("Trial length : " +
+        trials!.length.toString() +
+        "   trialsUser : " +
+        trialsUser.length.toString());
+
     await new Future.delayed(new Duration(seconds: 1));
     setState(() {
       experimentItems!.clear();
