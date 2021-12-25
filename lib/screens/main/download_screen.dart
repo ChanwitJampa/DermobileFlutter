@@ -450,7 +450,9 @@ class _DownloadScreen extends State<DownloadScreen> {
             trials![k].lastUpdate);
         _UserBox?.get(userNameNow).onSiteTrials.add(ost);
       }
+      _UserBox?.get(userNameNow).save();
     }
+
     //////////////////////////////////////////////////////////////////////////////////////////
     setState(() {
       for (int k = 0; k < experimentItems!.length; k++) {
@@ -481,7 +483,7 @@ getBox() async {
   //String user = await getUserFromSF();
   String userNameNow = await getUserFromSF();
 
-  _UserBox = await Hive.box<OnSiteUser>("Users");
+  _UserBox = await Hive.box("Users");
 
   // print(
   //     "OpenBox username $userNameNow:${_UserBox?.get(userNameNow).userName.toString()}");

@@ -5,7 +5,7 @@ import 'enum.dart';
 part 'plot.g.dart';
 
 @HiveType(typeId: 2)
-class OnSitePlot {
+class OnSitePlot extends HiveObject {
   @HiveField(0)
   int pltId;
 

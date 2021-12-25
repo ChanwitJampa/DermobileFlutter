@@ -3,7 +3,7 @@ import 'package:der/entities/site/trial.dart';
 part 'user.g.dart';
 
 @HiveType(typeId: 0)
-class OnSiteUser {
+class OnSiteUser extends HiveObject {
   @HiveField(1)
   String userName;
 

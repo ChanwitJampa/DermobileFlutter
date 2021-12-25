@@ -6,7 +6,7 @@ import 'enum.dart';
 part 'trial.g.dart';
 
 @HiveType(typeId: 1)
-class OnSiteTrial {
+class OnSiteTrial extends HiveObject {
   @HiveField(0)
   String trialId;
 

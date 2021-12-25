@@ -202,15 +202,20 @@ class _SignupScreen extends State<SignupScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('userNow', username);
     //prefs.setString('token', token);
-    print("sigin token is : " + token);
-
-    OnSiteUser user = OnSiteUser(
-        u.userName, u.firstName, u.lastName, u.picture, token, 123, "", []);
-    // print("---------------test-----------");
-
-    // OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);
-    //if (Hive.box("User").getAt(0).userName == username)
-    _UserBox?.put(u.userName, user);
+    //print("sigin token is : " + token);
+    //print("username is existing :" +
+    //   (_UserBox?.get(username) == null).toString());
+    if (_UserBox?.get(username) == null) {
+      OnSiteUser user = OnSiteUser(
+          u.userName, u.firstName, u.lastName, u.picture, token, 123, "", []);
+      // print("username not have : create User ");
+      // print("---------------test-----------");
+      // OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);
+      //if (Hive.box("User").getAt(0).userName == username)
+      _UserBox?.put(u.userName, user);
+    } else {
+      _UserBox?.get(username).token = token;
+    }
     //_UserBox!.close();
     // print(_UserBox?.length);
 
@@ -250,8 +255,8 @@ void _openBox() async {
   var dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);
 
-  await Hive.openBox<OnSiteUser>('Users');
-  _UserBox = Hive.box<OnSiteUser>('Users');
+  await Hive.openBox('Users');
+  _UserBox = Hive.box('Users');
   // print("GG:" +
   //     Hive.box<OnSiteUser>("Test").length.toString() +
   //     Hive.box<OnSiteUser>("Test").getAt(0)!.token.toString());
