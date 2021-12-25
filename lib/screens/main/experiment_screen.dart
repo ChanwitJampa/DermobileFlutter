@@ -1,4 +1,5 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:der/entities/site/trial.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:der/utils/constants.dart';
@@ -42,6 +43,45 @@ class _ExperimentScreen extends State<ExperimentScreen> {
     ]);
   }
 
+  // List <Widget> project-items;
+
+  var projectItems = _UserBox?.get(userNameNow).onSiteTrials;
+
+  // List<Widget> widgetList = projectItems.map((item) {
+  //   var status = item.status;
+  //   var type = item.type;
+
+  //   var itemImage = SERVER_URL + item.frames[0].value;
+  //   var posX = width * item.statusMap[status].position.x;
+  //   var posY = width * item.statusMap[status].position.y;
+  //   var posZ = width * item.statusMap[status].position.z;
+  //   var scale = width * item.statusMap[status].size;
+
+  //   if (type == 2) {
+  //     return Positioned(
+  //       bottom: posY,
+  //       left: posX,
+  //       child: Container(
+  //         width: scale,
+  //         height: scale,
+  //         child:
+  //             ProgressButton(item.additionalInfo.stepNumber, portalId, item.id),
+  //       ),
+  //     );
+  //   } else {
+  //     return Positioned(
+  //       bottom: posY,
+  //       left: posX,
+  //       child: Container(
+  //           width: scale,
+  //           height: scale,
+  //           child: new Image(
+  //               fit: BoxFit.contain, image: new NetworkImage(itemImage))),
+  //     );
+  //   }
+  // }).toList();
+
+////////////////////////////
   Widget makeExperiment(
       {experimentID,
       userImage = "assets/images/unknown_user.jpg",
@@ -185,6 +225,8 @@ class _ExperimentScreen extends State<ExperimentScreen> {
     );
   }
 
+  //////////////////////////////////////
+
   @override
   Widget build(context) {
     return Scaffold(
@@ -231,7 +273,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                     makeExperiment(
                         //experimentID: userNameNow,
                         experimentID:
-                            _UserBox?.get(userNameNow).onSiteTrials.length.toString(),
+                            _UserBox?.get(userNameNow).onSiteTrials[0].trialId,
                         userImage: 'assets/images/aiony-haust.jpg',
                         feedTime: '1 hr ago',
                         feedText:

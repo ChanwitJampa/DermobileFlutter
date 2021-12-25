@@ -293,7 +293,7 @@ class _DownloadScreen extends State<DownloadScreen> {
           Container(
             color: Colors.blue,
             height: 135,
-            padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 10),
+            padding: EdgeInsets.only(top: 75, right: 20, left: 20, bottom: 10),
             child: Row(
               children: <Widget>[
                 Expanded(
