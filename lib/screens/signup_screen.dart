@@ -23,7 +23,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Box? _UserBox;
-const SERVER_IP = 'http://10.0.2.2:8080';
 
 class SignupScreen extends StatefulWidget {
   @override
