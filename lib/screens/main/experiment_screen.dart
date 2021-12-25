@@ -214,7 +214,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
           Container(
             color: Colors.blue,
             height: 125,
-            padding: EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
+            padding: EdgeInsets.only(top: 75, right: 20, left: 20, bottom: 10),
             child: Row(
               children: [
                 Expanded(
