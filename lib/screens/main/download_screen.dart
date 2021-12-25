@@ -65,6 +65,8 @@ class _DownloadScreen extends State<DownloadScreen> {
 
     //var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
 
+    //var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
+    var url = 'http://192.168.3.198:8080/syngenta/api/trial/user/trials';
 
     String token = _UserBox!.get(userNameNow).token;
 
