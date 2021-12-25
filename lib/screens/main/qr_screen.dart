@@ -56,6 +56,9 @@ class _QRScreen extends State<QRScreen> {
                         'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}'),
                   // else
                   //   Icon(Icons.qr_code_outlined, color: Colors.white),
+                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                  else
+                    Icon(Icons.qr_code_outlined, color: Colors.white),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,6 +133,37 @@ class _QRScreen extends State<QRScreen> {
                   //     ),
                   //   ],
                   // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          border: Border.all(color: Colors.black, width: 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            controller?.pauseCamera();
+                            Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
+                          },
+                          child: Text('MATCH'),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          border: Border.all(color: Colors.black, width: 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: Text('NOT MATCH'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -174,6 +208,7 @@ class _QRScreen extends State<QRScreen> {
             'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}');
         dataCode = result!.code;
         Navigator.of(context).pushNamed(DOWNLOAD_ROUTE);
+        Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         controller.pauseCamera();
       });
     });
