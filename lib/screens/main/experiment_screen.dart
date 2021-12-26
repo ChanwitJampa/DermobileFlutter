@@ -23,12 +23,13 @@ class _ExperimentScreen extends State<ExperimentScreen> {
   initState() {
     super.initState();
     _UserBox = Hive.box("Users");
-
+    int i = 0;
     ost = _UserBox?.get(userNameNow).onSiteTrials;
     makeExperiments.clear();
     ost?.forEach((e) {
       makeExperiments.addAll([
         makeExperiment(
+            index: i,
             experimentID: e.trialId,
             userImage: 'assets/images/aiony-haust.jpg',
             feedTime: 'create time ' +
@@ -43,9 +44,10 @@ class _ExperimentScreen extends State<ExperimentScreen> {
             //     .toString() +
             // ") "
             ,
-            feedText: 'plots = ${e.onSitePlots.length}',
+            feedText: 'index : ${i}  plots = ${e.onSitePlots.length}',
             feedImage: 'assets/images/corn.png')
       ]);
+      i++;
     });
 
     // print(userNameNow);
@@ -73,7 +75,8 @@ class _ExperimentScreen extends State<ExperimentScreen> {
   }
 
   Widget makeExperiment(
-      {experimentID,
+      {index,
+      experimentID,
       userImage = "assets/images/unknown_user.jpg",
       feedTime,
       feedText,
@@ -85,7 +88,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
         // Navigator.pushReplacementNamed(context, PLOT_ROUTE,(Route<dynamic> route) => false,arguments: experimentID);
         //print("Test 1 :" + experimentID);
         //print("testtest: " + context.toString());
-        Navigator.pushNamed(context, PLOT_ROUTE, arguments: experimentID);
+        Navigator.pushNamed(context, PLOT_ROUTE, arguments: index);
 
         //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PlotsScreen(title: experimentID)));
       },

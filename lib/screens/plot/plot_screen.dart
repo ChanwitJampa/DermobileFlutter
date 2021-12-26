@@ -1,5 +1,8 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:der/entities/site/plot.dart';
+import 'package:der/entities/site/trial.dart';
 import 'package:der/main.dart';
+import 'package:der/screens/signup_screen.dart';
 import 'package:der/utils/router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,25 +17,30 @@ import 'package:der/ui/widgets/label_below_icon.dart';
 import 'package:der/utils/app_popup_menu.dart';
 import 'package:der/utils/constants.dart';
 
+import 'package:hive/hive.dart';
+import 'package:der/screens/signup_screen.dart';
+
+Box? _UserBox;
+
 class PlotsScreen extends StatefulWidget {
   final String title;
   PlotsScreen({Key? key, required this.title}) : super(key: key);
 
   @override
-  _PlotsScreen createState() => _PlotsScreen(this.title);
+  _PlotsScreen createState() => _PlotsScreen(int.parse(this.title));
 }
 
 class _PlotsScreen extends State<PlotsScreen> {
-  final String title;
+  final int title;
   Size? deviceSize;
 
   _PlotsScreen(this.title);
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print(title);
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   print(title);
+  // }
 
   final allChecked = CheckBoxModal(title: 'All Checked');
 
@@ -44,8 +52,8 @@ class _PlotsScreen extends State<PlotsScreen> {
   bool isLoading = false;
 
   Future _loadData() async {
-    await new Future.delayed(new Duration(seconds: 2));
-
+    //await new Future.delayed(new Duration(seconds: 2));
+    //print("testtest");
     //print("load more");
     // update data and loading status
     setState(() {
@@ -473,6 +481,25 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> plotList = [];
+    _UserBox = Hive.box("Users");
+    OnSiteTrial ost = _UserBox?.get(userNameNow).onSiteTrials[title];
+    print("title is :" + ost.trialId);
+
+    plotList.clear();
+    ost.onSitePlots.forEach((e) {
+      plotList.addAll([
+        makePlot(
+            plotID: e.pltId.toString(),
+            //userImage: 'assets/images/aiony-haust.jpg',
+            feedTime: (new DateTime.fromMillisecondsSinceEpoch(e.uploadDate))
+                .toString(),
+            feedText:
+                'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+            feedImage: 'assets/images/plot_corn.jpg')
+      ]);
+    });
+    // print((int.parse(title) + 1));
     // String id = "1";
     // onGenerateRoute:
     // (settings) {
@@ -573,37 +600,39 @@ class _PlotsScreen extends State<PlotsScreen> {
             child: Padding(
               padding: EdgeInsets.all(5),
               child: Column(
-                children: [
-                  //SizedBox(height: 40,),
-                  Container(
-                    height: 3,
-                    color: Colors.grey[300],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  makePlot(
-                      plotID: '54155',
-                      //userImage: 'assets/images/aiony-haust.jpg',
-                      feedTime: '1 hr ago',
-                      feedText:
-                          'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                      feedImage: 'assets/images/plot_corn.jpg'),
-                  makePlot(
-                      plotID: '54156',
-                      //userImage: 'assets/images/aiony-haust.jpg',
-                      feedTime: '1 hr ago',
-                      feedText:
-                          'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                      feedImage: 'assets/images/plot_corn.jpg'),
-                  makePlot(
-                      plotID: '54157',
-                      //userImage: 'assets/images/aiony-haust.jpg',
-                      feedTime: '1 hr ago',
-                      feedText:
-                          'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                      feedImage: 'assets/images/plot_corn.jpg'),
-                ],
+                children: plotList
+                // [
+                //   //SizedBox(height: 40,),
+                //   Container(
+                //     height: 3,
+                //     color: Colors.grey[300],
+                //   ),
+                //   SizedBox(
+                //     height: 15,
+                //   ),
+                //   makePlot(
+                //       plotID: '54155',
+                //       //userImage: 'assets/images/aiony-haust.jpg',
+                //       feedTime: '1 hr ago',
+                //       feedText:
+                //           'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                //       feedImage: 'assets/images/plot_corn.jpg'),
+                //   makePlot(
+                //       plotID: '54156',
+                //       //userImage: 'assets/images/aiony-haust.jpg',
+                //       feedTime: '1 hr ago',
+                //       feedText:
+                //           'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                //       feedImage: 'assets/images/plot_corn.jpg'),
+                //   makePlot(
+                //       plotID: '54157',
+                //       //userImage: 'assets/images/aiony-haust.jpg',
+                //       feedTime: '1 hr ago',
+                //       feedText:
+                //           'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                //       feedImage: 'assets/images/plot_corn.jpg'),
+                // ]
+                ,
               ),
             ),
           )),
