@@ -20,13 +20,13 @@ import 'package:der/entities/site/user.dart';
 import 'package:der/entities/response.dart';
 import 'package:der/entities/trial.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Box? _UserBox;
 //const SERVER_IP = 'http://10.0.2.2:8080';
+String? userNameNow;
 
-//const SERVER_IP = 'http://10.0.2.2:8080';
-const SERVER_IP = 'http://192.168.3.198:8080';
+const SERVER_IP = 'http://10.0.2.2:8080';
+//const SERVER_IP = 'http://192.168.3.198:8080';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -185,6 +185,7 @@ class _SignupScreen extends State<SignupScreen> {
     // print("-----------------------get token---------------------");
     username = "Test";
     password = "Test";
+    userNameNow = username;
     loginService dc = loginService();
     var res = await dc.attemptLogIn(username, password);
 
@@ -202,8 +203,8 @@ class _SignupScreen extends State<SignupScreen> {
     User u = t.body.user;
     u.userName = username;
     //username token to other page
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('userNow', username);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setString('userNow', username);
     //prefs.setString('token', token);
     //print("sigin token is : " + token);
     //print("username is existing :" +

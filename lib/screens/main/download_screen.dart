@@ -18,8 +18,10 @@ import 'package:der/main.dart';
 import 'package:flutter/material.dart';
 import 'package:der/model/check_box.dart';
 import 'package:der/screens/plot/plot_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:der/screens/signup_screen.dart';
+
+import 'package:der/screens/signup_screen.dart';
 import 'package:der/screens/main/qr_screen.dart';
 
 int i = 0;
@@ -40,10 +42,18 @@ class DownloadScreen extends StatefulWidget {
 class _DownloadScreen extends State<DownloadScreen> {
   initState() {
     super.initState();
-
-    //getUserFromSF();
-
     getBox();
+
+    _loadData().then((value) => {
+          experimentItems!.clear(),
+          for (i = 0; i < trials!.length; i++)
+            {
+              experimentItems!.addAll([
+                WidgetCheckBoxModel(
+                    title: '${i + 1}', trial: '${trials![i].trialId}')
+              ])
+            }
+        });
   }
 
   bool isLoading = false;
@@ -58,26 +68,9 @@ class _DownloadScreen extends State<DownloadScreen> {
 
   Future _loadData() async {
     int i, page = 1;
-    String userNameNow = await getUserFromSF();
-
-    //SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String token = prefs.getString('token').toString();
-
-    //var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
-
-    //var url = 'http://10.0.2.2:8080/syngenta/api/trial/user/trials';
-    var url = 'http://192.168.3.198:8080/syngenta/api/trial/user/trials';
-
     String token = _UserBox!.get(userNameNow).token;
-
-    // print("----------------------------------");
-    // print(token);
-    // print("-------------------------------");
-    // print(token1);
-    // print("------------------------------");
-    // if (token1 == token) {
-    //   print("-------------yes----------");
-    // }
+    //------------------------ get trials ---------------------------------------
+    String url = "$SERVER_IP/syngenta/api/trial/user/trials";
     var response = await Http.get(
       Uri.parse(url),
       headers: <String, String>{
@@ -86,15 +79,10 @@ class _DownloadScreen extends State<DownloadScreen> {
       },
     );
     var json = jsonDecode(response.body);
-
-    //print(response.body);
-
     trials = ObjectList<Trial>.fromJson(
         jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
-    //print(trials[0].plots.length);
 
     List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
-    //print("trials User ---${trialsUser.length}---");
     /////////////////////////////more faster if sorting////////////////////////////////////////////////////////////////////////////////////
     trialsUser.forEach((e) {
       //  print(e.trialId);
@@ -111,7 +99,7 @@ class _DownloadScreen extends State<DownloadScreen> {
         "   trialsUser : " +
         trialsUser.length.toString());
 
-    await new Future.delayed(new Duration(seconds: 1));
+    //await new Future.delayed(new Duration(seconds: 1));
     setState(() {
       experimentItems!.clear();
 
@@ -331,7 +319,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
                         Text(
-                          "Trial",
+                          "Trials on sever",
                           //"Plot ID = " + dataCode,
                           style: TextStyle(
                               color: Colors.grey[900],
@@ -417,7 +405,7 @@ class _DownloadScreen extends State<DownloadScreen> {
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),
           TabItem(icon: Icons.qr_code, title: 'Scan'),
-          TabItem(icon: Icons.art_track, title: 'Trial'),
+          TabItem(icon: Icons.art_track, title: 'Trials'),
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 1,
@@ -443,18 +431,48 @@ class _DownloadScreen extends State<DownloadScreen> {
   }
 
   Future onDownload() async {
-    String userNameNow = await getUserFromSF();
-    await new Future.delayed(new Duration(seconds: 2));
+    // String userNameNow = await getUserFromSF();
+    //await new Future.delayed(new Duration(seconds: 2));
     ////////////////////////////more faster if sorting with "value" //////////////////////////////
     for (int k = 0; k < experimentItems!.length; k++) {
       if (experimentItems![k].value) {
+        List<OnSitePlot> osps = [];
+        if (trials![k].plots.isNotEmpty) {
+          trials![k].plots.forEach((e) {
+            osps.add(OnSitePlot(
+                e.plotId,
+                e.barcode,
+                e.repNo,
+                e.abbrc,
+                e.entno,
+                e.notet,
+                e.plotImgPath,
+                e.plotImgPathS,
+                e.plotImgBoxPath,
+                e.plotImgBoxPathS,
+                e.uploadDate,
+                e.eartnA,
+                e.dlernA,
+                e.dlerpA,
+                e.drwapA,
+                e.eartnM,
+                e.dlernM,
+                e.dlerpM,
+                e.drwapM,
+                e.approveDate,
+                e.plotProgress,
+                e.plotStatus,
+                e.plotActive));
+          });
+        }
         OnSiteTrial ost = OnSiteTrial(
             trials![k].trialId,
             trials![k].aliasName,
             trials![k].trialActive,
             trials![k].trialStatus,
             trials![k].createDate,
-            trials![k].lastUpdate);
+            trials![k].lastUpdate,
+            osps);
         _UserBox?.get(userNameNow).onSiteTrials.add(ost);
       }
       _UserBox?.get(userNameNow).save();
@@ -479,18 +497,18 @@ class _DownloadScreen extends State<DownloadScreen> {
   }
 }
 
-getUserFromSF() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String username = prefs.getString('userNow').toString();
-  //print("get userName :" + username);
-  return username;
-}
+// getUserFromSF() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   String username = prefs.getString('userNow').toString();
+//   //print("get userName :" + username);
+//   return username;
+// }
 
 getBox() async {
   //String user = await getUserFromSF();
-  String userNameNow = await getUserFromSF();
+  // String userNameNow = await getUserFromSF();
 
-  _UserBox = await Hive.box("Users");
+  _UserBox = Hive.box("Users");
 
   // print(
   //     "OpenBox username $userNameNow:${_UserBox?.get(userNameNow).userName.toString()}");

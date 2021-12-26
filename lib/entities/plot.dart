@@ -10,7 +10,6 @@ class Plot {
   final int plotId;
 
   String barcode;
-  String pltId;
   int repNo;
   String abbrc;
   int entno;
@@ -37,7 +36,6 @@ class Plot {
   Plot(
       this.plotId,
       this.barcode,
-      this.pltId,
       this.repNo,
       this.abbrc,
       this.entno,

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:camera/camera.dart';
+import 'package:der/entities/objectlist.dart';
+import 'package:der/entities/trial.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,13 +16,18 @@ import 'package:der/screens/select_Image.dart';
 import 'package:der/ui/page/dashboard/dashboard_one/dashboard_menu_row.dart';
 import 'package:der/ui/widgets/label_below_icon.dart';
 import '../../main.dart';
+import '../signup_screen.dart';
 import 'qr_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:der/utils/constants.dart';
 import 'package:der/utils/router.dart';
 
+import 'package:hive/hive.dart';
+import 'package:http/http.dart' as Http;
+
 Box? _UserBox;
+List<Trial>? trials;
 
 class MainScreen extends StatefulWidget {
   //final List<CameraDescription> cameras;
@@ -43,6 +52,8 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    _UserBox = Hive.box("Users");
+
     // final _UserBox = ModalRoute.of(context)!.settings.arguments as Box;
     // print("User Box len:" + _UserBox.length.toString());
     // print(_UserBox.get("Users").userName);
@@ -520,7 +531,7 @@ class _MainScreenState extends State<MainScreen> {
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),
           TabItem(icon: Icons.qr_code, title: 'Scan'),
-          TabItem(icon: Icons.art_track, title: 'Experiment'),
+          TabItem(icon: Icons.art_track, title: 'Trials'),
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 0,
@@ -606,4 +617,20 @@ class _MainScreenState extends State<MainScreen> {
     // TODO: implement build
     throw UnimplementedError();
   }
+}
+
+loadData() async {
+  String token = _UserBox!.get(userNameNow).token;
+  //------------------------ get trials ---------------------------------------
+  String url = "$SERVER_IP/syngenta/api/trial/user/trials";
+  var response = await Http.get(
+    Uri.parse(url),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${token}'
+    },
+  );
+  var json = jsonDecode(response.body);
+  trials = ObjectList<Trial>.fromJson(
+      jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
 }

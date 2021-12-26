@@ -9,7 +9,6 @@ part of 'plot.dart';
 Plot _$PlotFromJson(Map<String, dynamic> json) => Plot(
       json['plotId'] == null ? 0 : json['plotId'] as int,
       json['barcode'] == null ? "null" : json['barcode'] as String,
-      json['pltId'] == null ? "null" : json['pltId'] as String,
       json['repNo'] == null ? 0 : json['repNo'] as int,
       json['abbrc'] == null ? "null" : json['abbrc'] as String,
       json['entno'] == null ? 0 : json['entno'] as int,
@@ -46,7 +45,6 @@ Plot _$PlotFromJson(Map<String, dynamic> json) => Plot(
 Map<String, dynamic> _$PlotToJson(Plot instance) => <String, dynamic>{
       'plotId': instance.plotId,
       'barcode': instance.barcode,
-      'pltId': instance.pltId,
       'repNo': instance.repNo,
       'abbrc': instance.abbrc,
       'entno': instance.entno,

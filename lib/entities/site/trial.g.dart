@@ -23,7 +23,7 @@ class OnSiteTrialAdapter extends TypeAdapter<OnSiteTrial> {
       reader.readString(),
       reader.readInt(),
       reader.readInt(),
-      //reader.readList().cast<OnSitePlot>(),
+      reader.readList().cast<OnSitePlot>(),
 
       // fields[0] as String,
       // fields[1] as String,
@@ -43,7 +43,8 @@ class OnSiteTrialAdapter extends TypeAdapter<OnSiteTrial> {
       ..writeString(obj.trialActive)
       ..writeString(obj.trialStatus)
       ..writeInt(obj.createDate)
-      ..writeInt(obj.lastUpdate);
+      ..writeInt(obj.lastUpdate)
+      ..writeList(obj.onSitePlots);
 
     // ..writeByte(7)
     // ..writeByte(0)

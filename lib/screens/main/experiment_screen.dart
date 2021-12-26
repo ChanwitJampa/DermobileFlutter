@@ -8,32 +8,42 @@ import 'package:hive/hive.dart';
 import 'package:der/entities/site/trial.dart';
 import 'package:der/entities/trial.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:der/screens/signup_screen.dart';
 
 class ExperimentScreen extends StatefulWidget {
   _ExperimentScreen createState() => _ExperimentScreen();
 }
 
 Box? _UserBox;
-String? userNameNow = "Test";
+
 List<Widget> makeExperiments = [];
 
 class _ExperimentScreen extends State<ExperimentScreen> {
   List<OnSiteTrial>? ost;
   initState() {
     super.initState();
-    getUserFromSF();
     _UserBox = Hive.box("Users");
 
     ost = _UserBox?.get(userNameNow).onSiteTrials;
+    makeExperiments.clear();
     ost?.forEach((e) {
       makeExperiments.addAll([
         makeExperiment(
             experimentID: e.trialId,
             userImage: 'assets/images/aiony-haust.jpg',
-            feedTime: '1 hr ago',
-            feedText:
-                'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+            feedTime: 'create time ' +
+                (new DateTime.fromMillisecondsSinceEpoch(e.lastUpdate))
+                    .toString()
+            //     +
+            // "  (" +
+            // DateTime.now()
+            //     .difference(
+            //         new DateTime.fromMicrosecondsSinceEpoch(e.lastUpdate))
+            //     .inDays
+            //     .toString() +
+            // ") "
+            ,
+            feedText: 'plots = ${e.onSitePlots.length}',
             feedImage: 'assets/images/corn.png')
       ]);
     });
@@ -73,7 +83,10 @@ class _ExperimentScreen extends State<ExperimentScreen> {
         //Navigator.pushNamedAndRemoveUntil(context, PLOT_ROUTE, (route) => false,arguments: experimentID);
         //Navigator.of(context).pushNamed('$i')
         // Navigator.pushReplacementNamed(context, PLOT_ROUTE,(Route<dynamic> route) => false,arguments: experimentID);
+        //print("Test 1 :" + experimentID);
+        //print("testtest: " + context.toString());
         Navigator.pushNamed(context, PLOT_ROUTE, arguments: experimentID);
+
         //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PlotsScreen(title: experimentID)));
       },
       child: Container(
@@ -260,7 +273,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),
           TabItem(icon: Icons.qr_code, title: 'Scan'),
-          TabItem(icon: Icons.art_track, title: 'Experiment'),
+          TabItem(icon: Icons.art_track, title: 'Trials'),
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 3,
@@ -270,9 +283,9 @@ class _ExperimentScreen extends State<ExperimentScreen> {
   }
 }
 
-getUserFromSF() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  userNameNow = prefs.getString('userNow').toString();
-  print("Test: ${userNameNow}");
-  // return username;
-}
+// getUserFromSF() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   userNameNow = prefs.getString('userNow').toString();
+//   print("Test: ${userNameNow}");
+//    return username;
+// }
