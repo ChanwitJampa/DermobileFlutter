@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:der/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,20 +11,20 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:der/screens/main/qr_screen.dart';
 
-String name = "Kuy";
-var id = "1";
+import 'package:gallery_saver/gallery_saver.dart';
 
 class SelectImage extends StatefulWidget {
   _SelectImage createState() => _SelectImage();
 }
 
 class _SelectImage extends State<SelectImage> {
-  List<XFile>? _imageFileList;
+  //List<XFile>? _imageFileList;
 
   var _image;
 
   final picker = ImagePicker();
   //late final XFile _imageFile ;
+
   _getImage(ImageSource imageSource) async {
     final _imageFile = await picker.pickImage(
       source: imageSource,
@@ -37,8 +38,9 @@ class _SelectImage extends State<SelectImage> {
       () {
         _image = _imageFile;
         isSelected = true;
+
         //_imageFileList = pickedFile;
-//Rebuild UI with the selected image.
+        //Rebuild UI with the selected image.
         //print('$_image');
         //_image = File(pickedFile.path);
       },
@@ -47,9 +49,23 @@ class _SelectImage extends State<SelectImage> {
 
   bool isSelected = false;
 
-  void saveExperiment() {}
+  void saveExperiment(XFile impath) {
+    GallerySaver.saveImage(impath.path);
+    print(impath.path);
+    _image = null;
+    Navigator.of(context).pushNamed(HOME_ROUTE);
+  }
 
-  void cancelExperiment() {}
+  void cancelExperiment() {
+    setState(
+      () {
+        _image = null;
+        isSelected = false;
+      },
+    );
+  }
+
+/*
 
   Widget test() {
     return Column(
@@ -176,7 +192,7 @@ class _SelectImage extends State<SelectImage> {
             ElevatedButton.icon(
               onPressed: () => isSelected == true
                   ? cancelExperiment()
-                  : _getImage(ImageSource.camera),
+                  : cancelExperiment(), //_getImage(ImageSource.camera),
               icon: isSelected == true
                   ? Icon(Icons.dangerous)
                   : Icon(Icons.camera),
@@ -188,6 +204,7 @@ class _SelectImage extends State<SelectImage> {
     );
   }
 
+*/
   Widget makeSelectedImage() {
     return Stack(
       fit: StackFit.expand,
@@ -243,7 +260,7 @@ class _SelectImage extends State<SelectImage> {
                                   Container(
                                     width: 368,
                                     child: const Text(
-                                      'Plot ID :' + '12345',
+                                      'Img:' + '12345',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,
@@ -295,7 +312,7 @@ class _SelectImage extends State<SelectImage> {
                       children: [
                         ElevatedButton.icon(
                           onPressed: () => isSelected == true
-                              ? saveExperiment()
+                              ? saveExperiment(_image)
                               : _getImage(ImageSource.gallery),
                           icon: isSelected == true
                               ? Icon(Icons.add)
