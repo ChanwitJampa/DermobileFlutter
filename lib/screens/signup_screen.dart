@@ -183,8 +183,8 @@ class _SignupScreen extends State<SignupScreen> {
 
   static Future<bool> signIn(String username, String password) async {
     // print("-----------------------get token---------------------");
-    username = "Test";
-    password = "Test";
+    // username = "Test";
+    //password = "Test";
     userNameNow = username;
     loginService dc = loginService();
     var res = await dc.attemptLogIn(username, password);

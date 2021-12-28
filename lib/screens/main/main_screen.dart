@@ -270,7 +270,7 @@ class _MainScreenState extends State<MainScreen> {
                         width: 175,
                         child: InkWell(
                           child: makeMenu(
-                              menuName: "Experiment",
+                              menuName: "Trials",
                               subMenuName: "Progress",
                               inProgress: 0.8,
                               finished: 0.3),

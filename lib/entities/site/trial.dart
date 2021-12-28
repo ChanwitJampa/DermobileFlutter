@@ -28,6 +28,8 @@ class OnSiteTrial extends HiveObject {
   @HiveField(6)
   List<OnSitePlot> onSitePlots;
 
+  //lastModifyDateOnSite
+
   OnSiteTrial(this.trialId, this.aliasName, this.trialActive, this.trialStatus,
       this.createDate, this.lastUpdate, this.onSitePlots);
 }

@@ -495,7 +495,9 @@ class _PlotsScreen extends State<PlotsScreen> {
             feedTime: (new DateTime.fromMillisecondsSinceEpoch(e.uploadDate))
                 .toString(),
             feedText:
-                'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
+            //     'All the Lorem Ipsum generators on the Internet tend to repeat predefined.'
+            // ,
             feedImage: 'assets/images/plot_corn.jpg')
       ]);
     });

@@ -50,7 +50,9 @@ class _DownloadScreen extends State<DownloadScreen> {
             {
               experimentItems!.addAll([
                 WidgetCheckBoxModel(
-                    title: '${i + 1}', trial: '${trials![i].trialId}')
+                    title: '${i + 1}',
+                    trial:
+                        '${trials![i].trialId}\n${(new DateTime.fromMillisecondsSinceEpoch(trials![i].lastUpdate)).toString()}')
               ])
             }
         });
@@ -105,7 +107,10 @@ class _DownloadScreen extends State<DownloadScreen> {
 
       for (i = 0; i < trials!.length; i++) {
         experimentItems!.addAll([
-          WidgetCheckBoxModel(title: '$page', trial: '${trials![i].trialId}')
+          WidgetCheckBoxModel(
+              title: '$page',
+              trial:
+                  '${trials![i].trialId}\n${(new DateTime.fromMillisecondsSinceEpoch(trials![i].lastUpdate)).toString()}')
         ]);
 
         page++;
