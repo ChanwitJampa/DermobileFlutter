@@ -1,5 +1,8 @@
+import 'package:der/entities/site/trial.dart';
+import 'package:der/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:camera/camera.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -10,6 +13,7 @@ import 'package:der/screens/select_Image.dart';
 import 'package:der/utils/constants.dart';
 
 var dataCode = "";
+Box? _UserBox;
 
 class QRScreen extends StatefulWidget {
   @override
@@ -20,6 +24,11 @@ class _QRScreen extends State<QRScreen> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+  initState() {
+    super.initState();
+    _UserBox = Hive.box("Users");
+  }
 
   List<bool> _isSelected = [false, false];
 
@@ -194,4 +203,17 @@ class _QRScreen extends State<QRScreen> {
     super.dispose();
     print("CustomWidget dispose");
   }
+}
+
+bool checkPlost(String barcode) {
+  List<OnSiteTrial> ost = _UserBox?.get(userNameNow).onSiteTrials;
+  ost.forEach((e) {
+    e.onSitePlots.forEach((l) {
+      if (barcode == l.barcode) {
+        print(e.trialId);
+      }
+    });
+  });
+
+  return true;
 }
