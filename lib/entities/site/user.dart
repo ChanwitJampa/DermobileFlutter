@@ -1,3 +1,4 @@
+import 'package:der/entities/site/plot.dart';
 import 'package:hive/hive.dart';
 import 'package:der/entities/site/trial.dart';
 part 'user.g.dart';
@@ -28,8 +29,19 @@ class OnSiteUser extends HiveObject {
   @HiveField(8)
   List<OnSiteTrial> onSiteTrials;
 
-  OnSiteUser(this.userName, this.firstName, this.lastName, this.picture,
-      this.token, this.tokenDateTime, this.passwordDigit, this.onSiteTrials
+  @HiveField(9)
+  List<OnSitePlot> unMatchPlots;
+
+  OnSiteUser(
+      this.userName,
+      this.firstName,
+      this.lastName,
+      this.picture,
+      this.token,
+      this.tokenDateTime,
+      this.passwordDigit,
+      this.onSiteTrials,
+      this.unMatchPlots
       //
       );
 }

@@ -1,3 +1,4 @@
+import 'package:der/entities/site/plot.dart';
 import 'package:der/entities/site/trial.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -182,8 +183,24 @@ class _QRScreen extends State<QRScreen> {
         print(
             'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}');
         dataCode = result!.code;
-        Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
-        controller.pauseCamera();
+        int i = 0;
+        int j = 0;
+        _UserBox?.get(userNameNow).onSiteTrials.foreach((e) {
+          e.onSitePlots.foreach((f) {
+            if (f.pltId == dataCode) {
+              print("match plot ID is" + dataCode);
+              controller?.pauseCamera();
+              Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
+            }
+            j++;
+          });
+          i++;
+        });
+
+        print("unmatch plot ID is" + dataCode);
+
+        // Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
+        // controller.pauseCamera();
       });
     });
   }

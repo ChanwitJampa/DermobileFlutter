@@ -26,6 +26,7 @@ import 'package:der/screens/main/qr_screen.dart';
 
 int i = 0;
 Box? _UserBox;
+
 List<Trial>? trials;
 //String? userNameNow;
 
