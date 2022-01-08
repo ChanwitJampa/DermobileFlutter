@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:der/entities/site/plot.dart';
 import 'package:der/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

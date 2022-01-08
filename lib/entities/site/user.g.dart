@@ -25,6 +25,7 @@ class OnSiteUserAdapter extends TypeAdapter<OnSiteUser> {
       reader.readInt(),
       reader.readString(),
       reader.readList().cast<OnSiteTrial>(),
+      reader.readList().cast<OnSitePlot>(),
     );
 
     // fields[0] as String,
@@ -44,7 +45,8 @@ class OnSiteUserAdapter extends TypeAdapter<OnSiteUser> {
       ..writeString(obj.token)
       ..writeInt(obj.tokenDateTime)
       ..writeString(obj.passwordDigit)
-      ..writeList(obj.onSiteTrials);
+      ..writeList(obj.onSiteTrials)
+      ..writeList(obj.unMatchPlots);
 
     // writer
     //   ..writeByte(9)
