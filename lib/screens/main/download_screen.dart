@@ -137,8 +137,8 @@ class _DownloadScreen extends State<DownloadScreen> {
             Row(
               children: [
                 Container(
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       //borderRadius: BorderRadius.circular(100),
@@ -161,21 +161,12 @@ class _DownloadScreen extends State<DownloadScreen> {
           ],
         ),
         Container(
-          height: 150,
+          height: 120,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Container(
-                height: 150,
-                width: 150,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    //borderRadius: BorderRadius.circular(100),
-                    image: DecorationImage(
-                        image: AssetImage(experimentImage), fit: BoxFit.cover)),
-              ),
               SizedBox(
-                width: 5,
+                width: 0,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,12 +179,13 @@ class _DownloadScreen extends State<DownloadScreen> {
                   //       height: 1.5,
                   //       letterSpacing: .7),
                   // ),
+                  SizedBox(height: 15),
                   Text(
-                    "Trial No. = " + experimentItems![index].title,
+                    "Trial " + experimentItems![index].title,
                     style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey[800],
-                        height: 1.5,
+                        fontSize: 25,
+                        color: Colors.blue[700],
+                        height: 1,
                         letterSpacing: .7),
                   ),
                   // Text(
@@ -206,6 +198,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                   //       height: 1.5,
                   //       letterSpacing: .7),
                   // ),
+                  SizedBox(height: 10),
                   Text(
                     experimentItems![index].trial,
                     style: TextStyle(
@@ -315,7 +308,7 @@ class _DownloadScreen extends State<DownloadScreen> {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -347,7 +340,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                     ),
                     //SizedBox(height: 20,),
                     Container(
-                      height: 500,
+                      height: 530,
                       child: NotificationListener<ScrollNotification>(
                         onNotification: (ScrollNotification scrollInfo) {
                           if (!isLoading &&
@@ -364,7 +357,8 @@ class _DownloadScreen extends State<DownloadScreen> {
                           onRefresh: _pullRefresh,
                           child: ListView.separated(
                             separatorBuilder: (context, index) => Divider(
-                              color: Colors.black,
+                              color: Colors.grey[500],
+                              thickness: 2,
                             ),
                             itemCount: experimentItems!.length,
                             itemBuilder: (context, index) => Padding(
