@@ -162,8 +162,8 @@ class _PlotsScreen extends State<PlotsScreen> {
               Row(
                 children: <Widget>[
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
@@ -196,8 +196,8 @@ class _PlotsScreen extends State<PlotsScreen> {
               ),
               InkWell(
                 child: Container(
-                  height: 30,
-                  width: 30,
+                  height: 20,
+                  width: 20,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
@@ -254,19 +254,23 @@ class _PlotsScreen extends State<PlotsScreen> {
                 letterSpacing: .7),
           ),
           SizedBox(
-            height: 20,
+            height: 90,
           ),
           feedImage != ''
-              ? Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          image: AssetImage(feedImage), fit: BoxFit.cover)),
+              ? new RotationTransition(
+                  turns: new AlwaysStoppedAnimation(90 / 360),
+                  child: new Image.asset(feedImage),
                 )
+              // Container(
+              //     height: 200,
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(10),
+              //         image: DecorationImage(
+              //             image: AssetImage(feedImage), fit: BoxFit.cover)),
+              //   )
               : Container(),
           SizedBox(
-            height: 10,
+            height: 60,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -545,7 +549,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                               color: Colors.grey,
                             ),
                             onTap: () {
-                              print('test');
+                              Navigator.of(context).pushNamed(SCAN_QR_ROUTE);
                             },
                           ),
                         ),
@@ -565,12 +569,12 @@ class _PlotsScreen extends State<PlotsScreen> {
                       AppPopupMenu(
                         icon: Icon(
                           Icons.filter_list,
-                          size: 25,
+                          size: 20,
                         ),
                         items: ['test', 'test'],
                         offset: const Offset(0, 20),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         padding: EdgeInsets.all(10),
                       ),
@@ -718,7 +722,7 @@ class _PlotsScreen extends State<PlotsScreen> {
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),
           TabItem(icon: Icons.qr_code, title: 'Scan'),
-          TabItem(icon: Icons.art_track, title: 'Experiment'),
+          TabItem(icon: Icons.art_track, title: 'Trials'),
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 3,
