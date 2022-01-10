@@ -190,11 +190,11 @@ class _QRScreen extends State<QRScreen> {
           print("match plot ID is" + dataCode);
           controller.pauseCamera();
           Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
+        } else {
+          print("unmatch plot ID is" + dataCode);
+          controller.pauseCamera();
+          Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         }
-
-        print("unmatch plot ID is" + dataCode);
-        controller.pauseCamera();
-        Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
 
         // Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         // controller.pauseCamera();
@@ -220,16 +220,24 @@ class _QRScreen extends State<QRScreen> {
 }
 
 bool checkPlost(String barcode) {
+  int check = 0;
+
   print("------------------------------------------------");
   List<OnSiteTrial> ost = _UserBox?.get(userNameNow).onSiteTrials;
   ost.forEach((e) {
     e.onSitePlots.forEach((l) {
       if (barcode == l.barcode) {
         print(e.trialId);
+        print(l.barcode);
+        check = 1;
       }
     });
   });
   print("------------------------------------------------------");
 
-  return true;
+  if (check == 1) {
+    return true;
+  } else {
+    return false;
+  }
 }
