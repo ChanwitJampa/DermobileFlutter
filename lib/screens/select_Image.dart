@@ -4,15 +4,19 @@ import 'dart:io';
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:der/entities/site/plot.dart';
+import 'package:der/screens/signup_screen.dart';
 import 'package:der/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:der/screens/main/qr_screen.dart';
 
 import 'package:gallery_saver/gallery_saver.dart';
+
+Box? _UserBox;
 
 class SelectImage extends StatefulWidget {
   _SelectImage createState() => _SelectImage();
@@ -20,6 +24,10 @@ class SelectImage extends StatefulWidget {
 
 class _SelectImage extends State<SelectImage> {
   //List<XFile>? _imageFileList;
+  initState() {
+    super.initState();
+    _UserBox = Hive.box("Users");
+  }
 
   var _image;
 
@@ -51,6 +59,13 @@ class _SelectImage extends State<SelectImage> {
   bool isSelected = false;
 
   void saveExperiment(XFile impath) {
+    _UserBox?.get(userNameNow)
+        .onSiteTrials[itrial]
+        .onSitePlots[jplot]
+        .plotImgPath = impath;
+    _UserBox?.get(userNameNow).save();
+    print(
+        "plath plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
     GallerySaver.saveImage(impath.path);
     print(impath.path);
     _image = null;
