@@ -187,10 +187,13 @@ class _QRScreen extends State<QRScreen> {
         int j = 0;
         if (checkPlost(dataCode)) {
           print("match plot ID is" + dataCode);
+          controller.pauseCamera();
+          Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         }
 
         print("unmatch plot ID is" + dataCode);
-
+        controller.pauseCamera();
+        Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         // Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         // controller.pauseCamera();
       });
