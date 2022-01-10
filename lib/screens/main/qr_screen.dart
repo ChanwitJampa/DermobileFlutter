@@ -185,33 +185,17 @@ class _QRScreen extends State<QRScreen> {
         dataCode = result!.code;
         int i = 0;
         int j = 0;
-<<<<<<< HEAD
-        _UserBox?.get(userNameNow).onSiteTrials.forEach((e) {
-          e.onSitePlots.forEach((f) {
-            if (f.barcode == dataCode) {
-              print("match plot ID is " + dataCode);
-              controller.pauseCamera();
-              Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
-            }
-            j++;
-          });
-          i++;
-        });
-=======
+
         if (checkPlost(dataCode)) {
           print("match plot ID is" + dataCode);
           controller.pauseCamera();
           Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         }
->>>>>>> 059366da0044092d932bc7b39a02cbfa1790518d
 
         print("unmatch plot ID is" + dataCode);
         controller.pauseCamera();
         Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
-<<<<<<< HEAD
 
-=======
->>>>>>> 059366da0044092d932bc7b39a02cbfa1790518d
         // Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         // controller.pauseCamera();
       });
