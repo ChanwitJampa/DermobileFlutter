@@ -15,6 +15,8 @@ import 'package:der/utils/constants.dart';
 
 String dataCode = "";
 Box? _UserBox;
+int itrial = 0;
+int jplot = 0;
 
 class QRScreen extends StatefulWidget {
   @override
@@ -183,8 +185,6 @@ class _QRScreen extends State<QRScreen> {
         print(
             'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}');
         dataCode = result!.code;
-        int i = 0;
-        int j = 0;
 
         if (checkPlost(dataCode)) {
           print("match plot ID is" + dataCode);
@@ -220,24 +220,34 @@ class _QRScreen extends State<QRScreen> {
 }
 
 bool checkPlost(String barcode) {
-  int check = 0;
-
   print("------------------------------------------------");
   List<OnSiteTrial> ost = _UserBox?.get(userNameNow).onSiteTrials;
-  ost.forEach((e) {
-    e.onSitePlots.forEach((l) {
-      if (barcode == l.barcode) {
-        print(e.trialId);
-        print(l.barcode);
-        check = 1;
+  // ost.forEach((e) {
+  //   e.onSitePlots.forEach((l) {
+  //     if (barcode == l.barcode) {
+  //       print(e.trialId);
+  //       print(l.barcode);
+  //       check = 1;
+  //     }
+  //     if(check==0)
+  //     jplot++;
+  //   });
+  //   if(check==0)
+  //   itrial++;
+  // });
+  for (; itrial < ost.length; itrial++) {
+    for (; jplot < ost[itrial].onSitePlots.length; jplot++) {
+      if (barcode == ost[itrial].onSitePlots[jplot].barcode) {
+        print(ost[itrial].trialId);
+        print(ost[itrial].onSitePlots[jplot].barcode);
+        print("i = " + itrial.toString() + " j = " + jplot.toString());
+        print("------------------------------------------------------");
+        return true;
       }
-    });
-  });
+    }
+  }
+
   print("------------------------------------------------------");
 
-  if (check == 1) {
-    return true;
-  } else {
-    return false;
-  }
+  return false;
 }
