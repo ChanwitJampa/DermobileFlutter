@@ -19,6 +19,7 @@ import 'package:der/utils/constants.dart';
 
 import 'package:hive/hive.dart';
 import 'package:der/screens/signup_screen.dart';
+import 'package:der/screens/select_image.dart';
 
 Box? _UserBox;
 
@@ -35,12 +36,15 @@ class _PlotsScreen extends State<PlotsScreen> {
   Size? deviceSize;
 
   _PlotsScreen(this.title);
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   print(title);
-  // }
+
+  @override
+  void initState() {
+    super.initState();
+
+    //_UserBox = Hive.box("Users");
+    // String path =
+    //     _UserBox?.get(userNameNow).onSiteTrials[0].onSitePlots[0].plotImgPath;
+  }
 
   final allChecked = CheckBoxModal(title: 'All Checked');
 
@@ -501,20 +505,33 @@ class _PlotsScreen extends State<PlotsScreen> {
     OnSiteTrial ost = _UserBox?.get(userNameNow).onSiteTrials[title];
     print("title is :" + ost.trialId);
 
+    int i = 0;
+
+    // ost.onSitePlots.forEach((e) {
+    //   print("path = " + e.plotImgPath);
+    //   print("i++" + i.toString());
+    //   i++;
+    // });
+
     plotList.clear();
     ost.onSitePlots.forEach((e) {
       plotList.addAll([
         makePlot(
-            plotID: e.pltId.toString(),
-            //userImage: 'assets/images/aiony-haust.jpg',
-            feedTime: (new DateTime.fromMillisecondsSinceEpoch(e.uploadDate))
-                .toString(),
-            feedText:
-                "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
-            //     'All the Lorem Ipsum generators on the Internet tend to repeat predefined.'
-            // ,
+          plotID: e.pltId.toString(),
+          //userImage: 'assets/images/aiony-haust.jpg',
+          feedTime: (new DateTime.fromMillisecondsSinceEpoch(e.uploadDate))
+              .toString(),
+          feedText:
+              "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
+          //     'All the Lorem Ipsum generators on the Internet tend to repeat predefined.'
+          // ,
 //            feedImage: 'assets/images/plot_corn.jpg')
-            feedImage: 'assets/images/emu_photo.jpg')
+          //feedImage: 'assets/images/emu_photo.jpg'),
+          feedImage: testpath,
+        )
+        // feedImage: e.plotImgPath == null
+        //     ? "assets/images/img_not.png"
+        //     : e.plotImgPath,
       ]);
     });
     // print((int.parse(title) + 1));

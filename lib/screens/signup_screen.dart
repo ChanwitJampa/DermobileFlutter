@@ -258,6 +258,7 @@ void _openBox() async {
   }
   var dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);
+  print("DIR PATH = " + dir.path);
 
   await Hive.openBox('Users');
   _UserBox = Hive.box('Users');

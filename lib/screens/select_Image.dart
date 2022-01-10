@@ -13,10 +13,13 @@ import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:der/screens/main/qr_screen.dart';
-
+import 'package:path_provider/path_provider.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:path/path.dart' as p;
 
 Box? _UserBox;
+String galleryPath = "";
+String testpath = "";
 
 class SelectImage extends StatefulWidget {
   _SelectImage createState() => _SelectImage();
@@ -58,15 +61,66 @@ class _SelectImage extends State<SelectImage> {
 
   bool isSelected = false;
 
-  void saveExperiment(XFile impath) {
+  Future<List<Directory>?>? _externalStorageDirectories;
+  // String tempPath = "";
+
+  // void _requestExternalStorageDirectories(StorageDirectory type) {
+  //   setState(() {
+  //     _externalStorageDirectories = getExternalStorageDirectories(type: type);
+  //     tempPath = _externalStorageDirectories as String;
+  //   });
+  // }
+
+  Future<void> saveExperiment(XFile impath) async {
+    Directory? directory;
+
     _UserBox?.get(userNameNow)
         .onSiteTrials[itrial]
         .onSitePlots[jplot]
-        .plotImgPath = impath;
+        .plotImgPath = impath.path;
     _UserBox?.get(userNameNow).save();
     print(
-        "plath plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
+        "path plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
     GallerySaver.saveImage(impath.path);
+
+    final _filename = p.basename(impath.path);
+
+    // _externalStorageDirectories =
+    //     getExternalStorageDirectories(type: StorageDirectory.pictures);
+    //tempPath = _externalStorageDirectories;
+    // directory = await getExternalStorageDirectories();
+
+    directory = await getExternalStorageDirectory();
+    //directory = await getExternalStorageDirectories(type: StorageDirectory.pictures);
+
+    // print(directory);
+    // print("tempPath2 = " + directory.toString());
+    print("tempPath3 = " + directory!.path);
+    print("FileName = " + _filename);
+
+    int count1 = 0;
+
+    if (count1 == 0) {
+      galleryPath = "";
+      for (int i = 0; i < directory!.path.length; i++) {
+        print(directory!.path[i]);
+
+        galleryPath = galleryPath + directory!.path[i];
+
+        if (directory.path[i] == "0") {
+          break;
+          count1 = 1;
+        }
+      }
+    }
+
+    galleryPath = galleryPath + "/Pictures/";
+
+    testpath = galleryPath + _filename;
+
+    print("galleryPath = " + galleryPath);
+    print("imgPath = " + testpath);
+
     print(impath.path);
     _image = null;
     Navigator.of(context).pushNamed(HOME_ROUTE);
