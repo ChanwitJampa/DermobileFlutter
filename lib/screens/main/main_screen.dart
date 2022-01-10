@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:der/entities/objectlist.dart';
 import 'package:der/entities/trial.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spincircle_bottom_bar/modals.dart';
@@ -451,11 +452,31 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  DateTime timeBackPressed = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      /*appBar: AppBar(
+    return WillPopScope(
+        onWillPop: () async {
+          final difference = DateTime.now().difference(timeBackPressed);
+          final isExitWarning = difference >= Duration(seconds: 2);
+
+          timeBackPressed = DateTime.now();
+
+          if (isExitWarning) {
+            const message = "Press back again to exit";
+            Fluttertoast.showToast(msg: message, fontSize: 18);
+
+            return false;
+          } else {
+            Fluttertoast.cancel();
+
+            return true;
+          }
+        },
+        child: Scaffold(
+          /*appBar: AppBar(
         centerTitle: true,
         title: Text("Home",
         style: TextStyle(
@@ -464,55 +485,55 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: Colors.white,
         leading: Container(),
       ),*/
-      //Adding SpinCircleBottomBarHolder to body of Scaffold
-      body: Stack(
-        fit: StackFit.expand,
-        //child: Stack(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          //Adding SpinCircleBottomBarHolder to body of Scaffold
+          body: Stack(
+            fit: StackFit.expand,
+            //child: Stack(
             children: <Widget>[
-              Container(
-                color: Colors.blue,
-                height: 120,
-                padding:
-                    EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 200,
-                  //color:Colors.red,
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        makeRecentExperiment(
-                            storyImage: 'assets/images/corn.png',
-                            userImage: 'assets/images/unknown_user.png',
-                            userName: 'Aatik Tasneem'),
-                        makeRecentExperiment(
-                            storyImage: 'assets/images/corn.png',
-                            userImage: 'assets/images/unknown_user.png',
-                            userName: 'Aiony Haust'),
-                        makeRecentExperiment(
-                            storyImage: 'assets/images/corn.png',
-                            userImage: 'assets/images/unknown_user.png',
-                            userName: 'Aiony Haust'),
-                        makeRecentExperiment(
-                            storyImage: 'assets/images/corn.png',
-                            userImage: 'assets/images/unknown_user.png',
-                            userName: 'Aiony Haust'),
-                      ],
-                    ),
-                  )),
-              SizedBox(
-                width: 20,
-              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    color: Colors.blue,
+                    height: 120,
+                    padding: EdgeInsets.only(
+                        top: 65, right: 20, left: 20, bottom: 10),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      height: 200,
+                      //color:Colors.red,
+                      child: Padding(
+                        padding: EdgeInsets.all(8),
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            makeRecentExperiment(
+                                storyImage: 'assets/images/corn.png',
+                                userImage: 'assets/images/unknown_user.png',
+                                userName: 'Aatik Tasneem'),
+                            makeRecentExperiment(
+                                storyImage: 'assets/images/corn.png',
+                                userImage: 'assets/images/unknown_user.png',
+                                userName: 'Aiony Haust'),
+                            makeRecentExperiment(
+                                storyImage: 'assets/images/corn.png',
+                                userImage: 'assets/images/unknown_user.png',
+                                userName: 'Aiony Haust'),
+                            makeRecentExperiment(
+                                storyImage: 'assets/images/corn.png',
+                                userImage: 'assets/images/unknown_user.png',
+                                userName: 'Aiony Haust'),
+                          ],
+                        ),
+                      )),
+                  SizedBox(
+                    width: 20,
+                  ),
 
-              /*Container(
+                  /*Container(
                     height: 150,
                     child: TextButton(
                       child: Text('Click to show full example'),
@@ -520,26 +541,26 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),*/
 
-              makeMenuCard(),
+                  makeMenuCard(),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
-      bottomNavigationBar: ConvexAppBar(
-        style: TabStyle.react,
-        items: [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.download, title: 'Download'),
-          TabItem(icon: Icons.qr_code, title: 'Scan'),
-          TabItem(icon: Icons.art_track, title: 'Trials'),
-          TabItem(icon: Icons.bar_chart, title: 'Report'),
-        ],
-        initialActiveIndex: 0,
-        onTap: (int i) =>
-            Navigator.of(context).pushNamed('$i', arguments: _UserBox),
-      ),
+          bottomNavigationBar: ConvexAppBar(
+            style: TabStyle.react,
+            items: [
+              TabItem(icon: Icons.home, title: 'Home'),
+              TabItem(icon: Icons.download, title: 'Download'),
+              TabItem(icon: Icons.qr_code, title: 'Scan'),
+              TabItem(icon: Icons.art_track, title: 'Trials'),
+              TabItem(icon: Icons.bar_chart, title: 'Report'),
+            ],
+            initialActiveIndex: 0,
+            onTap: (int i) =>
+                Navigator.of(context).pushNamed('$i', arguments: _UserBox),
+          ),
 
-      /*(
+          /*(
         bottomNavigationBar: SCBottomBarDetails(
 
             circleColors: [Colors.white, Colors.orange, Colors.redAccent],
@@ -612,8 +633,8 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),*/
 
-      //),
-    );
+          //),
+        ));
     // TODO: implement build
     throw UnimplementedError();
   }

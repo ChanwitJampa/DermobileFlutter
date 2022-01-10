@@ -280,7 +280,7 @@ class _DownloadScreen extends State<DownloadScreen> {
           Container(
             color: Colors.blue,
             height: 135,
-            padding: EdgeInsets.only(top: 75, right: 20, left: 20, bottom: 10),
+            padding: EdgeInsets.only(top: 73, right: 20, left: 20, bottom: 10),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -296,7 +296,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                       ),
                       border: InputBorder.none,
                       hintStyle: TextStyle(color: Colors.grey),
-                      hintText: "Search",
+                      hintText: "Search trail",
                     ),
                   ),
                 )),
@@ -323,8 +323,8 @@ class _DownloadScreen extends State<DownloadScreen> {
                           style: TextStyle(
                               color: Colors.grey[900],
                               fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              letterSpacing: 1.2),
+                              fontSize: 26,
+                              letterSpacing: 1),
                         ),
                         Container(
                           child: Checkbox(

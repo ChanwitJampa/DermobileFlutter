@@ -185,11 +185,11 @@ class _QRScreen extends State<QRScreen> {
         dataCode = result!.code;
         int i = 0;
         int j = 0;
-        _UserBox?.get(userNameNow).onSiteTrials.foreach((e) {
-          e.onSitePlots.foreach((f) {
-            if (f.pltId == dataCode) {
-              print("match plot ID is" + dataCode);
-              controller?.pauseCamera();
+        _UserBox?.get(userNameNow).onSiteTrials.forEach((e) {
+          e.onSitePlots.forEach((f) {
+            if (f.barcode == dataCode) {
+              print("match plot ID is " + dataCode);
+              controller.pauseCamera();
               Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
             }
             j++;
@@ -198,6 +198,8 @@ class _QRScreen extends State<QRScreen> {
         });
 
         print("unmatch plot ID is" + dataCode);
+        controller.pauseCamera();
+        Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
 
         // Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         // controller.pauseCamera();

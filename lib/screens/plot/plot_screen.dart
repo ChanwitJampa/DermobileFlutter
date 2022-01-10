@@ -243,7 +243,7 @@ class _PlotsScreen extends State<PlotsScreen> {
             ],
           ),
           SizedBox(
-            height: 20,
+            height: 0,
           ),
           Text(
             feedText,
@@ -254,12 +254,16 @@ class _PlotsScreen extends State<PlotsScreen> {
                 letterSpacing: .7),
           ),
           SizedBox(
-            height: 90,
+            height: 0,
           ),
           feedImage != ''
               ? new RotationTransition(
                   turns: new AlwaysStoppedAnimation(90 / 360),
-                  child: new Image.asset(feedImage),
+                  child: new Image.asset(
+                    feedImage,
+                    height: 400,
+                    width: 400,
+                  ),
                 )
               // Container(
               //     height: 200,
@@ -268,9 +272,16 @@ class _PlotsScreen extends State<PlotsScreen> {
               //         image: DecorationImage(
               //             image: AssetImage(feedImage), fit: BoxFit.cover)),
               //   )
-              : Container(),
+              : Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/img_not.png"),
+                          fit: BoxFit.cover)),
+                ),
           SizedBox(
-            height: 60,
+            height: 0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -502,7 +513,8 @@ class _PlotsScreen extends State<PlotsScreen> {
                 "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
             //     'All the Lorem Ipsum generators on the Internet tend to repeat predefined.'
             // ,
-            feedImage: 'assets/images/plot_corn.jpg')
+//            feedImage: 'assets/images/plot_corn.jpg')
+            feedImage: 'assets/images/emu_photo.jpg')
       ]);
     });
     // print((int.parse(title) + 1));
