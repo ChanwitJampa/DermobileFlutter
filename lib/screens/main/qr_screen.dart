@@ -13,7 +13,6 @@ import 'dart:io';
 import 'package:der/screens/select_Image.dart';
 import 'package:der/utils/constants.dart';
 
-var dataCode = "";
 String dataCode = "";
 Box? _UserBox;
 
