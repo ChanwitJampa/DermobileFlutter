@@ -13,7 +13,7 @@ import 'dart:io';
 import 'package:der/screens/select_Image.dart';
 import 'package:der/utils/constants.dart';
 
-var dataCode = "";
+String dataCode = "";
 Box? _UserBox;
 
 class QRScreen extends StatefulWidget {
@@ -185,17 +185,9 @@ class _QRScreen extends State<QRScreen> {
         dataCode = result!.code;
         int i = 0;
         int j = 0;
-        _UserBox?.get(userNameNow).onSiteTrials.foreach((e) {
-          e.onSitePlots.foreach((f) {
-            if (f.pltId == dataCode) {
-              print("match plot ID is" + dataCode);
-              controller?.pauseCamera();
-              Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
-            }
-            j++;
-          });
-          i++;
-        });
+        if (checkPlost(dataCode)) {
+          print("match plot ID is" + dataCode);
+        }
 
         print("unmatch plot ID is" + dataCode);
 
@@ -223,6 +215,7 @@ class _QRScreen extends State<QRScreen> {
 }
 
 bool checkPlost(String barcode) {
+  print("------------------------------------------------");
   List<OnSiteTrial> ost = _UserBox?.get(userNameNow).onSiteTrials;
   ost.forEach((e) {
     e.onSitePlots.forEach((l) {
@@ -231,6 +224,7 @@ bool checkPlost(String barcode) {
       }
     });
   });
+  print("------------------------------------------------------");
 
   return true;
 }
