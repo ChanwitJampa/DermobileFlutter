@@ -332,7 +332,7 @@ class _PlotsScreen extends State<PlotsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              makeCameraButton(),
+              makeCameraButton(plotID),
               makeGallryButton(),
               makeShareButton(),
             ],
@@ -394,7 +394,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   final picker = ImagePicker();
 
-  _getImage(ImageSource imageSource) async {
+  _getImage(ImageSource imageSource, String plotId) async {
     final _imageFile = await picker.pickImage(
       source: imageSource,
       maxWidth: 1000,
@@ -407,7 +407,7 @@ class _PlotsScreen extends State<PlotsScreen> {
       () {
         _image = _imageFile;
         isSelected = true;
-        saveExperiment(_image);
+        saveExperiment(_image, plotId);
         //_imageFileList = pickedFile;
 //Rebuild UI with the selected image.
         //print('$_image');
@@ -418,7 +418,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   bool isSelected = false;
 
-  Widget makeCameraButton() {
+  Widget makeCameraButton(String plotId) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
@@ -446,8 +446,10 @@ class _PlotsScreen extends State<PlotsScreen> {
                   ),
                 ),
                 onTap: () {
-                  var a = _getImage(ImageSource.camera);
-                  print("a" + a.toString());
+                  print(
+                      "___1!!!!!!--------------------________________ plot iD is" +
+                          plotId);
+                  _getImage(ImageSource.camera, plotId);
                 },
               ),
             ),
@@ -459,7 +461,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Future<List<Directory>?>? _externalStorageDirectories;
 
-  Future<void> saveExperiment(XFile impath) async {
+  Future<void> saveExperiment(XFile impath, String plotId) async {
     Directory? directory;
     String testpath = "";
 
@@ -505,6 +507,21 @@ class _PlotsScreen extends State<PlotsScreen> {
     print(impath.path);
     _image = null;
 
+    _UserBox = Hive.box("Users");
+    List<OnSiteTrial> ost = _UserBox?.get(userNameNow).onSiteTrials;
+    int i = 0, j = 0;
+    for (i = 0; i < ost.length; i++) {
+      for (j = 0; j < ost[i].onSitePlots.length; j++) {
+        if (plotId == ost[i].onSitePlots[j].pltId) {
+          _UserBox?.get(userNameNow)
+              .onSiteTrials[i]
+              .onSitePlots[j]
+              .plotImgPath = testpath;
+          _UserBox?.get(userNameNow).save();
+        }
+      }
+    }
+
     Navigator.of(context).pushNamed(HOME_ROUTE);
   }
 
@@ -536,7 +553,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                   ),
                 ),
                 onTap: () {
-                  _getImage(ImageSource.gallery);
+                  _getImage(ImageSource.gallery, "");
                 },
               ),
             ),
