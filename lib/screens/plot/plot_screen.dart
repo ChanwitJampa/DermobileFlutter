@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:der/entities/site/plot.dart';
 import 'package:der/entities/site/trial.dart';
 import 'package:der/main.dart';
+import 'package:der/screens/select_Image.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:der/utils/router.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +22,7 @@ import 'package:der/utils/constants.dart';
 
 import 'package:hive/hive.dart';
 import 'package:der/screens/signup_screen.dart';
-import 'package:der/screens/select_image.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 Box? _UserBox;
 
@@ -40,6 +43,17 @@ class _PlotsScreen extends State<PlotsScreen> {
   @override
   void initState() {
     super.initState();
+
+    () async {
+      var _permissionStatus = await Permission.storage.status;
+
+      if (_permissionStatus != PermissionStatus.granted) {
+        PermissionStatus permissionStatus = await Permission.storage.request();
+        setState(() {
+          _permissionStatus = permissionStatus;
+        });
+      }
+    }();
 
     //_UserBox = Hive.box("Users");
     // String path =
@@ -260,11 +274,13 @@ class _PlotsScreen extends State<PlotsScreen> {
           SizedBox(
             height: 0,
           ),
-          feedImage != ''
+          feedImage != "null"
               ? new RotationTransition(
                   turns: new AlwaysStoppedAnimation(90 / 360),
-                  child: new Image.asset(
-                    feedImage,
+                  child: new Image.file(
+                    File(feedImage),
+                    // child: new Image.asset(
+                    //   feedImage,
                     height: 400,
                     width: 400,
                   ),
@@ -504,6 +520,7 @@ class _PlotsScreen extends State<PlotsScreen> {
     _UserBox = Hive.box("Users");
     OnSiteTrial ost = _UserBox?.get(userNameNow).onSiteTrials[title];
     print("title is :" + ost.trialId);
+    //print("INIT PLOT " + testpath);
 
     int i = 0;
 
@@ -525,8 +542,8 @@ class _PlotsScreen extends State<PlotsScreen> {
               "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
           //     'All the Lorem Ipsum generators on the Internet tend to repeat predefined.'
           // ,
-//            feedImage: 'assets/images/plot_corn.jpg')
-          //feedImage: 'assets/images/emu_photo.jpg'),
+          //feedImage: 'assets/images/plot_corn.jpg')
+          //feedImage: testpath,)
           feedImage: e.plotImgPath,
         )
         // feedImage: e.plotImgPath == null

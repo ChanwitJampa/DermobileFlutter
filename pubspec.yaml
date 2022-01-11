@@ -67,7 +67,6 @@ dependencies:
   fluttertoast: ^8.0.7
   path:
   
-  
 dev_dependencies:
   flutter_test:
     sdk: flutter

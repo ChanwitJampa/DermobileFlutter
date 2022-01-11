@@ -123,7 +123,7 @@ class _SelectImage extends State<SelectImage> {
         .plotImgPath = testpath;
     _UserBox?.get(userNameNow).save();
     print(
-        "path plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
+        "img path plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
     Navigator.of(context).pushNamed(HOME_ROUTE);
   }
 
