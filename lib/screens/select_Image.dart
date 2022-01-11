@@ -19,7 +19,6 @@ import 'package:path/path.dart' as p;
 
 Box? _UserBox;
 String galleryPath = "";
-String testpath = "";
 
 class SelectImage extends StatefulWidget {
   _SelectImage createState() => _SelectImage();
@@ -73,6 +72,7 @@ class _SelectImage extends State<SelectImage> {
 
   Future<void> saveExperiment(XFile impath) async {
     Directory? directory;
+    String testpath = "";
 
     GallerySaver.saveImage(impath.path);
 

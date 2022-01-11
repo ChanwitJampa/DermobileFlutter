@@ -527,7 +527,7 @@ class _PlotsScreen extends State<PlotsScreen> {
           // ,
 //            feedImage: 'assets/images/plot_corn.jpg')
           //feedImage: 'assets/images/emu_photo.jpg'),
-          feedImage: testpath,
+          feedImage: e.plotImgPath,
         )
         // feedImage: e.plotImgPath == null
         //     ? "assets/images/img_not.png"
