@@ -74,13 +74,6 @@ class _SelectImage extends State<SelectImage> {
   Future<void> saveExperiment(XFile impath) async {
     Directory? directory;
 
-    _UserBox?.get(userNameNow)
-        .onSiteTrials[itrial]
-        .onSitePlots[jplot]
-        .plotImgPath = impath.path;
-    _UserBox?.get(userNameNow).save();
-    print(
-        "path plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
     GallerySaver.saveImage(impath.path);
 
     final _filename = p.basename(impath.path);
@@ -123,6 +116,14 @@ class _SelectImage extends State<SelectImage> {
 
     print(impath.path);
     _image = null;
+
+    _UserBox?.get(userNameNow)
+        .onSiteTrials[itrial]
+        .onSitePlots[jplot]
+        .plotImgPath = testpath;
+    _UserBox?.get(userNameNow).save();
+    print(
+        "path plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
     Navigator.of(context).pushNamed(HOME_ROUTE);
   }
 
