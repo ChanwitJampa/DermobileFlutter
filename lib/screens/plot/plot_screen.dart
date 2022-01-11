@@ -11,7 +11,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:spincircle_bottom_bar/modals.dart';
 import 'package:spincircle_bottom_bar/spincircle_bottom_bar.dart';
 import 'package:der/model/check_box.dart';
@@ -23,6 +25,7 @@ import 'package:der/utils/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:path/path.dart' as p;
 
 Box? _UserBox;
 
@@ -35,6 +38,8 @@ class PlotsScreen extends StatefulWidget {
 }
 
 class _PlotsScreen extends State<PlotsScreen> {
+  var _image;
+
   final int title;
   Size? deviceSize;
 
@@ -388,7 +393,6 @@ class _PlotsScreen extends State<PlotsScreen> {
   }
 
   final picker = ImagePicker();
-  var _image;
 
   _getImage(ImageSource imageSource) async {
     final _imageFile = await picker.pickImage(
@@ -403,6 +407,7 @@ class _PlotsScreen extends State<PlotsScreen> {
       () {
         _image = _imageFile;
         isSelected = true;
+        saveExperiment(_image);
         //_imageFileList = pickedFile;
 //Rebuild UI with the selected image.
         //print('$_image');
@@ -441,7 +446,8 @@ class _PlotsScreen extends State<PlotsScreen> {
                   ),
                 ),
                 onTap: () {
-                  _getImage(ImageSource.camera);
+                  var a = _getImage(ImageSource.camera);
+                  print("a" + a.toString());
                 },
               ),
             ),
@@ -449,6 +455,57 @@ class _PlotsScreen extends State<PlotsScreen> {
         ),
       ),
     );
+  }
+
+  Future<List<Directory>?>? _externalStorageDirectories;
+
+  Future<void> saveExperiment(XFile impath) async {
+    Directory? directory;
+    String testpath = "";
+
+    GallerySaver.saveImage(impath.path);
+
+    final _filename = p.basename(impath.path);
+
+    // _externalStorageDirectories =
+    //     getExternalStorageDirectories(type: StorageDirectory.pictures);
+    //tempPath = _externalStorageDirectories;
+    // directory = await getExternalStorageDirectories();
+
+    directory = await getExternalStorageDirectory();
+    //directory = await getExternalStorageDirectories(type: StorageDirectory.pictures);
+
+    // print(directory);
+    // print("tempPath2 = " + directory.toString());
+    print("tempPath3 = " + directory!.path);
+    print("FileName = " + _filename);
+
+    int count1 = 0;
+
+    if (count1 == 0) {
+      galleryPath = "";
+      for (int i = 0; i < directory!.path.length; i++) {
+        print(directory!.path[i]);
+
+        galleryPath = galleryPath + directory!.path[i];
+
+        if (directory.path[i] == "0") {
+          break;
+          count1 = 1;
+        }
+      }
+    }
+
+    galleryPath = galleryPath + "/Pictures/";
+    testpath = galleryPath + _filename;
+
+    print("galleryPath = " + galleryPath);
+    print("imgPath = " + testpath);
+
+    print(impath.path);
+    _image = null;
+
+    Navigator.of(context).pushNamed(HOME_ROUTE);
   }
 
   Widget makeGallryButton() {
