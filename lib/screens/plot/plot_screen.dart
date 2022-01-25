@@ -446,9 +446,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                   ),
                 ),
                 onTap: () {
-                  print(
-                      "___1!!!!!!--------------------________________ plot iD is" +
-                          plotId);
+                  print("camera plot iD is" + plotId);
                   _getImage(ImageSource.camera, plotId);
                 },
               ),
@@ -512,12 +510,19 @@ class _PlotsScreen extends State<PlotsScreen> {
     int i = 0, j = 0;
     for (i = 0; i < ost.length; i++) {
       for (j = 0; j < ost[i].onSitePlots.length; j++) {
-        if (plotId == ost[i].onSitePlots[j].pltId) {
+        print(ost[i].onSitePlots[j].pltId.toString() +
+            "${plotId == ost[i].onSitePlots[j].pltId.toString()}");
+        if (plotId == ost[i].onSitePlots[j].pltId.toString()) {
           _UserBox?.get(userNameNow)
               .onSiteTrials[i]
               .onSitePlots[j]
               .plotImgPath = testpath;
           _UserBox?.get(userNameNow).save();
+          print("this is save now ----------------------- " +
+              _UserBox?.get(userNameNow)
+                  .onSiteTrials[i]
+                  .onSitePlots[j]
+                  .plotImgPath);
         }
       }
     }
