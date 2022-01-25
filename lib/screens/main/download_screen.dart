@@ -128,92 +128,166 @@ class _DownloadScreen extends State<DownloadScreen> {
       experimentImage = "assets/images/corn.png",
       userName,
       index = 0}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: 40,
+    return Align(
+      alignment: AlignmentDirectional(0, 0.25),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Align(
+              alignment: AlignmentDirectional(-0.95, 0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                child: Container(
                   width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      //borderRadius: BorderRadius.circular(100),
-                      image: DecorationImage(
-                          image: AssetImage(userImage), fit: BoxFit.cover)),
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Align(
+                    alignment: AlignmentDirectional(0.05, 0.05),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(0),
+                      child: Image.asset(
+                        userImage,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
-              ],
-            ),
-            Container(
-              child: Checkbox(
-                  value: experimentItems![index].value,
-                  checkColor: Colors.grey[200],
-                  onChanged: (value) {
-                    setState(() {
-                      experimentItems![index].value =
-                          !experimentItems![index].value;
-                    });
-                  }),
-            ),
-          ],
-        ),
-        Container(
-          height: 120,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                width: 0,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Text(
-                  //   userName,
-                  //   style: TextStyle(
-                  //       fontSize: 15,
-                  //       color: Colors.grey[800],
-                  //       height: 1.5,
-                  //       letterSpacing: .7),
-                  // ),
-                  SizedBox(height: 15),
-                  Text(
-                    "Trial " + experimentItems![index].title,
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.blue[700],
-                        height: 1,
-                        letterSpacing: .7),
-                  ),
-                  // Text(
-                  //   //trial ID
-                  //   "plot Id :"
-                  //   '${experimentItems![index].plot}',
-                  //   style: TextStyle(
-                  //       fontSize: 15,
-                  //       color: Colors.grey[800],
-                  //       height: 1.5,
-                  //       letterSpacing: .7),
-                  // ),
-                  SizedBox(height: 10),
-                  Text(
-                    experimentItems![index].trial,
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey[800],
-                        height: 1.5,
-                        letterSpacing: .7),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+          Container(
+            width: 500,
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            child: CheckboxListTile(
+              value: experimentItems![index].value,
+              onChanged: (value) {
+                setState(() {
+                  experimentItems![index].value =
+                      !experimentItems![index].value;
+                });
+              },
+              title: Text(
+                'Trial' + experimentItems![index].title,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  height: 1.5,
+                ),
+              ),
+              //               SizedBox(height: 20),
+
+              subtitle: Text(
+                experimentItems![index].trial,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 12,
+                  height: 1.5,
+                ),
+              ),
+              tileColor: Colors.white,
+              dense: false,
+              controlAffinity: ListTileControlAffinity.trailing,
+            ),
+          ),
+        ],
+      ),
     );
+    // return Column(
+    //   crossAxisAlignment: CrossAxisAlignment.start,
+    //   children: <Widget>[
+    //     Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //       children: [
+    //         Row(
+    //           children: [
+    //             Container(
+    //               height: 35,
+    //               width: 35,
+    //               decoration: BoxDecoration(
+    //                   shape: BoxShape.circle,
+    //                   //borderRadius: BorderRadius.circular(100),
+    //                   image: DecorationImage(
+    //                       image: AssetImage(userImage), fit: BoxFit.cover)),
+    //             ),
+    //           ],
+    //         ),
+    //         Container(
+    //           child: Checkbox(
+    //               value: experimentItems![index].value,
+    //               checkColor: Colors.grey[200],
+    //               onChanged: (value) {
+    //                 setState(() {
+    //                   experimentItems![index].value =
+    //                       !experimentItems![index].value;
+    //                 });
+    //               }),
+    //         ),
+    //       ],
+    //     ),
+    //     Container(
+    //       height: 120,
+    //       child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.start,
+    //         children: <Widget>[
+    //           SizedBox(
+    //             width: 0,
+    //           ),
+    //           Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: [
+    //               // Text(
+    //               //   userName,
+    //               //   style: TextStyle(
+    //               //       fontSize: 15,
+    //               //       color: Colors.grey[800],
+    //               //       height: 1.5,
+    //               //       letterSpacing: .7),
+    //               // ),
+    //               SizedBox(height: 20),
+    //               Text(
+    //                 "Trial " + experimentItems![index].title,
+    //                 style: TextStyle(
+    //                     fontSize: 25,
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.blue[700],
+    //                     height: 1,
+    //                     letterSpacing: .7),
+    //               ),
+    //               // Text(
+    //               //   //trial ID
+    //               //   "plot Id :"
+    //               //   '${experimentItems![index].plot}',
+    //               //   style: TextStyle(
+    //               //       fontSize: 15,
+    //               //       color: Colors.grey[800],
+    //               //       height: 1.5,
+    //               //       letterSpacing: .7),
+    //               // ),
+    //               SizedBox(height: 40),
+    //               Text(
+    //                 experimentItems![index].trial,
+    //                 style: TextStyle(
+    //                     fontSize: 15,
+    //                     color: Colors.grey[800],
+    //                     height: 1,
+    //                     letterSpacing: .7),
+    //               ),
+    //             ],
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ],
+    // );
   }
 
 /*
@@ -279,8 +353,8 @@ class _DownloadScreen extends State<DownloadScreen> {
         children: <Widget>[
           Container(
             color: Colors.blue,
-            height: 135,
-            padding: EdgeInsets.only(top: 73, right: 20, left: 20, bottom: 10),
+            height: 140,
+            padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 10),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -340,7 +414,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                     ),
                     //SizedBox(height: 20,),
                     Container(
-                      height: 530,
+                      height: 660,
                       child: NotificationListener<ScrollNotification>(
                         onNotification: (ScrollNotification scrollInfo) {
                           if (!isLoading &&
@@ -357,7 +431,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                           onRefresh: _pullRefresh,
                           child: ListView.separated(
                             separatorBuilder: (context, index) => Divider(
-                              color: Colors.grey[500],
+                              color: Colors.grey[200],
                               thickness: 2,
                             ),
                             itemCount: experimentItems!.length,

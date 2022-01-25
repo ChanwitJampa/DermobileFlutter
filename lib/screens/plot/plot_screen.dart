@@ -276,9 +276,6 @@ class _PlotsScreen extends State<PlotsScreen> {
                 height: 1.5,
                 letterSpacing: .7),
           ),
-          SizedBox(
-            height: 0,
-          ),
           feedImage != "null"
               ? new RotationTransition(
                   turns: new AlwaysStoppedAnimation(90 / 360),
@@ -286,8 +283,8 @@ class _PlotsScreen extends State<PlotsScreen> {
                     File(feedImage),
                     // child: new Image.asset(
                     //   feedImage,
-                    height: 400,
-                    width: 400,
+                    height: 500,
+                    width: 600,
                   ),
                 )
               // Container(
@@ -298,16 +295,13 @@ class _PlotsScreen extends State<PlotsScreen> {
               //             image: AssetImage(feedImage), fit: BoxFit.cover)),
               //   )
               : Container(
-                  height: 200,
+                  height: 400,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                           image: AssetImage("assets/images/img_not.png"),
                           fit: BoxFit.cover)),
                 ),
-          SizedBox(
-            height: 0,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
