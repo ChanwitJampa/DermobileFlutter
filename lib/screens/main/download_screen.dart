@@ -162,7 +162,7 @@ class _DownloadScreen extends State<DownloadScreen> {
             ),
           ),
           Container(
-            width: 500,
+            width: 490,
             height: 80,
             decoration: BoxDecoration(
               color: Colors.white,

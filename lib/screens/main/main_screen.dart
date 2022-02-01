@@ -138,7 +138,7 @@ class _MainScreenState extends State<MainScreen> {
       double? finished = 0,
       double? third = 0}) {
     return Container(
-      height: 100,
+      height: 140,
       //width: 164,
       padding: EdgeInsets.all(12),
       margin: EdgeInsets.all(8),
@@ -220,7 +220,7 @@ class _MainScreenState extends State<MainScreen> {
                   style: TextStyle(
                     color: Colors.blue[600],
                     fontWeight: FontWeight.bold,
-                    fontSize: 14,
+                    fontSize: 30,
                   ),
                 ),
               ),
@@ -232,7 +232,7 @@ class _MainScreenState extends State<MainScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                            width: 175,
+                            width: 250,
                             child: InkWell(
                               onTap: () {
                                 Navigator.of(context)
@@ -244,7 +244,7 @@ class _MainScreenState extends State<MainScreen> {
                                   imageName: "assets/images/unknown_user.png"),
                             )),
                         Container(
-                            width: 175,
+                            width: 250,
                             child: InkWell(
                               onTap: () {
                                 Navigator.of(context)
@@ -268,7 +268,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        width: 175,
+                        width: 250,
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Trials",
@@ -282,7 +282,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                       Container(
-                        width: 175,
+                        width: 250,
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Plot",
@@ -300,11 +300,12 @@ class _MainScreenState extends State<MainScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Row(
+                  Expanded(
+                      child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        width: 175,
+                        width: 250,
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Uploaded",
@@ -316,7 +317,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                       Container(
-                        width: 175,
+                        width: 250,
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Info",
@@ -328,7 +329,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       )
                     ],
-                  )
+                  ))
                 ],
               ),
             ],

@@ -219,13 +219,15 @@ class _PlotsScreen extends State<PlotsScreen> {
               ),
               InkWell(
                 child: Container(
-                  height: 20,
-                  width: 20,
+                  height: 30,
+                  width: 30,
+                  margin:
+                      EdgeInsets.only(top: 0, right: 10, left: 0, bottom: 0),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           image: AssetImage(
-                              'assets/images/arrow_curved_forward_right_2.png'),
+                              'assets/images/arrow_curved_forward_right.png'),
                           fit: BoxFit.cover)),
                 ),
                 onTap: () {
@@ -284,7 +286,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                     // child: new Image.asset(
                     //   feedImage,
                     height: 500,
-                    width: 600,
+                    width: 700,
                   ),
                 )
               // Container(
@@ -295,7 +297,8 @@ class _PlotsScreen extends State<PlotsScreen> {
               //             image: AssetImage(feedImage), fit: BoxFit.cover)),
               //   )
               : Container(
-                  height: 400,
+                  margin: const EdgeInsets.all(50.0),
+                  height: 300,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
@@ -303,7 +306,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                           fit: BoxFit.cover)),
                 ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -414,7 +417,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Widget makeCameraButton(String plotId) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFEEEEEE)),
         borderRadius: BorderRadius.circular(50),
@@ -426,7 +429,7 @@ class _PlotsScreen extends State<PlotsScreen> {
             Icon(
               Icons.camera,
               color: Colors.blue,
-              size: 18,
+              size: 30,
             ),
             SizedBox(
               width: 5,
@@ -436,7 +439,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                 child: Container(
                   child: Text(
                     "Camera",
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: Colors.blue, fontSize: 18),
                   ),
                 ),
                 onTap: () {
@@ -526,7 +529,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Widget makeGallryButton() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFEEEEEE)),
         borderRadius: BorderRadius.circular(50),
@@ -538,7 +541,7 @@ class _PlotsScreen extends State<PlotsScreen> {
             Icon(
               Icons.photo,
               color: Colors.blue,
-              size: 18,
+              size: 30,
             ),
             SizedBox(
               width: 5,
@@ -548,7 +551,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                 child: Container(
                   child: Text(
                     "Gallery",
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: Colors.blue, fontSize: 18),
                   ),
                 ),
                 onTap: () {
@@ -564,7 +567,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Widget makeShareButton() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFEEEEEE)),
         borderRadius: BorderRadius.circular(50),
@@ -573,13 +576,13 @@ class _PlotsScreen extends State<PlotsScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.upload, color: Colors.grey, size: 18),
+            Icon(Icons.upload, color: Colors.grey, size: 30),
             SizedBox(
               width: 5,
             ),
             Text(
               "Upload",
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.grey, fontSize: 18),
             )
           ],
         ),
