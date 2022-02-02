@@ -289,7 +289,7 @@ class _SelectImage extends State<SelectImage> {
           children: [
             Container(
               color: Colors.blue,
-              height: 120,
+              height: 100,
               padding:
                   EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
             ),
@@ -315,14 +315,14 @@ class _SelectImage extends State<SelectImage> {
                                     height: 10,
                                   ),
                                   Container(
-                                    width: 368,
+                                    width: 400,
                                     height: 30,
                                     /*decoration: BoxDecoration(
 
                                     border: Border.all(color: Colors.grey),
                                   ),*/
                                     child: Text(
-                                      'Plot ID : ' + dataCode,
+                                      '  Plot ID : ' + dataCode,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,
@@ -336,7 +336,7 @@ class _SelectImage extends State<SelectImage> {
                                   Container(
                                     width: 368,
                                     child: const Text(
-                                      'Img:' + '12345',
+                                      '  Img: ' + '1',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,

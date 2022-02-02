@@ -186,8 +186,9 @@ class _PlotsScreen extends State<PlotsScreen> {
               Row(
                 children: <Widget>[
                   Container(
-                    width: 40,
-                    height: 40,
+                    margin: const EdgeInsets.all(10.0),
+                    width: 50,
+                    height: 50,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
@@ -203,7 +204,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                         plotID,
                         style: TextStyle(
                             color: Colors.grey[900],
-                            fontSize: 18,
+                            fontSize: 25,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1),
                       ),
@@ -212,7 +213,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                       ),
                       Text(
                         feedTime,
-                        style: TextStyle(fontSize: 15, color: Colors.grey),
+                        style: TextStyle(fontSize: 20, color: Colors.grey),
                       ),
                     ],
                   )
@@ -220,13 +221,15 @@ class _PlotsScreen extends State<PlotsScreen> {
               ),
               InkWell(
                 child: Container(
-                  height: 20,
-                  width: 20,
+                  height: 30,
+                  width: 30,
+                  margin:
+                      EdgeInsets.only(top: 0, right: 10, left: 0, bottom: 0),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           image: AssetImage(
-                              'assets/images/arrow_curved_forward_right_2.png'),
+                              'assets/images/arrow_curved_forward_right.png'),
                           fit: BoxFit.cover)),
                 ),
                 onTap: () {
@@ -267,16 +270,18 @@ class _PlotsScreen extends State<PlotsScreen> {
             ],
           ),
           SizedBox(
-            height: 0,
+            height: 10,
           ),
-          Text(
+          Center(
+              child: Text(
             feedText,
             style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey[800],
-                height: 1.5,
-                letterSpacing: .7),
-          ),
+              fontSize: 20,
+              color: Colors.grey[800],
+              height: 1.5,
+              letterSpacing: .7,
+            ),
+          )),
           feedImage != "null"
               ? new RotationTransition(
                   turns: new AlwaysStoppedAnimation(90 / 360),
@@ -285,7 +290,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                     // child: new Image.asset(
                     //   feedImage,
                     height: 500,
-                    width: 600,
+                    width: 700,
                   ),
                 )
               // Container(
@@ -296,15 +301,16 @@ class _PlotsScreen extends State<PlotsScreen> {
               //             image: AssetImage(feedImage), fit: BoxFit.cover)),
               //   )
               : Container(
-                  height: 400,
+                  margin: const EdgeInsets.all(50.0),
+                  height: 300,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
                           image: AssetImage("assets/images/img_not.png"),
                           fit: BoxFit.cover)),
                 ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -313,6 +319,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                   ] else ...[
                     makeLock(isLock: true)
                   ]
+
                   /*
                   makeLike(),
                   Transform.translate(
@@ -326,6 +333,9 @@ class _PlotsScreen extends State<PlotsScreen> {
               ),
               //Text("400 Comments", style: TextStyle(fontSize: 13, color: Colors.grey[800]),)
             ],
+          ),
+          SizedBox(
+            height: 20,
           ),
           //SizedBox(height: 20,),
           Row(
@@ -350,15 +360,15 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Widget makeLock({required bool isLock}) {
     return Container(
-      width: 25,
-      height: 25,
+      width: 30,
+      height: 30,
       decoration: BoxDecoration(
           color: (isLock) ? Colors.red : Colors.blue,
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white)),
       child: Center(
         child: Icon((isLock) ? Icons.lock : Icons.thumb_up,
-            size: 12, color: Colors.white),
+            size: 15, color: Colors.white),
       ),
     );
   }
@@ -419,7 +429,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Widget makeCameraButton(String plotId) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFEEEEEE)),
         borderRadius: BorderRadius.circular(50),
@@ -431,17 +441,17 @@ class _PlotsScreen extends State<PlotsScreen> {
             Icon(
               Icons.camera,
               color: Colors.blue,
-              size: 18,
+              size: 30,
             ),
             SizedBox(
-              width: 5,
+              width: 20,
             ),
             Container(
               child: InkWell(
                 child: Container(
                   child: Text(
                     "Camera",
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: Colors.blue, fontSize: 18),
                   ),
                 ),
                 onTap: () {
@@ -531,7 +541,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Widget makeGallryButton() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFEEEEEE)),
         borderRadius: BorderRadius.circular(50),
@@ -543,7 +553,7 @@ class _PlotsScreen extends State<PlotsScreen> {
             Icon(
               Icons.photo,
               color: Colors.blue,
-              size: 18,
+              size: 30,
             ),
             SizedBox(
               width: 5,
@@ -553,7 +563,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                 child: Container(
                   child: Text(
                     "Gallery",
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: Colors.blue, fontSize: 18),
                   ),
                 ),
                 onTap: () {
@@ -569,7 +579,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Widget makeShareButton() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFFEEEEEE)),
         borderRadius: BorderRadius.circular(50),
@@ -578,13 +588,13 @@ class _PlotsScreen extends State<PlotsScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.upload, color: Colors.grey, size: 18),
+            Icon(Icons.upload, color: Colors.grey, size: 30),
             SizedBox(
               width: 5,
             ),
             Text(
               "Upload",
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.grey, fontSize: 18),
             )
           ],
         ),
