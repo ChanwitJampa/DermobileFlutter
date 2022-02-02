@@ -73,7 +73,7 @@ class _SelectImage extends State<SelectImage> {
   Future<void> saveExperiment(XFile impath) async {
     Directory? directory;
     String testpath = "";
-
+    _UserBox = Hive.box("Users");
     GallerySaver.saveImage(impath.path);
 
     final _filename = p.basename(impath.path);
@@ -116,14 +116,19 @@ class _SelectImage extends State<SelectImage> {
 
     print(impath.path);
     _image = null;
-
-    _UserBox?.get(userNameNow)
-        .onSiteTrials[itrial]
-        .onSitePlots[jplot]
-        .plotImgPath = testpath;
+    if (type == "MATCH") {
+      _UserBox?.get(userNameNow)
+          .onSiteTrials[itrial]
+          .onSitePlots[jplot]
+          .plotImgPath = testpath;
+    } else if (type == "UNMATCH") {
+      // OnSitePlot osp = OnSitePlot(pltId, barcode, repNo, abbrc, entno, notet, plotImgPath, plotImgPathS, plotImgBoxPath, plotImgBoxPathS, uploadDate, eartnA, dlernA, dlerpA, drwapA, eartnM, dlernM, dlerpM, drwapM, approveDate, plotProgress, plotStatus, plotActive)
+      _UserBox?.get(userNameNow).unMatchPlots.add();
+    }
     _UserBox?.get(userNameNow).save();
     print(
         "img path plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
+
     Navigator.of(context).pushNamed(HOME_ROUTE);
   }
 
