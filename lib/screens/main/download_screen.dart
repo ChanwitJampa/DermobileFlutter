@@ -353,7 +353,7 @@ class _DownloadScreen extends State<DownloadScreen> {
         children: <Widget>[
           Container(
             color: Colors.blue,
-            height: 140,
+            height: 100,
             padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 10),
             child: Row(
               children: <Widget>[
@@ -369,7 +369,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                         color: Colors.grey,
                       ),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
                       hintText: "Search trail",
                     ),
                   ),
@@ -392,15 +392,16 @@ class _DownloadScreen extends State<DownloadScreen> {
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
                         Text(
-                          "Trials on sever",
+                          " Trials on sever",
                           //"Plot ID = " + dataCode,
                           style: TextStyle(
-                              color: Colors.grey[900],
+                              color: Colors.grey[800],
                               fontWeight: FontWeight.bold,
-                              fontSize: 26,
+                              fontSize: 30,
                               letterSpacing: 1),
                         ),
                         Container(
+                          margin: EdgeInsets.only(right: 20),
                           child: Checkbox(
                               value: allChecked.value,
                               checkColor: Colors.grey[200],

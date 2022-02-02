@@ -185,8 +185,9 @@ class _PlotsScreen extends State<PlotsScreen> {
               Row(
                 children: <Widget>[
                   Container(
-                    width: 40,
-                    height: 40,
+                    margin: const EdgeInsets.all(10.0),
+                    width: 50,
+                    height: 50,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
@@ -202,7 +203,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                         plotID,
                         style: TextStyle(
                             color: Colors.grey[900],
-                            fontSize: 18,
+                            fontSize: 25,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1),
                       ),
@@ -211,7 +212,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                       ),
                       Text(
                         feedTime,
-                        style: TextStyle(fontSize: 15, color: Colors.grey),
+                        style: TextStyle(fontSize: 20, color: Colors.grey),
                       ),
                     ],
                   )
@@ -268,16 +269,18 @@ class _PlotsScreen extends State<PlotsScreen> {
             ],
           ),
           SizedBox(
-            height: 0,
+            height: 10,
           ),
-          Text(
+          Center(
+              child: Text(
             feedText,
             style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey[800],
-                height: 1.5,
-                letterSpacing: .7),
-          ),
+              fontSize: 20,
+              color: Colors.grey[800],
+              height: 1.5,
+              letterSpacing: .7,
+            ),
+          )),
           feedImage != "null"
               ? new RotationTransition(
                   turns: new AlwaysStoppedAnimation(90 / 360),
@@ -300,17 +303,18 @@ class _PlotsScreen extends State<PlotsScreen> {
                   margin: const EdgeInsets.all(50.0),
                   height: 300,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
                           image: AssetImage("assets/images/img_not.png"),
                           fit: BoxFit.cover)),
                 ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
                 children: <Widget>[
                   makeLock(isLock: true),
+
                   /*
                   makeLike(),
                   Transform.translate(
@@ -324,6 +328,9 @@ class _PlotsScreen extends State<PlotsScreen> {
               ),
               //Text("400 Comments", style: TextStyle(fontSize: 13, color: Colors.grey[800]),)
             ],
+          ),
+          SizedBox(
+            height: 20,
           ),
           //SizedBox(height: 20,),
           Row(
@@ -348,15 +355,15 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   Widget makeLock({required bool isLock}) {
     return Container(
-      width: 25,
-      height: 25,
+      width: 30,
+      height: 30,
       decoration: BoxDecoration(
           color: (isLock) ? Colors.red : Colors.blue,
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white)),
       child: Center(
         child: Icon((isLock) ? Icons.lock : Icons.thumb_up,
-            size: 12, color: Colors.white),
+            size: 15, color: Colors.white),
       ),
     );
   }
@@ -432,7 +439,7 @@ class _PlotsScreen extends State<PlotsScreen> {
               size: 30,
             ),
             SizedBox(
-              width: 5,
+              width: 20,
             ),
             Container(
               child: InkWell(

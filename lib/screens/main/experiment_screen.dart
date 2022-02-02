@@ -44,7 +44,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
             //     .toString() +
             // ") "
             ,
-            feedText: 'index : ${i}  plots = ${e.onSitePlots.length}',
+            feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
             feedImage: 'assets/images/corn.png')
       ]);
       i++;
@@ -123,7 +123,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                           experimentID,
                           style: TextStyle(
                               color: Colors.grey[900],
-                              fontSize: 18,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1),
                         ),
@@ -132,7 +132,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                         ),
                         Text(
                           feedTime,
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                          style: TextStyle(fontSize: 20, color: Colors.grey),
                         ),
                       ],
                     )
@@ -149,12 +149,12 @@ class _ExperimentScreen extends State<ExperimentScreen> {
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Text(
               feedText,
               style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 20,
                   color: Colors.grey[800],
                   height: 1.5,
                   letterSpacing: .7),
@@ -166,7 +166,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
               children: [
                 feedImage != ''
                     ? Container(
-                        height: 200,
+                        height: 300,
                         child: Stack(
                           children: [Container()],
                         ),
@@ -229,8 +229,8 @@ class _ExperimentScreen extends State<ExperimentScreen> {
         children: [
           Container(
             color: Colors.blue,
-            height: 125,
-            padding: EdgeInsets.only(top: 75, right: 20, left: 20, bottom: 10),
+            height: 100,
+            padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 10),
             child: Row(
               children: [
                 Expanded(
@@ -245,7 +245,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                         color: Colors.grey,
                       ),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
                       hintText: "Search Experiment",
                     ),
                   ),

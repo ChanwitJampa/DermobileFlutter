@@ -185,7 +185,7 @@ class _MainScreenState extends State<MainScreen> {
                 menuName,
                 style: TextStyle(
                   color: Colors.grey[800],
-                  fontSize: 14,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -193,7 +193,7 @@ class _MainScreenState extends State<MainScreen> {
                 subMenuName,
                 style: TextStyle(
                   color: Colors.grey[600],
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -217,9 +217,10 @@ class _MainScreenState extends State<MainScreen> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   'Menu',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.blue[600],
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.normal,
                     fontSize: 30,
                   ),
                 ),
@@ -321,7 +322,7 @@ class _MainScreenState extends State<MainScreen> {
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Info",
-                              subMenuName: "SYNDER\nRARA",
+                              subMenuName: "SYNDERRARA",
                               imageName: "assets/images/unknown_user.png"),
                           onTap: () {
                             //Navigator.of(context).pushNamed(UNMATCH_PLOT_ROUTE);
@@ -496,7 +497,7 @@ class _MainScreenState extends State<MainScreen> {
                 children: <Widget>[
                   Container(
                     color: Colors.blue,
-                    height: 120,
+                    height: 80,
                     padding: EdgeInsets.only(
                         top: 65, right: 20, left: 20, bottom: 10),
                   ),
@@ -504,7 +505,7 @@ class _MainScreenState extends State<MainScreen> {
                     height: 10,
                   ),
                   Container(
-                      height: 200,
+                      height: 240,
                       //color:Colors.red,
                       child: Padding(
                         padding: EdgeInsets.all(8),
