@@ -1,25 +1,40 @@
-
-
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:der/entities/site/plot.dart';
+import 'package:der/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 
+Box? _UserBox;
+List<Widget> allWigetUnmatchPlots = [];
+
 class UnMatchPlotScreen extends StatefulWidget {
-
   _UnMatchPlotScreen createState() => _UnMatchPlotScreen();
-
 }
 
-
-class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
-
-  final  picker = ImagePicker();
+class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
+  final picker = ImagePicker();
   var _image;
 
-  _getImage(ImageSource imageSource) async
-  {
+  initState() {
+    print("unmatch Screen");
+    _UserBox = Hive.box("Users");
+    List<OnSitePlot> unmatchPlots = _UserBox!.get(userNameNow).unMatchPlots;
+    print("unmatchplots length" + unmatchPlots.length.toString());
+    int i = 0;
+    allWigetUnmatchPlots.clear();
+    for (i = 0; i < unmatchPlots.length; i++) {
+      allWigetUnmatchPlots.add(makePlot(
+        plotID: unmatchPlots[i].pltId.toString(),
+        feedImage: unmatchPlots[i].plotImgPath,
+        feedText: unmatchPlots[i].barcode,
+      ));
+    }
+  }
 
-    final _imageFile  = await picker.pickImage(source: imageSource,
+  _getImage(ImageSource imageSource) async {
+    final _imageFile = await picker.pickImage(
+      source: imageSource,
       maxWidth: 1000,
       maxHeight: 1000,
       //imageQuality: quality,
@@ -27,9 +42,9 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
 //if user doesn't take any image, just return.
     if (_imageFile == null) return;
     setState(
-          () {
+      () {
         _image = _imageFile;
-        isSelected = true ;
+        isSelected = true;
         //_imageFileList = pickedFile;
 //Rebuild UI with the selected image.
         //print('$_image');
@@ -37,7 +52,8 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
       },
     );
   }
-  bool isSelected = false ;
+
+  bool isSelected = false;
 
   Widget makeCameraButton() {
     return Container(
@@ -49,27 +65,34 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-
-
           children: <Widget>[
-            Icon(Icons.camera, color: Colors.blue ,size: 18,),
-            SizedBox(width: 5,),
+            Icon(
+              Icons.camera,
+              color: Colors.blue,
+              size: 18,
+            ),
+            SizedBox(
+              width: 5,
+            ),
             Container(
               child: InkWell(
                 child: Container(
-                  child: Text("Camera", style: TextStyle(color:  Colors.blue),),
+                  child: Text(
+                    "Camera",
+                    style: TextStyle(color: Colors.blue),
+                  ),
                 ),
-                onTap: (){
+                onTap: () {
                   _getImage(ImageSource.camera);
                 },
               ),
             ),
-
           ],
         ),
       ),
     );
   }
+
   Widget makeGallryButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -81,14 +104,23 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.photo, color: Colors.blue ,size: 18,),
-            SizedBox(width: 5,),
+            Icon(
+              Icons.photo,
+              color: Colors.blue,
+              size: 18,
+            ),
+            SizedBox(
+              width: 5,
+            ),
             Container(
               child: InkWell(
                 child: Container(
-                  child: Text("Gallery", style: TextStyle(color:  Colors.blue),),
+                  child: Text(
+                    "Gallery",
+                    style: TextStyle(color: Colors.blue),
+                  ),
                 ),
-                onTap: (){
+                onTap: () {
                   _getImage(ImageSource.gallery);
                 },
               ),
@@ -98,6 +130,7 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
       ),
     );
   }
+
   Widget makeShareButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -110,16 +143,25 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(Icons.delete, color: Colors.blue, size: 18),
-            SizedBox(width: 5,),
-            Text("Delete", style: TextStyle(color: Colors.blue),)
+            SizedBox(
+              width: 5,
+            ),
+            Text(
+              "Delete",
+              style: TextStyle(color: Colors.blue),
+            )
           ],
         ),
       ),
     );
   }
 
-
-  Widget makePlot({plotID, userImage="assets/images/unknown_user.png", feedTime, feedText, feedImage}) {
+  Widget makePlot(
+      {plotID,
+      userImage = "assets/images/unknown_user.png",
+      feedTime,
+      feedText,
+      feedImage}) {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
@@ -136,45 +178,69 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            image: AssetImage(userImage),
-                            fit: BoxFit.cover
-                        )
-                    ),
+                            image: AssetImage(userImage), fit: BoxFit.cover)),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(plotID, style: TextStyle(color: Colors.grey[900], fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1),),
-                      SizedBox(height: 3,),
-                      Text(feedTime, style: TextStyle(fontSize: 15, color: Colors.grey),),
+                      Text(
+                        plotID,
+                        style: TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1),
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        feedTime,
+                        style: TextStyle(fontSize: 15, color: Colors.grey),
+                      ),
                     ],
                   )
                 ],
               ),
               IconButton(
-                icon: Icon(Icons.more_horiz, size: 30, color: Colors.grey[600],),
-                onPressed: () {
-
-                },
+                icon: Icon(
+                  Icons.more_horiz,
+                  size: 30,
+                  color: Colors.grey[600],
+                ),
+                onPressed: () {},
               )
             ],
           ),
-          SizedBox(height: 20,),
-          Text(feedText, style: TextStyle(fontSize: 15, color: Colors.grey[800], height: 1.5, letterSpacing: .7),),
-          SizedBox(height: 20,),
-          feedImage != '' ?
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: AssetImage(feedImage),
-                    fit: BoxFit.cover
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            feedText,
+            style: TextStyle(
+                fontSize: 15,
+                color: Colors.grey[800],
+                height: 1.5,
+                letterSpacing: .7),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          feedImage != ''
+              ? Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          image: AssetImage(feedImage), fit: BoxFit.cover)),
                 )
-            ),
-          ) : Container(),
-          SizedBox(height: 30,),
+              : Container(),
+          SizedBox(
+            height: 30,
+          ),
           /*    Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -205,20 +271,16 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
             height: 3,
             color: Colors.grey[300],
           ),
-
         ],
       ),
     );
   }
 
-
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-
           Container(
             color: Colors.blue,
             height: 125,
@@ -227,90 +289,57 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen>{
               children: [
                 Expanded(
                     child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.grey[200]
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.grey[200]),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.grey,
                       ),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search, color: Colors.grey,),
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(color: Colors.grey),
-                          hintText: "Search Unmatch Plot",
-                          suffixIcon: InkWell(
-                            child:Icon(Icons.qr_code, color: Colors.grey,),
-                            onTap: (){
-                              print('test');
-                            },
-                          ),
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(color: Colors.grey),
+                      hintText: "Search Unmatch Plot",
+                      suffixIcon: InkWell(
+                        child: Icon(
+                          Icons.qr_code,
+                          color: Colors.grey,
                         ),
+                        onTap: () {
+                          print('test');
+                        },
                       ),
-                    )
-                ),
+                    ),
+                  ),
+                )),
               ],
             ),
           ),
           Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    children: [
-                      //SizedBox(height: 40,),
-                      Container(
-                        height: 3,
-                        color: Colors.grey[300],
-                      ),
-                      SizedBox(height: 15,),
-                      makePlot(
-                          plotID: '54155',
-                          //userImage: 'assets/images/aiony-haust.jpg',
-                          feedTime: '1 hr ago',
-                          feedText: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                          feedImage: 'assets/images/plot_corn.jpg'
-                      ),
-                      makePlot(
-                          plotID: '54156',
-                          //userImage: 'assets/images/aiony-haust.jpg',
-                          feedTime: '1 hr ago',
-                          feedText: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                          feedImage: 'assets/images/plot_corn.jpg'
-                      ),
-                      makePlot(
-                          plotID: '54157',
-                          //userImage: 'assets/images/aiony-haust.jpg',
-                          feedTime: '1 hr ago',
-                          feedText: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                          feedImage: 'assets/images/plot_corn.jpg'
-                      ),
-                    ],
-                  ),
-                ),
-              )
-          ),
+            scrollDirection: Axis.vertical,
+            child: Padding(
+              padding: EdgeInsets.all(5),
+              child: Column(
+                children: allWigetUnmatchPlots,
+              ),
+            ),
+          )),
         ],
-
-
       ),
-
-      bottomNavigationBar:  ConvexAppBar(
+      bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,
         items: [
-
-          TabItem(icon: Icons.home,title: 'Home'),
-          TabItem(icon: Icons.download, title:'Download'),
-          TabItem(icon: Icons.qr_code, title:'Scan'),
-          TabItem(icon: Icons.art_track, title:'Experiment'),
-          TabItem(icon: Icons.bar_chart,title:'Report'),
-
+          TabItem(icon: Icons.home, title: 'Home'),
+          TabItem(icon: Icons.download, title: 'Download'),
+          TabItem(icon: Icons.qr_code, title: 'Scan'),
+          TabItem(icon: Icons.art_track, title: 'Experiment'),
+          TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 3,
         onTap: (int i) => Navigator.of(context).pushNamed('$i'),
-
       ),
     );
   }
-
-
 }

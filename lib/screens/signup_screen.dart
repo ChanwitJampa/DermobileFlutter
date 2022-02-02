@@ -25,8 +25,8 @@ Box? _UserBox;
 //const SERVER_IP = 'http://10.0.2.2:8080';
 String? userNameNow;
 
-//const SERVER_IP = 'http://10.0.2.2:8080';
-const SERVER_IP = 'http://192.168.3.199:8080';
+const SERVER_IP = 'http://10.0.2.2:8080';
+//const SERVER_IP = 'http://192.168.3.199:8080';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -209,6 +209,7 @@ class _SignupScreen extends State<SignupScreen> {
     //print("sigin token is : " + token);
     //print("username is existing :" +
     //   (_UserBox?.get(username) == null).toString());
+    print("token " + token);
     if (_UserBox?.get(username) == null) {
       OnSiteUser user = OnSiteUser(u.userName, u.firstName, u.lastName,
           u.picture, token, 123, "", [], []);

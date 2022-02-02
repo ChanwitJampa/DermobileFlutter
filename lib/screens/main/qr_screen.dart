@@ -14,6 +14,7 @@ import 'package:der/screens/select_Image.dart';
 import 'package:der/utils/constants.dart';
 
 String dataCode = "";
+String type = "";
 Box? _UserBox;
 int itrial = 0;
 int jplot = 0;
@@ -136,7 +137,12 @@ class _QRScreen extends State<QRScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         ),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            type = "UNMATCH";
+                            dataCode = "DR234658395";
+                            controller?.pauseCamera();
+                            Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
+                          },
                           child: Text('NOT MATCH'),
                         ),
                       ),
@@ -188,11 +194,13 @@ class _QRScreen extends State<QRScreen> {
 
         if (checkPlost(dataCode)) {
           print("match plot ID is" + dataCode);
+          type = "MATCH";
           controller.pauseCamera();
           Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         } else {
           print("unmatch plot ID is" + dataCode);
           controller.pauseCamera();
+          type = "UNMATCH";
           Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
         }
 
