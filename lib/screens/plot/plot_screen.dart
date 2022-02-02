@@ -169,7 +169,8 @@ class _PlotsScreen extends State<PlotsScreen> {
   }
 
   Widget makePlot(
-      {plotID,
+      {isLock,
+      plotID,
       userImage = "assets/images/unknown_user.png",
       feedTime,
       feedText,
@@ -307,7 +308,11 @@ class _PlotsScreen extends State<PlotsScreen> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  makeLock(isLock: true),
+                  if (isLock == "Open") ...[
+                    makeLock(isLock: false),
+                  ] else ...[
+                    makeLock(isLock: true)
+                  ]
                   /*
                   makeLike(),
                   Transform.translate(
@@ -328,7 +333,7 @@ class _PlotsScreen extends State<PlotsScreen> {
             children: <Widget>[
               makeCameraButton(plotID),
               makeGallryButton(),
-              makeShareButton(),
+              if (isLock == "Open") ...[makeShareButton()]
             ],
           ),
           SizedBox(
@@ -478,10 +483,10 @@ class _PlotsScreen extends State<PlotsScreen> {
 
     if (count1 == 0) {
       galleryPath = "";
-      for (int i = 0; i < directory!.path.length; i++) {
-        print(directory!.path[i]);
+      for (int i = 0; i < directory.path.length; i++) {
+        print(directory.path[i]);
 
-        galleryPath = galleryPath + directory!.path[i];
+        galleryPath = galleryPath + directory.path[i];
 
         if (directory.path[i] == "0") {
           break;
@@ -602,11 +607,16 @@ class _PlotsScreen extends State<PlotsScreen> {
     //   print("i++" + i.toString());
     //   i++;
     // });
-
+    String isStatus = "";
     plotList.clear();
     ost.onSitePlots.forEach((e) {
+      isStatus = "";
+      if (e.plotStatus == "Open") {
+        isStatus = "Open";
+      }
       plotList.addAll([
         makePlot(
+          isLock: isStatus,
           plotID: e.pltId.toString(),
           //userImage: 'assets/images/aiony-haust.jpg',
           feedTime: (new DateTime.fromMillisecondsSinceEpoch(e.uploadDate))
