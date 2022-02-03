@@ -121,13 +121,18 @@ class _SelectImage extends State<SelectImage> {
           .onSiteTrials[itrial]
           .onSitePlots[jplot]
           .plotImgPath = testpath;
+
+      print(
+          "img path Match plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
     } else if (type == "UNMATCH") {
-      // OnSitePlot osp = OnSitePlot(pltId, barcode, repNo, abbrc, entno, notet, plotImgPath, plotImgPathS, plotImgBoxPath, plotImgBoxPathS, uploadDate, eartnA, dlernA, dlerpA, drwapA, eartnM, dlernM, dlerpM, drwapM, approveDate, plotProgress, plotStatus, plotActive)
-      _UserBox?.get(userNameNow).unMatchPlots.add();
+      OnSitePlot osp = OnSitePlot(0, dataCode, 0, "", 0, "", testpath, "", "",
+          "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", "", "");
+      _UserBox?.get(userNameNow).unMatchPlots.add(osp);
+      int length = _UserBox?.get(userNameNow).unMatchPlots.length;
+      print(
+          "img path UNMatch plots is : ${_UserBox?.get(userNameNow).unMatchPlots[length - 1].plotImgPath} /----/ barcode is ${_UserBox?.get(userNameNow).unMatchPlots[length - 1].barcode}");
     }
     _UserBox?.get(userNameNow).save();
-    print(
-        "img path plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
 
     Navigator.of(context).pushNamed(HOME_ROUTE);
   }

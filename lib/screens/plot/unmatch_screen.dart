@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:der/entities/site/plot.dart';
 import 'package:der/screens/signup_screen.dart';
@@ -23,11 +25,14 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
     print("unmatchplots length" + unmatchPlots.length.toString());
     int i = 0;
     allWigetUnmatchPlots.clear();
+    print("---------------------");
     for (i = 0; i < unmatchPlots.length; i++) {
+      print(i);
       allWigetUnmatchPlots.add(makePlot(
-        plotID: unmatchPlots[i].pltId.toString(),
+        plotID: unmatchPlots[i].barcode,
+        feedTime: "plot ${i + 1}",
         feedImage: unmatchPlots[i].plotImgPath,
-        feedText: unmatchPlots[i].barcode,
+        feedText: "",
       ));
     }
   }
@@ -229,14 +234,24 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
           SizedBox(
             height: 20,
           ),
-          feedImage != ''
-              ? Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          image: AssetImage(feedImage), fit: BoxFit.cover)),
+          feedImage != "null"
+              ? new RotationTransition(
+                  turns: new AlwaysStoppedAnimation(90 / 360),
+                  child: new Image.file(
+                    File(feedImage),
+                    // child: new Image.asset(
+                    //   feedImage,
+                    height: 500,
+                    width: 700,
+                  ),
                 )
+              // ? Container(
+              //     height: 200,
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(10),
+              //         image: DecorationImage(
+              //             image: AssetImage(feedImage), fit: BoxFit.cover)),
+              //   )
               : Container(),
           SizedBox(
             height: 30,
@@ -277,6 +292,7 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
   }
 
   Widget build(BuildContext context) {
+    print("----- build ------");
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -321,9 +337,39 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
             scrollDirection: Axis.vertical,
             child: Padding(
               padding: EdgeInsets.all(5),
-              child: Column(
-                children: allWigetUnmatchPlots,
-              ),
+              child: Column(children: allWigetUnmatchPlots
+                  // [
+                  //   //SizedBox(height: 40,),
+                  //   Container(
+                  //     height: 3,
+                  //     color: Colors.grey[300],
+                  //   ),
+                  //   SizedBox(
+                  //     height: 15,
+                  //   ),
+                  //   makePlot(
+                  //       plotID: '54155',
+                  //       //userImage: 'assets/images/aiony-haust.jpg',
+                  //       feedTime: '1 hr ago',
+                  //       feedText:
+                  //           'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                  //       feedImage: 'assets/images/plot_corn.jpg'),
+                  //   makePlot(
+                  //       plotID: '54156',
+                  //       //userImage: 'assets/images/aiony-haust.jpg',
+                  //       feedTime: '1 hr ago',
+                  //       feedText:
+                  //           'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                  //       feedImage: 'assets/images/plot_corn.jpg'),
+                  //   makePlot(
+                  //       plotID: '54157',
+                  //       //userImage: 'assets/images/aiony-haust.jpg',
+                  //       feedTime: '1 hr ago',
+                  //       feedText:
+                  //           'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                  //       feedImage: 'assets/images/plot_corn.jpg'),
+                  // ],
+                  ),
             ),
           )),
         ],
@@ -334,7 +380,7 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),
           TabItem(icon: Icons.qr_code, title: 'Scan'),
-          TabItem(icon: Icons.art_track, title: 'Experiment'),
+          TabItem(icon: Icons.art_track, title: 'Trials'),
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 3,
