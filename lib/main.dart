@@ -4,6 +4,7 @@ import 'package:der/screens/signup_screen.dart';
 import 'package:der/utils/constants.dart';
 import "package:der/utils/router.dart";
 import 'package:reflectable/reflectable.dart';
+import 'package:der/screens/main/existed_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
               HOME_ROUTE: (BuildContext context) =>
                   new MyHomePage(cameras: cameras)
             },
+            // home: new SignupScreen(),
             home: new SignupScreen(),
           );
         }

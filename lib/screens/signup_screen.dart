@@ -153,29 +153,27 @@ class _SignupScreen extends State<SignupScreen> {
                           )),
                       SizedBox(height: 20.0),
                       Container(
-                        height: 40.0,
-                        color: Colors.transparent,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.black,
-                                  style: BorderStyle.solid,
-                                  width: 1.0),
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(20.0)),
-                          child: InkWell(
-                            onTap: () {
-                              //Navigator.of(context).pop();
-                            },
-                            child: Center(
-                              child: Text('Go Back',
+                          height: 40.0,
+                          child: Material(
+                            borderRadius: BorderRadius.circular(20.0),
+                            shadowColor: Colors.redAccent,
+                            color: Colors.redAccent,
+                            elevation: 7.0,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(EXISTED_ROUTE);
+                              },
+                              child: Center(
+                                child: Text(
+                                  'EXISTED',
                                   style: TextStyle(
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat')),
+                                      fontFamily: 'Montserrat'),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
+                          )),
                     ],
                   )),
             ]));

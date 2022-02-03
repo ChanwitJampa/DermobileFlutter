@@ -39,6 +39,8 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
+const color = const Color(0xffb74093);
+
 class _MainScreenState extends State<MainScreen> {
   Size? deviceSize;
 
@@ -325,6 +327,7 @@ class _MainScreenState extends State<MainScreen> {
                               subMenuName: "SYNDERRARA",
                               imageName: "assets/images/unknown_user.png"),
                           onTap: () {
+                            Navigator.of(context).pushNamed(EXISTED_ROUTE);
                             //Navigator.of(context).pushNamed(UNMATCH_PLOT_ROUTE);
                           },
                         ),
@@ -496,7 +499,7 @@ class _MainScreenState extends State<MainScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    color: Colors.blue,
+                    color: Colors.cyan[700],
                     height: 80,
                     padding: EdgeInsets.only(
                         top: 65, right: 20, left: 20, bottom: 10),
@@ -550,6 +553,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           bottomNavigationBar: ConvexAppBar(
             style: TabStyle.react,
+            backgroundColor: Colors.cyan[700],
             items: [
               TabItem(icon: Icons.home, title: 'Home'),
               TabItem(icon: Icons.download, title: 'Download'),
