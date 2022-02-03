@@ -124,7 +124,7 @@ class _QRScreen extends State<QRScreen> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            type = "UNMATCH";
+                            type = "MATCH";
                             controller?.pauseCamera();
                             Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
                           },
