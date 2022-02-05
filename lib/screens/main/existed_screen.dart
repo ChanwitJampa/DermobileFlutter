@@ -1,5 +1,6 @@
 //use to dowload data from http
 import 'package:der/entities/site/user.dart';
+import 'package:der/utils/constants.dart';
 import 'package:http/http.dart' as Http;
 import 'dart:convert';
 import 'package:der/entities/objectlist.dart';
@@ -40,16 +41,15 @@ class _ExistedScreen extends State<ExistedScreen> {
   initState() {
     super.initState();
     getBox();
+    _UserBox = Hive.box("Users");
 
     _loadData().then((value) => {
           experimentItems!.clear(),
-          for (i = 0; i < trials!.length; i++)
+          for (i = 0; i < _UserBox!.length; i++)
             {
               experimentItems!.addAll([
                 WidgetCheckBoxModel(
-                    title: '${i + 1}',
-                    trial:
-                        '${trials![i].trialId}\n${(new DateTime.fromMillisecondsSinceEpoch(trials![i].lastUpdate)).toString()}')
+                    title: '${_UserBox!.getAt(i).userName}', trial: '')
               ])
             }
         });
@@ -66,51 +66,19 @@ class _ExistedScreen extends State<ExistedScreen> {
   _LoadDataScreen() {}
 
   Future _loadData() async {
-    int i, page = 1;
-    String token = _UserBox!.get(userNameNow).token;
-    //------------------------ get trials ---------------------------------------
-    String url = "$SERVER_IP/syngenta/api/trial/user/trials";
-    var response = await Http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${token}'
-      },
-    );
-    var json = jsonDecode(response.body);
-    trials = ObjectList<Trial>.fromJson(
-        jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
-
-    List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
-    /////////////////////////////more faster if sorting////////////////////////////////////////////////////////////////////////////////////
-    trialsUser.forEach((e) {
-      //  print(e.trialId);
-      for (int i = 0; i < trials!.length; i++) {
-        // print("       " + trials![i].trialId.toString());
-        if (trials![i].trialId == e.trialId) {
-          trials!.removeAt(i);
-        }
-      }
-    });
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    print("Trial length : " +
-        trials!.length.toString() +
-        "   trialsUser : " +
-        trialsUser.length.toString());
+    _UserBox = Hive.box("Users");
+    print("------ all user is  ${_UserBox!.length}");
 
     //await new Future.delayed(new Duration(seconds: 1));
+
     setState(() {
       experimentItems!.clear();
 
-      for (i = 0; i < trials!.length; i++) {
+      for (i = 0; i < _UserBox!.length; i++) {
         experimentItems!.addAll([
           WidgetCheckBoxModel(
-              title: '$page',
-              trial:
-                  '${trials![i].trialId}\n${(new DateTime.fromMillisecondsSinceEpoch(trials![i].lastUpdate)).toString()}')
+              title: '${_UserBox!.getAt(i).userName}', trial: '')
         ]);
-
-        page++;
       }
 
       isLoading = false;
@@ -151,7 +119,7 @@ class _ExistedScreen extends State<ExistedScreen> {
                   });
                 },
                 title: Text(
-                  'USERNAME ' + experimentItems![index].title,
+                  experimentItems![index].title,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 30,
@@ -273,7 +241,9 @@ class _ExistedScreen extends State<ExistedScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: const Color(0xff03dac6),
         foregroundColor: Colors.black,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed(SIGNUP_ROUTE);
+        },
         label: Text(
           "New User",
           style: TextStyle(
@@ -302,49 +272,6 @@ class _ExistedScreen extends State<ExistedScreen> {
     // String userNameNow = await getUserFromSF();
     //await new Future.delayed(new Duration(seconds: 2));
     ////////////////////////////more faster if sorting with "value" //////////////////////////////
-    for (int k = 0; k < experimentItems!.length; k++) {
-      if (experimentItems![k].value) {
-        List<OnSitePlot> osps = [];
-        if (trials![k].plots.isNotEmpty) {
-          trials![k].plots.forEach((e) {
-            osps.add(OnSitePlot(
-                e.plotId,
-                e.barcode,
-                e.repNo,
-                e.abbrc,
-                e.entno,
-                e.notet,
-                e.plotImgPath,
-                e.plotImgPathS,
-                e.plotImgBoxPath,
-                e.plotImgBoxPathS,
-                e.uploadDate,
-                e.eartnA,
-                e.dlernA,
-                e.dlerpA,
-                e.drwapA,
-                e.eartnM,
-                e.dlernM,
-                e.dlerpM,
-                e.drwapM,
-                e.approveDate,
-                e.plotProgress,
-                e.plotStatus,
-                e.plotActive));
-          });
-        }
-        OnSiteTrial ost = OnSiteTrial(
-            trials![k].trialId,
-            trials![k].aliasName,
-            trials![k].trialActive,
-            trials![k].trialStatus,
-            trials![k].createDate,
-            trials![k].lastUpdate,
-            osps);
-        _UserBox?.get(userNameNow).onSiteTrials.add(ost);
-      }
-      _UserBox?.get(userNameNow).save();
-    }
 
     //////////////////////////////////////////////////////////////////////////////////////////
     setState(() {

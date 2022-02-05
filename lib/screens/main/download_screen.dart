@@ -506,9 +506,12 @@ class _DownloadScreen extends State<DownloadScreen> {
   }
 
   Future onDownload() async {
+    List<String> un_match_onload = [];
+    List<OnSiteTrial> allTrialOnLoad = [];
     // String userNameNow = await getUserFromSF();
     //await new Future.delayed(new Duration(seconds: 2));
     ////////////////////////////more faster if sorting with "value" //////////////////////////////
+    ///
     for (int k = 0; k < experimentItems!.length; k++) {
       if (experimentItems![k].value) {
         List<OnSitePlot> osps = [];
@@ -538,6 +541,14 @@ class _DownloadScreen extends State<DownloadScreen> {
                 e.plotProgress,
                 e.plotStatus,
                 e.plotActive));
+            List<OnSitePlot> listOspUnmatch =
+                _UserBox?.get(userNameNow).unMatchPlots;
+            for (int j = 0; j < listOspUnmatch.length; j++) {
+              print("j : ${j}");
+              if (listOspUnmatch[j].barcode == e.barcode) {
+                un_match_onload.add(e.barcode);
+              }
+            }
           });
         }
         OnSiteTrial ost = OnSiteTrial(
@@ -548,9 +559,13 @@ class _DownloadScreen extends State<DownloadScreen> {
             trials![k].createDate,
             trials![k].lastUpdate,
             osps);
-        _UserBox?.get(userNameNow).onSiteTrials.add(ost);
+        allTrialOnLoad.add(ost);
       }
-      _UserBox?.get(userNameNow).save();
+    }
+    _UserBox?.get(userNameNow).onSiteTrials.addAll(allTrialOnLoad);
+    _UserBox?.get(userNameNow).save();
+    if (un_match_onload.length > 0) {
+      print("plots on load is match on unmatch plots :   ${un_match_onload}");
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////

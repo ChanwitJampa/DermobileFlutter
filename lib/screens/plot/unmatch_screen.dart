@@ -27,7 +27,7 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
     allWigetUnmatchPlots.clear();
     print("---------------------");
     for (i = 0; i < unmatchPlots.length; i++) {
-      print(i);
+      // print(i);
       allWigetUnmatchPlots.add(makePlot(
         plotID: unmatchPlots[i].barcode,
         feedTime: "plot ${i + 1}",
@@ -292,7 +292,7 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
   }
 
   Widget build(BuildContext context) {
-    print("----- build ------");
+    // print("----- build ------");
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

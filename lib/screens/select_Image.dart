@@ -95,10 +95,10 @@ class _SelectImage extends State<SelectImage> {
 
     if (count1 == 0) {
       galleryPath = "";
-      for (int i = 0; i < directory!.path.length; i++) {
-        print(directory!.path[i]);
+      for (int i = 0; i < directory.path.length; i++) {
+        print(directory.path[i]);
 
-        galleryPath = galleryPath + directory!.path[i];
+        galleryPath = galleryPath + directory.path[i];
 
         if (directory.path[i] == "0") {
           break;
@@ -341,7 +341,7 @@ class _SelectImage extends State<SelectImage> {
                                   Container(
                                     width: 368,
                                     child: const Text(
-                                      '  Img: ' + '1',
+                                      '  Img: ' + '-------???----------',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,
