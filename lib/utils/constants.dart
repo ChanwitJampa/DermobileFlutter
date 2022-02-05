@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 // MAJOR ROUTE
 const String HOME_ROUTE = '0';
 const String DOWNLOAD_ROUTE = '1';
@@ -16,3 +18,26 @@ const String EXPERIMENT_DASHBOARD_ROUTE = '11';
 const String SIGNUP_ROUTE = '12';
 const String ASSESSMENT_ROUTE = '13';
 const String EXISTED_ROUTE = '15';
+
+final kHintTextStyle = TextStyle(
+  color: Colors.white54,
+  fontFamily: 'OpenSans',
+);
+
+final kLabelStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'OpenSans',
+);
+
+final kBoxDecorationStyle = BoxDecoration(
+  color: Color(0xFF6CA8F1),
+  borderRadius: BorderRadius.circular(10.0),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black12,
+      blurRadius: 6.0,
+      offset: Offset(0, 2),
+    ),
+  ],
+);
