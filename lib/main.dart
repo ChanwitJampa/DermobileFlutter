@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:der/screens/main/newlogin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:der/utils/constants.dart';
@@ -46,7 +47,8 @@ class MyApp extends StatelessWidget {
                   new MyHomePage(cameras: cameras)
             },
             // home: new SignupScreen(),
-            home: new SignupScreen(),
+            // home: new SignupScreen(),
+            home: new LoginScreen(),
           );
         }
         MyHomePage(cameras: cameras);

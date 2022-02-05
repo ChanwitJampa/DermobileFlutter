@@ -1,3 +1,4 @@
+import 'package:der/screens/main/newlogin_screen.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/assessment_screen.dart';
@@ -57,6 +58,10 @@ class Routers {
       case '15':
         print("1515155151515151515515151");
         return MaterialPageRoute(builder: (_) => ExistedScreen());
+
+      case '16':
+        print("1616616161616116");
+        return MaterialPageRoute(builder: (_) => LoginScreen());
 
       default:
         return MaterialPageRoute(

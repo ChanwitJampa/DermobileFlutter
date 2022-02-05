@@ -18,6 +18,7 @@ const String EXPERIMENT_DASHBOARD_ROUTE = '11';
 const String SIGNUP_ROUTE = '12';
 const String ASSESSMENT_ROUTE = '13';
 const String EXISTED_ROUTE = '15';
+const String NEWLOGIN_ROUTE = '16';
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,
@@ -25,10 +26,18 @@ final kHintTextStyle = TextStyle(
 );
 
 final kLabelStyle = TextStyle(
-  color: Colors.white,
+  // color: Colors.white,
+  color: Color(0xFF398AE5),
   fontWeight: FontWeight.bold,
   fontFamily: 'OpenSans',
 );
+
+final kTest = TextStyle(
+    // color: Colors.white,
+    color: Colors.white,
+    fontFamily: 'OpenSans',
+    fontSize: 25,
+    height: 1.15);
 
 final kBoxDecorationStyle = BoxDecoration(
   color: Color(0xFF6CA8F1),
