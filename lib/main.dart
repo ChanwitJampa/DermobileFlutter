@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         } else {
           return MaterialApp(
             debugShowCheckedModeBanner: true,
+            onGenerateRoute: Routers.generateRoute,
             routes: <String, WidgetBuilder>{
               //'12': (BuildContext context) => new SignupScreen()
               HOME_ROUTE: (BuildContext context) =>

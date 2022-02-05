@@ -95,10 +95,10 @@ class _SelectImage extends State<SelectImage> {
 
     if (count1 == 0) {
       galleryPath = "";
-      for (int i = 0; i < directory!.path.length; i++) {
-        print(directory!.path[i]);
+      for (int i = 0; i < directory.path.length; i++) {
+        print(directory.path[i]);
 
-        galleryPath = galleryPath + directory!.path[i];
+        galleryPath = galleryPath + directory.path[i];
 
         if (directory.path[i] == "0") {
           break;
@@ -121,13 +121,18 @@ class _SelectImage extends State<SelectImage> {
           .onSiteTrials[itrial]
           .onSitePlots[jplot]
           .plotImgPath = testpath;
+
+      print(
+          "img path Match plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
     } else if (type == "UNMATCH") {
-      // OnSitePlot osp = OnSitePlot(pltId, barcode, repNo, abbrc, entno, notet, plotImgPath, plotImgPathS, plotImgBoxPath, plotImgBoxPathS, uploadDate, eartnA, dlernA, dlerpA, drwapA, eartnM, dlernM, dlerpM, drwapM, approveDate, plotProgress, plotStatus, plotActive)
-      _UserBox?.get(userNameNow).unMatchPlots.add();
+      OnSitePlot osp = OnSitePlot(0, dataCode, 0, "", 0, "", testpath, "", "",
+          "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", "", "");
+      _UserBox?.get(userNameNow).unMatchPlots.add(osp);
+      int length = _UserBox?.get(userNameNow).unMatchPlots.length;
+      print(
+          "img path UNMatch plots is : ${_UserBox?.get(userNameNow).unMatchPlots[length - 1].plotImgPath} /----/ barcode is ${_UserBox?.get(userNameNow).unMatchPlots[length - 1].barcode}");
     }
     _UserBox?.get(userNameNow).save();
-    print(
-        "img path plots is : ${_UserBox?.get(userNameNow).onSiteTrials[itrial].onSitePlots[jplot].plotImgPath}");
 
     Navigator.of(context).pushNamed(HOME_ROUTE);
   }
@@ -336,7 +341,7 @@ class _SelectImage extends State<SelectImage> {
                                   Container(
                                     width: 368,
                                     child: const Text(
-                                      '  Img: ' + '1',
+                                      '  Img: ' + '-------???----------',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,
