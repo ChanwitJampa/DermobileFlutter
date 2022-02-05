@@ -278,11 +278,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.white
-                      // Color(0xFF73AEF5),
-                      // Color(0xFF61A4F1),
-                      // Color(0xFF478DE0),
-                      // Color(0xFF398AE5),
+                      // Colors.white
+                      Color(0xFF73AEF5),
+                      Color(0xFF61A4F1),
+                      Color(0xFF478DE0),
+                      Color(0xFF398AE5),
                     ],
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
@@ -302,7 +302,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'Login',
                         style: TextStyle(
-                          color: Color(0xFF398AE5),
+                          // color: Color(0xFF398AE5),
+                          color: Colors.white,
                           fontFamily: 'OpenSans',
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -366,8 +367,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 40.0),
                       Container(
                           child: Divider(
-                        // color: Colors.white54,
-                        color: Color(0xFF398AE5),
+                        color: Colors.white54,
+                        // color: Color(0xFF398AE5),
                         height: 10,
                         thickness: 3,
                       )),
