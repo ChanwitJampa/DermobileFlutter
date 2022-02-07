@@ -66,6 +66,7 @@ dependencies:
   gallery_saver: ^2.3.2
   fluttertoast: ^8.0.7
   path:
+  dropdown_button2: ^1.1.1
   
 dev_dependencies:
   flutter_test:

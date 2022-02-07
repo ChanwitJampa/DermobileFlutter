@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,6 +14,7 @@ import 'package:der/entities/trial.dart';
 //hive
 import 'package:hive/hive.dart';
 import 'package:der/entities/site/trial.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:der/utils/constants.dart';
 
@@ -261,6 +263,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String dropdownValue = 'Existed User';
 
+  late String country_id;
+
+  List<String> country = [
+    "America",
+    "Brazil",
+    "Canada",
+    "India",
+    "Mongalia",
+    "USA",
+    "China",
+    "Russia",
+    "Germany"
+  ];
+
+  String? selectedValue;
+  List<String> items = [
+    'Item1',
+    'Item2',
+    'Item3',
+    'Item4',
+    'Item5',
+    'Item6',
+    'Item7',
+    'Item8',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -279,10 +307,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       // Colors.white
+                      //Blue
                       Color(0xFF73AEF5),
                       Color(0xFF61A4F1),
                       Color(0xFF478DE0),
                       Color(0xFF398AE5),
+                      //Green
+                      // Color(0xFF2EB62C),
+                      // Color(0xFF2EB62C),
+                      // Color(0xFF57C84D),
+                      // Color(0xFF57C84D),
                     ],
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
@@ -311,59 +345,124 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 50.0),
                       Container(
-                        child: DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xFF6CA8F1), width: 1),
-                              borderRadius: BorderRadius.circular(10),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: Row(
+                              children: const [
+                                Icon(
+                                  Icons.account_circle,
+                                  size: 30,
+                                  color: Color(0xFF398AE5),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Existed User',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF398AE5),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                            filled: true,
-                            fillColor: Colors.blueAccent,
+                            items: items
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.normal,
+                                          color: Color(0xFF398AE5),
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                                .toList(),
+                            value: selectedValue,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedValue = value as String;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.arrow_forward_ios_outlined,
+                            ),
+                            iconSize: 14,
+                            iconEnabledColor: Color(0xFF398AE5),
+                            iconDisabledColor: Colors.grey,
+                            buttonHeight: 70,
+                            buttonWidth: 520,
+                            buttonPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: Colors.black26,
+                              ),
+                              color: Colors.white,
+                            ),
+                            buttonElevation: 2,
+                            itemHeight: 70,
+                            itemPadding:
+                                const EdgeInsets.only(left: 14, right: 14),
+                            dropdownMaxHeight: 200,
+                            dropdownWidth: 520,
+                            dropdownPadding: null,
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            dropdownElevation: 8,
+                            scrollbarRadius: const Radius.circular(10),
+                            scrollbarThickness: 6,
+                            scrollbarAlwaysShow: true,
+                            offset: const Offset(0, -1),
                           ),
-                          value: dropdownValue,
-                          dropdownColor: const Color(0xFF73AEF5),
-                          icon: const Icon(
-                            Icons.account_circle,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          elevation: 16,
-                          style: kTest,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropdownValue = newValue!;
-                            });
-                          },
-                          items: <String>[
-                            'Existed User',
-                            'Test',
-                            'user1@ku.th',
-                            'user2@ku.th',
-                            'Admin2@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                            'user3@ku.th',
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
                         ),
                       ),
+                      // child: DropdownButtonFormField<String>(
+                      //   decoration: InputDecoration(
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //           color: Color(0xFF6CA8F1), width: 1),
+                      //       borderRadius: BorderRadius.circular(10),
+                      //     ),
+                      //     filled: true,
+                      //     fillColor: Colors.blueAccent,
+                      //   ),
+                      //   value: dropdownValue,
+                      //   dropdownColor: Colors.white,
+                      //   icon: const Icon(
+                      //     Icons.account_circle,
+                      //     color: Colors.white,
+                      //     size: 30,
+                      //   ),
+                      //   elevation: 16,
+                      //   style: kTest,
+                      //   onChanged: (String? newValue) {
+                      //     setState(() {
+                      //       dropdownValue = newValue!;
+                      //     });
+                      //   },
+                      //   items: <String>[
+                      //     'Existed User',
+                      //     'Test',
+                      //     'user1@ku.th',
+                      //   ].map<DropdownMenuItem<String>>((String value) {
+                      //     return DropdownMenuItem<String>(
+                      //       value: value,
+                      //       child: Text(value),
+                      //     );
+                      //   }).toList(),
+                      // ),
+                      //),
                       SizedBox(height: 40.0),
                       Container(
                           child: Divider(
