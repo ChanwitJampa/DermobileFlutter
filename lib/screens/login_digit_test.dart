@@ -33,7 +33,7 @@ class _PinScreenState extends State<PinScreen> {
   TextEditingController pinSixController = TextEditingController();
 
   var outlineInputBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(20.0),
+    borderRadius: BorderRadius.circular(60.0),
     borderSide: BorderSide(color: Colors.transparent),
   );
 
