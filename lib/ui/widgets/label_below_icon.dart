@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:der/utils/uidata.dart';
 
-
 class LabelBelowIcon extends StatelessWidget {
   final label;
   final IconData icon;
@@ -13,47 +12,47 @@ class LabelBelowIcon extends StatelessWidget {
 
   LabelBelowIcon(
       {this.label,
-        required this.icon,
-        this.onPressed,
-        this.iconColor = Colors.white,
-        this.circleColor,
-        this.isCircleEnabled = true,
-        this.betweenHeight = 5.0});
+      required this.icon,
+      this.onPressed,
+      this.iconColor = Colors.white,
+      this.circleColor,
+      this.isCircleEnabled = true,
+      this.betweenHeight = 5.0});
   @override
   Widget build(BuildContext context) {
     return InkWell(
       child: IgnorePointer(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          isCircleEnabled
-              ? CircleAvatar(
-            backgroundColor: circleColor,
-            radius: 20.0,
-            child: Icon(
-              icon,
-              size: 12.0,
-              color: iconColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            isCircleEnabled
+                ? CircleAvatar(
+                    backgroundColor: circleColor,
+                    radius: 20.0,
+                    child: Icon(
+                      icon,
+                      size: 12.0,
+                      color: iconColor,
+                    ),
+                  )
+                : Icon(
+                    icon,
+                    size: 23.0,
+                    color: iconColor,
+                  ),
+            SizedBox(
+              height: betweenHeight,
             ),
-          )
-              : Icon(
-            icon,
-            size: 23.0,
-            color: iconColor,
-          ),
-          SizedBox(
-            height: betweenHeight,
-          ),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: UIData.ralewayFont),
-          )
-        ],
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontFamily: UIData.ralewayFont),
+            )
+          ],
+        ),
       ),
-    ),
-    onTap: () => onPressed,
+      onTap: () => onPressed,
     );
   }
 }

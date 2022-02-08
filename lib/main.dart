@@ -1,11 +1,16 @@
 import 'package:camera/camera.dart';
+
 import 'package:der/screens/login_digit_screen.dart';
 import 'package:der/screens/select_user_screen.dart';
+
+import 'package:der/screens/main/newlogin_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:der/utils/constants.dart';
 import "package:der/utils/router.dart";
 import 'package:reflectable/reflectable.dart';
+import 'package:der/screens/main/existed_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,12 +45,18 @@ class MyApp extends StatelessWidget {
         } else {
           return MaterialApp(
             debugShowCheckedModeBanner: true,
+            onGenerateRoute: Routers.generateRoute,
             routes: <String, WidgetBuilder>{
               //'12': (BuildContext context) => new SignupScreen()
               HOME_ROUTE: (BuildContext context) =>
                   new MyHomePage(cameras: cameras)
             },
+
             home: new LoginDigitScreen(),
+
+            // home: new SignupScreen(),
+            // home: new SignupScreen(),
+            //home: new LoginScreen(),
           );
         }
         MyHomePage(cameras: cameras);

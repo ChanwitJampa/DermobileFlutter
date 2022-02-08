@@ -1,4 +1,6 @@
 import 'package:der/screens/login_digit_screen.dart';
+import 'package:der/screens/main/newlogin_screen.dart';
+import 'package:der/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/assessment_screen.dart';
 import 'package:der/screens/experiment_dashboard_screen.dart';
@@ -15,11 +17,14 @@ import 'package:der/screens/select_Image.dart';
 import 'package:der/screens/test_der_report_screen.dart';
 import 'package:der/screens/test_der_screen.dar.dart';
 import 'package:der/screens/select_user_screen.dart';
+import 'package:der/screens/main/existed_screen.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '0':
+        print("1111111111111111111111111");
+
         return MaterialPageRoute(builder: (_) => MainScreen());
       case '1':
         return MaterialPageRoute(builder: (_) => DownloadScreen());
@@ -44,10 +49,20 @@ class Routers {
         return MaterialPageRoute(builder: (_) => TestDERReportScreen());
       case '11':
         return MaterialPageRoute(builder: (_) => ExperimanetDashBoardScreen());
+      case '12':
+        return MaterialPageRoute(builder: (_) => SignupScreen());
       case '13':
         return MaterialPageRoute(builder: (_) => AssessmentScreen());
       case '14':
         return MaterialPageRoute(builder: (_) => LoginDigitScreen());
+
+      case '15':
+        print("1515155151515151515515151");
+        return MaterialPageRoute(builder: (_) => ExistedScreen());
+
+      case '16':
+        print("1616616161616116");
+        return MaterialPageRoute(builder: (_) => LoginScreen());
 
       default:
         return MaterialPageRoute(
