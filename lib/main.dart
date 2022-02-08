@@ -1,4 +1,6 @@
 import 'package:camera/camera.dart';
+import 'package:der/screens/login_digit_screen.dart';
+import 'package:der/screens/select_user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:der/utils/constants.dart';
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
               HOME_ROUTE: (BuildContext context) =>
                   new MyHomePage(cameras: cameras)
             },
-            home: new SignupScreen(),
+            home: new LoginDigitScreen(),
           );
         }
         MyHomePage(cameras: cameras);

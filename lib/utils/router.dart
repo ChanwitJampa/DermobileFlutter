@@ -1,3 +1,4 @@
+import 'package:der/screens/login_digit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/assessment_screen.dart';
 import 'package:der/screens/experiment_dashboard_screen.dart';
@@ -13,6 +14,7 @@ import 'package:der/screens/plot/unmatch_screen.dart';
 import 'package:der/screens/select_Image.dart';
 import 'package:der/screens/test_der_report_screen.dart';
 import 'package:der/screens/test_der_screen.dar.dart';
+import 'package:der/screens/select_user_screen.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -27,7 +29,6 @@ class Routers {
         return MaterialPageRoute(builder: (_) => ExperimentScreen());
       case '4':
         return MaterialPageRoute(builder: (_) => EarGalleryScreen());
-
       case '5':
         return MaterialPageRoute(
             builder: (_) => PlotsScreen(title: settings.arguments.toString()));
@@ -43,9 +44,10 @@ class Routers {
         return MaterialPageRoute(builder: (_) => TestDERReportScreen());
       case '11':
         return MaterialPageRoute(builder: (_) => ExperimanetDashBoardScreen());
-
       case '13':
         return MaterialPageRoute(builder: (_) => AssessmentScreen());
+      case '14':
+        return MaterialPageRoute(builder: (_) => LoginDigitScreen());
 
       default:
         return MaterialPageRoute(

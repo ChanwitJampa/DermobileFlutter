@@ -29,12 +29,12 @@ const SERVER_IP = 'http://10.0.2.2:8005';
 //const SERVER_IP = 'http://10.0.2.2:8080';
 //const SERVER_IP = 'http://192.168.3.199:8080';
 
-class SignupScreen extends StatefulWidget {
+class WelcomeScreen extends StatefulWidget {
   @override
-  _SignupScreen createState() => _SignupScreen();
+  _WelcomeScreen createState() => _WelcomeScreen();
 }
 
-class _SignupScreen extends State<SignupScreen> {
+class _WelcomeScreen extends State<WelcomeScreen> {
   @override
   void initState() {
     _openBox();
@@ -56,12 +56,18 @@ class _SignupScreen extends State<SignupScreen> {
                     Container(
                       padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
                       child: Text(
-                        'LogIn',
+                        'สู้ๆนะเอ๊าะ ไม่ไหวละ',
                         style: TextStyle(
-                            fontSize: 80.0, fontWeight: FontWeight.bold),
+                            fontSize: 60.0, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Container(
+                      padding: EdgeInsets.fromLTRB(150.0, 200.0, 0.0, 0.0),
+                      child: Image.asset(
+                        'assets/images/cat.png',
+                      ),
+                    ),
+                    /*Container(
                       padding: EdgeInsets.fromLTRB(260.0, 125.0, 0.0, 0.0),
                       child: Text(
                         '.',
@@ -70,7 +76,7 @@ class _SignupScreen extends State<SignupScreen> {
                             fontWeight: FontWeight.bold,
                             color: Colors.green),
                       ),
-                    )
+                    )*/
                   ],
                 ),
               ),
@@ -78,41 +84,15 @@ class _SignupScreen extends State<SignupScreen> {
                   padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                   child: Column(
                     children: <Widget>[
-                      TextField(
-                        controller: usernameController,
-                        decoration: InputDecoration(
-                            labelText: 'EMAIL',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            // hintText: 'EMAIL',
-                            // hintStyle: ,
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green))),
-                      ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: passwordController,
-                        decoration: InputDecoration(
-                            labelText: 'PASSWORD ',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green))),
-                        obscureText: true,
-                      ),
-                      SizedBox(height: 10.0),
-                      SizedBox(height: 50.0),
+                      SizedBox(height: 300.0),
+                      //SizedBox(height: 50.0),
                       Container(
-                          height: 40.0,
+                          height: 60.0,
                           child: Material(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(30.0),
                             shadowColor: Colors.greenAccent,
-                            color: Colors.green,
-                            elevation: 7.0,
+                            color: Colors.orange,
+                            //elevation: 7.0,
                             child: InkWell(
                               onTap: () async {
                                 if (await signIn(usernameController.text,
@@ -143,8 +123,9 @@ class _SignupScreen extends State<SignupScreen> {
                               },
                               child: Center(
                                 child: Text(
-                                  'LOGIN',
+                                  'EXISTED USER',
                                   style: TextStyle(
+                                      fontSize: 20,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat'),
@@ -152,9 +133,9 @@ class _SignupScreen extends State<SignupScreen> {
                               ),
                             ),
                           )),
-                      SizedBox(height: 20.0),
+                      SizedBox(height: 30.0),
                       Container(
-                        height: 40.0,
+                        height: 60.0,
                         color: Colors.transparent,
                         child: Container(
                           decoration: BoxDecoration(
@@ -163,14 +144,15 @@ class _SignupScreen extends State<SignupScreen> {
                                   style: BorderStyle.solid,
                                   width: 1.0),
                               color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(20.0)),
+                              borderRadius: BorderRadius.circular(30.0)),
                           child: InkWell(
                             onTap: () {
                               //Navigator.of(context).pop();
                             },
                             child: Center(
-                              child: Text('Go Back',
+                              child: Text('NEW USER',
                                   style: TextStyle(
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Montserrat')),
                             ),
