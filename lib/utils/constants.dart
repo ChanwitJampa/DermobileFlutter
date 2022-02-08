@@ -17,6 +17,7 @@ const String PRETEST_REPORT_PLOT_ROUTE = '10';
 const String EXPERIMENT_DASHBOARD_ROUTE = '11';
 const String SIGNUP_ROUTE = '12';
 const String ASSESSMENT_ROUTE = '13';
+const String DIGIT_ROUTE = '14';
 const String EXISTED_ROUTE = '15';
 const String NEWLOGIN_ROUTE = '16';
 

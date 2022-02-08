@@ -52,11 +52,11 @@ class MyApp extends StatelessWidget {
                   new MyHomePage(cameras: cameras)
             },
 
-            home: new LoginDigitScreen(),
+            //home: new LoginDigitScreen(),
 
             // home: new SignupScreen(),
             // home: new SignupScreen(),
-            //home: new LoginScreen(),
+            home: new LoginScreen(),
           );
         }
         MyHomePage(cameras: cameras);

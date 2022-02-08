@@ -186,7 +186,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildSocialBtn(Function onTap, AssetImage logo) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(DIGIT_ROUTE);
+      },
       child: Container(
         height: 60.0,
         width: 60.0,
@@ -278,6 +280,7 @@ class _LoginScreenState extends State<LoginScreen> {
   ];
 
   String? selectedValue;
+
   List<String> items = [
     'Item1',
     'Item2',
@@ -409,10 +412,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Colors.white,
                             ),
                             buttonElevation: 2,
-                            itemHeight: 70,
+                            itemHeight: 50,
                             itemPadding:
                                 const EdgeInsets.only(left: 14, right: 14),
-                            dropdownMaxHeight: 200,
+                            dropdownMaxHeight: 205,
                             dropdownWidth: 520,
                             dropdownPadding: null,
                             dropdownDecoration: BoxDecoration(
