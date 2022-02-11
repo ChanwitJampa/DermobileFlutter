@@ -157,19 +157,17 @@ class _PinScreenState extends State<PinScreen> {
                     },
                   ),
                   Container(
-                    width: 60.0,
+                    width: 61.0,
                     child: MaterialButton(
-                      height: 60.0,
+                      height: 61.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(60.0),
                       ),
                       onPressed: () {
                         clearPin();
                       },
-                      child: Image.asset(
-                        "assets/images/delete_clear.png",
-                        color: Colors.white,
-                      ),
+                      child: Image.asset("assets/images/delete_clear.png",
+                          color: Colors.white),
                     ),
                   ),
                 ],
