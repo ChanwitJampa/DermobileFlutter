@@ -282,7 +282,7 @@ class _PinScreenState extends State<PinScreen> {
 
   buildSecurityText() {
     return Text(
-      "Enter Your Pin Code",
+      "Enter Pin Code",
       style: TextStyle(
         color: Colors.white70,
         fontSize: 35.0,
