@@ -23,35 +23,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
   initState() {
     super.initState();
     _UserBox = Hive.box("Users");
-    int i = 0;
-    ost = _UserBox?.get(userNameNow).onSiteTrials;
-    makeExperiments.clear();
-    ost?.forEach((e) {
-      makeExperiments.addAll([
-        makeExperiment(
-            index: i,
-            experimentID: e.trialId,
-            userImage: 'assets/images/aiony-haust.jpg',
-            feedTime: 'create time ' +
-                (new DateTime.fromMillisecondsSinceEpoch(e.lastUpdate))
-                    .toString()
-            //     +
-            // "  (" +
-            // DateTime.now()
-            //     .difference(
-            //         new DateTime.fromMicrosecondsSinceEpoch(e.lastUpdate))
-            //     .inDays
-            //     .toString() +
-            // ") "
-            ,
-            feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
-            feedImage: 'assets/images/corn.png')
-      ]);
-      i++;
-    });
-
-    // print(userNameNow);
-    // print(_UserBox?.get(userNameNow).onSiteTrials[0].trialId.toString());
+    loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials);
   }
 
   Widget makeDoughnutProgress({double? inProgress, double? finished}) {
@@ -140,11 +112,17 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                 ),
                 IconButton(
                   icon: Icon(
-                    Icons.more_horiz,
+                    Icons.delete,
                     size: 30,
-                    color: Colors.grey[600],
+                    color: Colors.red[500],
+                    // color: Colors.grey[600],
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    print(index);
+                    _UserBox!.get(userNameNow).onSiteTrials.removeAt(index);
+                    _UserBox!.get(userNameNow).save();
+                    loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials);
+                  },
                 )
               ],
             ),
@@ -242,10 +220,11 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.search,
-                        color: Colors.grey,
+                        color: Colors.grey[600],
                       ),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
+                      hintStyle:
+                          TextStyle(color: Colors.grey[600], fontSize: 20),
                       hintText: "Search Experiment",
                     ),
                   ),
@@ -283,6 +262,29 @@ class _ExperimentScreen extends State<ExperimentScreen> {
         onTap: (int i) => Navigator.of(context).pushNamed('$i'),
       ),
     );
+  }
+
+  loadAllTrials(List<OnSiteTrial> ost) {
+    //print("load All");
+    //print(ost.length);
+    int i = 0;
+    setState(() {
+      makeExperiments.clear();
+      ost.forEach((e) {
+        makeExperiments.addAll([
+          makeExperiment(
+              index: i,
+              experimentID: e.trialId,
+              userImage: 'assets/images/aiony-haust.jpg',
+              feedTime: 'create time ' +
+                  (new DateTime.fromMillisecondsSinceEpoch(e.lastUpdate))
+                      .toString(),
+              feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
+              feedImage: 'assets/images/corn.png')
+        ]);
+        i++;
+      });
+    });
   }
 }
 

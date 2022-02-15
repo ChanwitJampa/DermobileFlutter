@@ -42,7 +42,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   final int title;
   Size? deviceSize;
-
+  List<Widget> plotList = [];
   _PlotsScreen(this.title);
 
   @override
@@ -60,9 +60,7 @@ class _PlotsScreen extends State<PlotsScreen> {
       }
     }();
 
-    //_UserBox = Hive.box("Users");
-    // String path =
-    //     _UserBox?.get(userNameNow).onSiteTrials[0].onSitePlots[0].plotImgPath;
+    loadAllPlot();
   }
 
   final allChecked = CheckBoxModal(title: 'All Checked');
@@ -604,46 +602,6 @@ class _PlotsScreen extends State<PlotsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> plotList = [];
-    _UserBox = Hive.box("Users");
-    OnSiteTrial ost = _UserBox?.get(userNameNow).onSiteTrials[title];
-    print("title is :" + ost.trialId);
-    //print("INIT PLOT " + testpath);
-
-    int i = 0;
-
-    // ost.onSitePlots.forEach((e) {
-    //   print("path = " + e.plotImgPath);
-    //   print("i++" + i.toString());
-    //   i++;
-    // });
-    String isStatus = "";
-    plotList.clear();
-    ost.onSitePlots.forEach((e) {
-      isStatus = "";
-      if (e.plotStatus == "Open") {
-        isStatus = "Open";
-      }
-      plotList.addAll([
-        makePlot(
-          isLock: isStatus,
-          plotID: e.pltId.toString(),
-          //userImage: 'assets/images/aiony-haust.jpg',
-          feedTime: (new DateTime.fromMillisecondsSinceEpoch(e.uploadDate))
-              .toString(),
-          feedText:
-              "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
-          //     'All the Lorem Ipsum generators on the Internet tend to repeat predefined.'
-          // ,
-          //feedImage: 'assets/images/plot_corn.jpg')
-          //feedImage: testpath,)
-          feedImage: e.plotImgPath,
-        )
-        // feedImage: e.plotImgPath == null
-        //     ? "assets/images/img_not.png"
-        //     : e.plotImgPath,
-      ]);
-    });
     // print((int.parse(title) + 1));
     // String id = "1";
     // onGenerateRoute:
@@ -710,7 +668,71 @@ class _PlotsScreen extends State<PlotsScreen> {
                           Icons.filter_list,
                           size: 20,
                         ),
-                        items: ['test', 'test'],
+                        items: [
+                          'all',
+                          'have picture',
+                          'not have picture on phone'
+                        ],
+                        onSelected: (value) {
+                          //print(value);
+                          OnSiteTrial ost =
+                              _UserBox?.get(userNameNow).onSiteTrials[title];
+                          int i = 0;
+                          setState(() {
+                            if (value == "all") {
+                              loadAllPlot();
+                            } else if (value == 'have picture') {
+                              String isStatus = "";
+                              plotList.clear();
+                              ost.onSitePlots.forEach((e) {
+                                isStatus = "";
+                                if (e.plotStatus == "Open") {
+                                  isStatus = "Open";
+                                }
+                                if (e.plotImgPath != "null") {
+                                  plotList.addAll([
+                                    makePlot(
+                                      isLock: isStatus,
+                                      plotID: e.pltId.toString(),
+                                      feedTime: (new DateTime
+                                                  .fromMillisecondsSinceEpoch(
+                                              e.uploadDate))
+                                          .toString(),
+                                      feedText:
+                                          "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
+                                      feedImage: e.plotImgPath,
+                                    )
+                                  ]);
+                                }
+                              });
+                            } else if (value == 'not have picture on phone') {
+                              plotList.clear();
+                              String isStatus = "";
+                              plotList.clear();
+                              ost.onSitePlots.forEach((e) {
+                                isStatus = "";
+                                if (e.plotStatus == "Open") {
+                                  isStatus = "Open";
+                                }
+                                if (e.plotImgPath == "null") {
+                                  plotList.addAll([
+                                    makePlot(
+                                      isLock: isStatus,
+                                      plotID: e.pltId.toString(),
+                                      feedTime: (new DateTime
+                                                  .fromMillisecondsSinceEpoch(
+                                              e.uploadDate))
+                                          .toString(),
+                                      feedText:
+                                          "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
+                                      feedImage: e.plotImgPath,
+                                    )
+                                  ]);
+                                }
+                              });
+                            }
+                          });
+                        },
                         offset: const Offset(0, 20),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
@@ -883,6 +905,35 @@ class _PlotsScreen extends State<PlotsScreen> {
   onItemClicked(CheckBoxModal item) {
     setState(() {
       item.value = !item.value;
+    });
+  }
+
+  loadAllPlot() {
+    _UserBox = Hive.box("Users");
+    OnSiteTrial ost = _UserBox?.get(userNameNow).onSiteTrials[title];
+    print("title is :" + ost.trialId);
+
+    // print("build");
+    int i = 0;
+
+    String isStatus = "";
+    plotList.clear();
+    ost.onSitePlots.forEach((e) {
+      isStatus = "";
+      if (e.plotStatus == "Open") {
+        isStatus = "Open";
+      }
+      plotList.addAll([
+        makePlot(
+          isLock: isStatus,
+          plotID: e.pltId.toString(),
+          feedTime: (new DateTime.fromMillisecondsSinceEpoch(e.uploadDate))
+              .toString(),
+          feedText:
+              "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
+          feedImage: e.plotImgPath,
+        )
+      ]);
     });
   }
 }
