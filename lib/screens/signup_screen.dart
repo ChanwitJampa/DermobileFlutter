@@ -14,6 +14,8 @@ import 'package:der/entities/token.dart';
 import 'package:der/entities/user.dart';
 import 'package:der/entities/objectlist.dart';
 
+//check internet
+import 'package:connectivity_plus/connectivity_plus.dart';
 //hive
 import 'package:der/entities/site/user.dart';
 
@@ -24,6 +26,7 @@ import 'package:path_provider/path_provider.dart';
 Box? _UserBox;
 //const SERVER_IP = 'http://10.0.2.2:8080';
 String? userNameNow;
+ConnectivityResult? _connectivityResult;
 
 //const SERVER_IP = 'http://10.0.2.2:8005';
 const SERVER_IP = 'http://10.0.2.2:8080';
@@ -224,6 +227,22 @@ class _SignupScreen extends State<SignupScreen> {
     // print(_UserBox?.length);
 
     return true;
+  }
+
+  Future<void> _checkConnectivityState() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+
+    if (result == ConnectivityResult.wifi) {
+      print('Connected to a Wi-Fi network');
+    } else if (result == ConnectivityResult.mobile) {
+      print('Connected to a mobile network');
+    } else {
+      print('Not connected to any network');
+    }
+
+    setState(() {
+      _connectivityResult = result;
+    });
   }
 }
 

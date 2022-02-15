@@ -340,7 +340,7 @@ class _PlotsScreen extends State<PlotsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               makeCameraButton(plotID),
-              makeGallryButton(),
+              makeGallryButton(plotID),
               if (isLock == "Open") ...[makeShareButton()]
             ],
           ),
@@ -408,10 +408,15 @@ class _PlotsScreen extends State<PlotsScreen> {
       maxHeight: 1000,
       //imageQuality: quality,
     );
+
 //if user doesn't take any image, just return.
-    if (_imageFile == null) return;
+    if (_imageFile == null) {
+      print("null");
+      return;
+    }
     setState(
       () {
+        print("not null");
         _image = _imageFile;
         isSelected = true;
         saveExperiment(_image, plotId);
@@ -473,17 +478,8 @@ class _PlotsScreen extends State<PlotsScreen> {
     GallerySaver.saveImage(impath.path);
 
     final _filename = p.basename(impath.path);
-
-    // _externalStorageDirectories =
-    //     getExternalStorageDirectories(type: StorageDirectory.pictures);
-    //tempPath = _externalStorageDirectories;
-    // directory = await getExternalStorageDirectories();
-
     directory = await getExternalStorageDirectory();
-    //directory = await getExternalStorageDirectories(type: StorageDirectory.pictures);
 
-    // print(directory);
-    // print("tempPath2 = " + directory.toString());
     print("tempPath3 = " + directory!.path);
     print("FileName = " + _filename);
 
@@ -517,8 +513,9 @@ class _PlotsScreen extends State<PlotsScreen> {
     int i = 0, j = 0;
     for (i = 0; i < ost.length; i++) {
       for (j = 0; j < ost[i].onSitePlots.length; j++) {
-        print(ost[i].onSitePlots[j].pltId.toString() +
-            "${plotId == ost[i].onSitePlots[j].pltId.toString()}");
+        print("${plotId}" +
+            ost[i].onSitePlots[j].pltId.toString() +
+            "    ${plotId == ost[i].onSitePlots[j].pltId.toString()}");
         if (plotId == ost[i].onSitePlots[j].pltId.toString()) {
           _UserBox?.get(userNameNow)
               .onSiteTrials[i]
@@ -537,7 +534,7 @@ class _PlotsScreen extends State<PlotsScreen> {
     Navigator.of(context).pushNamed(HOME_ROUTE);
   }
 
-  Widget makeGallryButton() {
+  Widget makeGallryButton(String plotID) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
@@ -565,7 +562,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                   ),
                 ),
                 onTap: () {
-                  _getImage(ImageSource.gallery, "");
+                  _getImage(ImageSource.gallery, plotID);
                 },
               ),
             ),

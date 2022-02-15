@@ -119,6 +119,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                   ),
                   onPressed: () {
                     print(index);
+                    //--------------------------------delete trial-------------------------------------
                     _UserBox!.get(userNameNow).onSiteTrials.removeAt(index);
                     _UserBox!.get(userNameNow).save();
                     loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials);

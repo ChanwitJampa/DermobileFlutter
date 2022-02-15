@@ -23,7 +23,7 @@ class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '0':
-        print("1111111111111111111111111");
+        // print("1111111111111111111111111");
 
         return MaterialPageRoute(builder: (_) => MainScreen());
       case '1':
@@ -57,11 +57,11 @@ class Routers {
         return MaterialPageRoute(builder: (_) => LoginDigitScreen());
 
       case '15':
-        print("1515155151515151515515151");
+        //  print("1515155151515151515515151");
         return MaterialPageRoute(builder: (_) => ExistedScreen());
 
       case '16':
-        print("1616616161616116");
+        // print("1616616161616116");
         return MaterialPageRoute(builder: (_) => LoginScreen());
 
       default:
