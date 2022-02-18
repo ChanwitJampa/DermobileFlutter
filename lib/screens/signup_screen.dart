@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 //import 'dart:html';
 
 import 'package:der/entities/site/plot.dart';
@@ -27,6 +28,7 @@ Box? _UserBox;
 //const SERVER_IP = 'http://10.0.2.2:8080';
 String? userNameNow;
 ConnectivityResult? _connectivityResult;
+bool _isConnectionSuccessful = false;
 
 //const SERVER_IP = 'http://10.0.2.2:8005';
 const SERVER_IP = 'http://10.0.2.2:8080';
@@ -42,6 +44,21 @@ class _SignupScreen extends State<SignupScreen> {
   void initState() {
     _openBox();
     super.initState();
+  }
+
+  Future<void> _tryConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      setState(() {
+        _isConnectionSuccessful = response.isNotEmpty;
+        print("Sucess");
+      });
+    } on SocketException catch (e) {
+      setState(() {
+        _isConnectionSuccessful = false;
+        print("failed");
+      });
+    }
   }
 
   @override
@@ -118,18 +135,40 @@ class _SignupScreen extends State<SignupScreen> {
                             elevation: 7.0,
                             child: InkWell(
                               onTap: () async {
-                                if (await signIn(usernameController.text,
-                                    passwordController.text)) {
-                                  Navigator.of(context).pushNamed(HOME_ROUTE);
+                                await _tryConnection();
+                                if (_isConnectionSuccessful) {
+                                  if (await signIn(usernameController.text,
+                                      passwordController.text)) {
+                                    Navigator.of(context).pushNamed(HOME_ROUTE);
+                                  } else {
+                                    usernameController.clear();
+                                    passwordController.clear();
+                                    await showDialog<void>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                              'Wrong username or Password'),
+                                          content: Text('Please try again'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
                                 } else {
-                                  usernameController.clear();
-                                  passwordController.clear();
                                   await showDialog<void>(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: const Text(
-                                            'Wrong username or Password'),
+                                            'Internet Connection Issues'),
                                         content: Text('Please try again'),
                                         actions: <Widget>[
                                           TextButton(
