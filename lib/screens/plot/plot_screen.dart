@@ -48,6 +48,7 @@ class _PlotsScreen extends State<PlotsScreen> {
   @override
   void initState() {
     super.initState();
+    _UserBox = Hive.box("Users");
 
     () async {
       var _permissionStatus = await Permission.storage.status;
@@ -530,8 +531,30 @@ class _PlotsScreen extends State<PlotsScreen> {
         }
       }
     }
+    setState(() {
+      OnSiteTrial onSiteTrial = _UserBox?.get(userNameNow).onSiteTrials[title];
+      plotList.clear();
+      onSiteTrial.onSitePlots.forEach((e) {
+        String isStatus = "";
+        if (e.plotStatus == "Open") {
+          isStatus = "Open";
+        }
+        plotList.addAll([
+          makePlot(
+            isLock: isStatus,
+            plotID: e.pltId.toString(),
+            feedTime: (new DateTime.fromMillisecondsSinceEpoch(e.uploadDate))
+                .toString(),
+            feedText:
+                "Status : ${e.plotStatus}   repNO : ${e.repNo}      barcode : ${e.barcode}",
+            feedImage: e.plotImgPath,
+          )
+        ]);
+      });
+    });
+    ;
 
-    Navigator.of(context).pushNamed(HOME_ROUTE);
+    // Navigator.of(context).pushNamed(PLOT_ROUTE);
   }
 
   Widget makeGallryButton(String plotID) {

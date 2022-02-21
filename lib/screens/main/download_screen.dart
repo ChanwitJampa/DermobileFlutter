@@ -83,27 +83,25 @@ class _DownloadScreen extends State<DownloadScreen> {
       var json = jsonDecode(response.body);
       trials = ObjectList<Trial>.fromJson(
           jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
-    } else
+    } else {
       trials = [];
+    }
     //trial on phone
     List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
 
     /////////////////////////////more faster if sorting////////////////////////////////////////////////////////////////////////////////////
     trialsUser.forEach((e) {
-      //  print(e.trialId);
       for (int i = 0; i < trials.length; i++) {
         if (trials[i].trialId == e.trialId) {
-          trials.removeAt(i);
+          //check id
+          if (trials[i].lastUpdate <= e.lastUpdate) {
+            //check last uupdate
+            trials.removeAt(i);
+          }
         }
       }
     });
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    print("Trial length : " +
-        trials.length.toString() +
-        "   trialsUser : " +
-        trialsUser.length.toString());
 
-    //await new Future.delayed(new Duration(seconds: 1));
     setState(() {
       experimentItems!.clear();
 
@@ -114,10 +112,8 @@ class _DownloadScreen extends State<DownloadScreen> {
               trial:
                   '${trials[i].trialId}\n${(new DateTime.fromMillisecondsSinceEpoch(trials[i].lastUpdate)).toString()}')
         ]);
-
         page++;
       }
-
       isLoading = false;
     });
   }
@@ -528,8 +524,7 @@ class _DownloadScreen extends State<DownloadScreen> {
     List<OnSiteTrial> allTrialOnLoad = [];
     // String userNameNow = await getUserFromSF();
     //await new Future.delayed(new Duration(seconds: 2));
-    ////////////////////////////more faster if sorting with "value" //////////////////////////////
-    ///
+
     for (int k = 0; k < experimentItems!.length; k++) {
       if (experimentItems![k].value) {
         List<OnSitePlot> osps = [];
@@ -577,6 +572,7 @@ class _DownloadScreen extends State<DownloadScreen> {
             trials[k].createDate,
             trials[k].lastUpdate,
             osps);
+        removeTrialsOnPhoneMatch(ost);
         allTrialOnLoad.add(ost);
       }
     }
@@ -596,6 +592,17 @@ class _DownloadScreen extends State<DownloadScreen> {
         }
       }
     });
+  }
+
+  removeTrialsOnPhoneMatch(OnSiteTrial ost) {
+    List<OnSiteTrial> trialOnPhone = _UserBox?.get(userNameNow).onSiteTrials;
+    for (int z = 0; z < trialOnPhone.length; z++) {
+      if (ost.trialId == trialOnPhone[z].trialId) {
+        _UserBox?.get(userNameNow).onSiteTrials.removeAt(z);
+        print("remove trial on phone :${ost.trialId}");
+      }
+    }
+    _UserBox?.get(userNameNow).save();
   }
 
   onItemClicked(CheckBoxModal item) {
