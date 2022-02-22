@@ -29,7 +29,23 @@ Box? _UserBox;
 String? userNameNow;
 ConnectivityResult? _connectivityResult;
 bool _isConnectionSuccessful = false;
+<<<<<<< HEAD
+List<String> caseLogin = [
+  "sucess",
+  "wrong userName or password",
+  "no internet",
+  "no web"
+];
+=======
 
+// const SERVER_IP = 'http://10.0.2.2:8005';
+//const SERVER_IP = 'http://10.0.2.2:8080';
+//const SERVER_IP = 'http://192.168.3.199:8080';
+
+<<<<<<< HEAD
+>>>>>>> 2f532bc915dffea1afdecb5f88687af02a6df8ad
+=======
+>>>>>>> 2f532bc915dffea1afdecb5f88687af02a6df8ad
 //const SERVER_IP = 'http://10.0.2.2:8005';
 const SERVER_IP = 'http://10.0.2.2:8080';
 //const SERVER_IP = 'http://192.168.3.199:8080';
@@ -67,221 +83,194 @@ class _SignupScreen extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return new Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                      child: Text(
-                        'LogIn',
-                        style: TextStyle(
-                            fontSize: 80.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(260.0, 125.0, 0.0, 0.0),
-                      child: Text(
-                        '.',
-                        style: TextStyle(
-                            fontSize: 80.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green),
-                      ),
-                    )
-                  ],
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+            Widget>[
+          Container(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                  child: Text(
+                    'LogIn',
+                    style:
+                        TextStyle(fontSize: 80.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Container(
-                  padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
-                  child: Column(
-                    children: <Widget>[
-                      TextField(
-                        controller: usernameController,
-                        decoration: InputDecoration(
-                            labelText: 'EMAIL',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            // hintText: 'EMAIL',
-                            // hintStyle: ,
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green))),
-                      ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: passwordController,
-                        decoration: InputDecoration(
-                            labelText: 'PASSWORD ',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.green))),
-                        obscureText: true,
-                      ),
-                      SizedBox(height: 10.0),
-                      SizedBox(height: 50.0),
-                      Container(
-                          height: 40.0,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(20.0),
-                            shadowColor: Colors.greenAccent,
-                            color: Colors.green,
-                            elevation: 7.0,
-                            child: InkWell(
-                              onTap: () async {
-                                await _tryConnection();
-                                if (_isConnectionSuccessful) {
-                                  if (await signIn(usernameController.text,
-                                      passwordController.text)) {
-                                    Navigator.of(context).pushNamed(HOME_ROUTE);
-                                  } else {
-                                    usernameController.clear();
-                                    passwordController.clear();
-                                    await showDialog<void>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                              'Wrong username or Password'),
-                                          content: Text('Please try again'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('OK'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                                } else {
-                                  await showDialog<void>(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                            'Internet Connection Issues'),
-                                        content: Text('Please try again'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('OK'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }
-                              },
-                              child: Center(
-                                child: Text(
-                                  'LOGIN',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat'),
-                                ),
-                              ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(260.0, 125.0, 0.0, 0.0),
+                  child: Text(
+                    '.',
+                    style: TextStyle(
+                        fontSize: 80.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+              padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: usernameController,
+                    decoration: InputDecoration(
+                        labelText: 'EMAIL',
+                        labelStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey),
+                        // hintText: 'EMAIL',
+                        // hintStyle: ,
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green))),
+                  ),
+                  SizedBox(height: 10.0),
+                  TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                        labelText: 'PASSWORD ',
+                        labelStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green))),
+                    obscureText: true,
+                  ),
+                  SizedBox(height: 10.0),
+                  SizedBox(height: 50.0),
+                  Container(
+                      height: 40.0,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        shadowColor: Colors.greenAccent,
+                        color: Colors.green,
+                        elevation: 7.0,
+                        child: InkWell(
+                          onTap: () async {
+                            String resultLogin = await signIn(
+                                usernameController.text,
+                                passwordController.text);
+                            print("result login : ${resultLogin}");
+                            //["sucess","wrong userName or password","no internet","no web"]
+                            if (resultLogin == caseLogin[0]) {
+                              Navigator.of(context).pushNamed(HOME_ROUTE);
+                            } else if (resultLogin == caseLogin[1]) {
+                              usernameController.clear();
+                              passwordController.clear();
+                              useShowDialog(
+                                  "wrong user name or password", context);
+                            } else if (resultLogin == caseLogin[2]) {
+                              usernameController.clear();
+                              passwordController.clear();
+                              useShowDialog("no internet connection", context);
+                            } else if (resultLogin == caseLogin[3]) {
+                              usernameController.clear();
+                              passwordController.clear();
+                              useShowDialog("no web", context);
+                            }
+                          },
+                          child: Center(
+                            child: Text(
+                              'LOGIN',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat'),
                             ),
-                          )),
-                      SizedBox(height: 20.0),
-                      Container(
-                          height: 40.0,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(20.0),
-                            shadowColor: Colors.redAccent,
-                            color: Colors.redAccent,
-                            elevation: 7.0,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context).pushNamed(EXISTED_ROUTE);
-                              },
-                              child: Center(
-                                child: Text(
-                                  'EXISTED',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat'),
-                                ),
-                              ),
+                          ),
+                        ),
+                      )),
+                  SizedBox(height: 20.0),
+                  Container(
+                      height: 40.0,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        shadowColor: Colors.redAccent,
+                        color: Colors.redAccent,
+                        elevation: 7.0,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(EXISTED_ROUTE);
+                          },
+                          child: Center(
+                            child: Text(
+                              'EXISTED',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat'),
                             ),
-                          )),
-                    ],
-                  )),
-            ]));
+                          ),
+                        ),
+                      )),
+                ],
+              )),
+        ]));
   }
 
-  static Future<bool> signIn(String username, String password) async {
+  useShowDialog(String title, BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text('Please try again'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String> signIn(String username, String password) async {
+    //["sucess","wrong userName or password","no internet","no web"]
+
     // print("-----------------------get token---------------------");
     // username = "Test";
     //password = "Test";
+    await _tryConnection();
+    if (!_isConnectionSuccessful) {
+      return caseLogin[2];
+    }
     userNameNow = username;
     loginService dc = loginService();
     var res = await dc.attemptLogIn(username, password);
 
-    // print("username : " + username + " password : " + password);
-    if (res.statusCode != 200) {
+    if (res == null) {
+      //res == null if dont' have web service
+      print("web don't have service or don't have web");
+      return caseLogin[3];
+    } else if (res.statusCode != 200) {
       print("fails to  join");
-      return false;
+
+      return caseLogin[1];
     }
 
     Response<Token> t = Response<Token>.fromJson(
         jsonDecode(res.body), (body) => Token.fromJson(body));
-
-    //print(res.body);
     String token = t.body.token;
     User u = t.body.user;
     u.userName = username;
-    //username token to other page
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setString('userNow', username);
-    //prefs.setString('token', token);
-    //print("sigin token is : " + token);
-    //print("username is existing :" +
-    //   (_UserBox?.get(username) == null).toString());
     print("token " + token);
     if (_UserBox?.get(username) == null) {
       OnSiteUser user = OnSiteUser(u.userName, u.firstName, u.lastName,
           u.picture, token, 123, "", [], []);
-      // print("username not have : create User ");
-      // print("---------------test-----------");
-      // OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);
-      //if (Hive.box("User").getAt(0).userName == username)
       _UserBox?.put(u.userName, user);
     } else {
       _UserBox?.get(username).token = token;
     }
-    //_UserBox!.close();
-    // print(_UserBox?.length);
 
-    return true;
-  }
-
-  Future<void> _checkConnectivityState() async {
-    final ConnectivityResult result = await Connectivity().checkConnectivity();
-
-    if (result == ConnectivityResult.wifi) {
-      print('Connected to a Wi-Fi network');
-    } else if (result == ConnectivityResult.mobile) {
-      print('Connected to a mobile network');
-    } else {
-      print('Not connected to any network');
-    }
-
-    setState(() {
-      _connectivityResult = result;
-    });
+    //["sucess","wrong userName or password","no internet","no web"]
+    return caseLogin[0];
   }
 }
 
@@ -290,16 +279,23 @@ class loginService {
 
   attemptLogIn(String username, String password) async {
     var url = "$SERVER_IP/syngenta/api/authenticate";
-
-    var res = await Http.post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-          <String, String>{'username': username, 'password': password}),
-    );
-
+    var res = null;
+    try {
+      res = await Http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, String>{'username': username, 'password': password}),
+      );
+    } on SocketException {
+      print('No Internet connection 😑');
+    } on HttpException {
+      print("Couldn't find the post 😱");
+    } on FormatException {
+      print("Bad response format 👎");
+    }
     return res;
   }
 }
@@ -320,7 +316,4 @@ void _openBox() async {
 
   await Hive.openBox('Users');
   _UserBox = Hive.box('Users');
-  // print("GG:" +
-  //     Hive.box<OnSiteUser>("Test").length.toString() +
-  //     Hive.box<OnSiteUser>("Test").getAt(0)!.token.toString());
 }

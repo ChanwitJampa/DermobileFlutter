@@ -51,7 +51,12 @@ class _DownloadScreen extends State<DownloadScreen> {
   initState() {
     super.initState();
 
-    getBox();
+    _UserBox = Hive.box("Users");
+    _tryConnection().then((value) => {
+          if (!_isConnectionSuccessful)
+            {useShowDialog("no internet connection", context)}
+        });
+
     loadData();
   }
 
@@ -69,7 +74,6 @@ class _DownloadScreen extends State<DownloadScreen> {
     int i, page = 1;
 
     String token = _UserBox!.get(userNameNow).token;
-
     await _tryConnection();
     if (_isConnectionSuccessful) {
       String url = "$SERVER_IP/syngenta/api/trial/user/trials";
@@ -94,10 +98,10 @@ class _DownloadScreen extends State<DownloadScreen> {
       for (int i = 0; i < trials.length; i++) {
         if (trials[i].trialId == e.trialId) {
           //check id
-          if (trials[i].lastUpdate <= e.lastUpdate) {
-            //check last uupdate
-            trials.removeAt(i);
-          }
+          // if (trials[i].lastUpdate <= e.lastUpdate) {
+          //check last uupdate
+          trials.removeAt(i);
+          // }
         }
       }
     });
@@ -198,137 +202,8 @@ class _DownloadScreen extends State<DownloadScreen> {
         ],
       ),
     );
-    // return Column(
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: <Widget>[
-    //     Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       children: [
-    //         Row(
-    //           children: [
-    //             Container(
-    //               height: 35,
-    //               width: 35,
-    //               decoration: BoxDecoration(
-    //                   shape: BoxShape.circle,
-    //                   //borderRadius: BorderRadius.circular(100),
-    //                   image: DecorationImage(
-    //                       image: AssetImage(userImage), fit: BoxFit.cover)),
-    //             ),
-    //           ],
-    //         ),
-    //         Container(
-    //           child: Checkbox(
-    //               value: experimentItems![index].value,
-    //               checkColor: Colors.grey[200],
-    //               onChanged: (value) {
-    //                 setState(() {
-    //                   experimentItems![index].value =
-    //                       !experimentItems![index].value;
-    //                 });
-    //               }),
-    //         ),
-    //       ],
-    //     ),
-    //     Container(
-    //       height: 120,
-    //       child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.start,
-    //         children: <Widget>[
-    //           SizedBox(
-    //             width: 0,
-    //           ),
-    //           Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               // Text(
-    //               //   userName,
-    //               //   style: TextStyle(
-    //               //       fontSize: 15,
-    //               //       color: Colors.grey[800],
-    //               //       height: 1.5,
-    //               //       letterSpacing: .7),
-    //               // ),
-    //               SizedBox(height: 20),
-    //               Text(
-    //                 "Trial " + experimentItems![index].title,
-    //                 style: TextStyle(
-    //                     fontSize: 25,
-    //                     fontWeight: FontWeight.bold,
-    //                     color: Colors.blue[700],
-    //                     height: 1,
-    //                     letterSpacing: .7),
-    //               ),
-    //               // Text(
-    //               //   //trial ID
-    //               //   "plot Id :"
-    //               //   '${experimentItems![index].plot}',
-    //               //   style: TextStyle(
-    //               //       fontSize: 15,
-    //               //       color: Colors.grey[800],
-    //               //       height: 1.5,
-    //               //       letterSpacing: .7),
-    //               // ),
-    //               SizedBox(height: 40),
-    //               Text(
-    //                 experimentItems![index].trial,
-    //                 style: TextStyle(
-    //                     fontSize: 15,
-    //                     color: Colors.grey[800],
-    //                     height: 1,
-    //                     letterSpacing: .7),
-    //               ),
-    //             ],
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 
-/*
-  Widget loadNewData(){
-    return Expanded(
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (ScrollNotification scrollInfo)  {
-
-          if (!isLoading && scrollInfo.metrics.pixels ==
-              scrollInfo.metrics.maxScrollExtent) {
-            _loadData();
-            // start loading data
-            setState(() {
-              isLoading = true;
-            });
-          }
-          return isLoading;
-        },
-        child: ListView.builder(
-          itemCount: experimentItems!.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text("test"),
-              subtitle: Text("Sample Subtitle. \nSubtitle line 3"),
-              trailing: Icon(Icons.home),
-              onTap: (){
-                //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ExperimentScreen(title: experimentItems[index].title)));
-              },
-              //value: items[index].isChecked,
-              //onChanged: (val) {
-              //  setState(
-              //        () {
-              //          items[index].isChecked = val! ;
-              //    },
-            );
-          },
-          //  );
-          // },
-        ),
-      ),
-    );
-  }
-
- */
   final allChecked = CheckBoxModal(title: 'All Checked');
 
   int index = 0;
@@ -440,6 +315,10 @@ class _DownloadScreen extends State<DownloadScreen> {
                               scrollInfo.metrics.pixels ==
                                   scrollInfo.metrics.maxScrollExtent) {
                             loadData();
+
+                            // if (!_isConnectionSuccessful) {
+                            //   useShowDialog("no internet connection", context);
+                            // }
                             setState(() {
                               print("isloading");
                               isLoading = true;
@@ -520,7 +399,7 @@ class _DownloadScreen extends State<DownloadScreen> {
   }
 
   Future onDownload() async {
-    List<String> un_match_onload = [];
+    // List<String> un_match_onload = _UserBox!.get(userNameNow).unMatchPlots;
     List<OnSiteTrial> allTrialOnLoad = [];
     // String userNameNow = await getUserFromSF();
     //await new Future.delayed(new Duration(seconds: 2));
@@ -554,14 +433,6 @@ class _DownloadScreen extends State<DownloadScreen> {
                 e.plotProgress,
                 e.plotStatus,
                 e.plotActive));
-            List<OnSitePlot> listOspUnmatch =
-                _UserBox?.get(userNameNow).unMatchPlots;
-            for (int j = 0; j < listOspUnmatch.length; j++) {
-              // print("j : ${j}");
-              if (listOspUnmatch[j].barcode == e.barcode) {
-                un_match_onload.add(e.barcode);
-              }
-            }
           });
         }
         OnSiteTrial ost = OnSiteTrial(
@@ -578,9 +449,10 @@ class _DownloadScreen extends State<DownloadScreen> {
     }
     _UserBox?.get(userNameNow).onSiteTrials.addAll(allTrialOnLoad);
     _UserBox?.get(userNameNow).save();
-    if (un_match_onload.length > 0) {
-      print("plots on load is match on unmatch plots :   ${un_match_onload}");
-    }
+    // if (un_match_onload.length > 0) {
+
+    //     print("plots on load is match on unmatch plots :   ${un_match_onload}");
+    // }
 
     //////////////////////////////////////////////////////////////////////////////////////////
     setState(() {
@@ -592,6 +464,26 @@ class _DownloadScreen extends State<DownloadScreen> {
         }
       }
     });
+  }
+
+  useShowDialog(String title, BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text('Please try again'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   removeTrialsOnPhoneMatch(OnSiteTrial ost) {
@@ -619,26 +511,7 @@ class _DownloadScreen extends State<DownloadScreen> {
         _isConnectionSuccessful = response.isNotEmpty;
       });
     } on SocketException catch (e) {
-      setState(() {
-        _isConnectionSuccessful = false;
-      });
+      _isConnectionSuccessful = false;
     }
   }
-}
-
-// getUserFromSF() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   String username = prefs.getString('userNow').toString();
-//   //print("get userName :" + username);
-//   return username;
-// }
-
-getBox() async {
-  //String user = await getUserFromSF();
-  // String userNameNow = await getUserFromSF();
-
-  _UserBox = Hive.box("Users");
-
-  // print(
-  //     "OpenBox username $userNameNow:${_UserBox?.get(userNameNow).userName.toString()}");
 }

@@ -1,4 +1,5 @@
 import 'package:der/screens/login_digit_screen.dart';
+import 'package:der/screens/main/first_screen.dart';
 import 'package:der/screens/main/newlogin_screen.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,9 @@ class Routers {
       case '16':
         // print("1616616161616116");
         return MaterialPageRoute(builder: (_) => LoginScreen());
+      case '17':
+        print("1616616161616116");
+        return MaterialPageRoute(builder: (_) => FirstScreen());
 
       default:
         return MaterialPageRoute(

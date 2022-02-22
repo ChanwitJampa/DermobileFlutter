@@ -105,8 +105,8 @@ class _ExistedScreen extends State<ExistedScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
-                  color: Colors.green,
-                  width: 3,
+                  color: Color(0xFF398AE5),
+                  width: 5,
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -123,6 +123,7 @@ class _ExistedScreen extends State<ExistedScreen> {
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 30,
+                    fontWeight: FontWeight.w500,
                     height: 1.5,
                   ),
                 ),
@@ -131,7 +132,7 @@ class _ExistedScreen extends State<ExistedScreen> {
                   "Last Time Login " + experimentItems![index].trial,
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 12,
+                    fontSize: 15,
                     height: 1.5,
                   ),
                 ),
@@ -224,6 +225,60 @@ class _ExistedScreen extends State<ExistedScreen> {
                                     userName: experimentItems![index].title,
                                     index: index,
                                   ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
+                                  makeExperiment(
+                                    //userImage: 'assets/images/corn.png',
+                                    //experimentImage: 'assets/images/corn.png',
+                                    userName: experimentItems![index].title,
+                                    index: index,
+                                  ),
                                 ],
                               ),
                             ),
@@ -238,22 +293,22 @@ class _ExistedScreen extends State<ExistedScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: const Color(0xff03dac6),
-        foregroundColor: Colors.black,
-        onPressed: () {
-          Navigator.of(context).pushNamed(SIGNUP_ROUTE);
-        },
-        label: Text(
-          "New User",
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400,
-              fontSize: 20,
-              fontFamily: 'Poppins',
-              letterSpacing: 1),
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   backgroundColor: const Color(0xff03dac6),
+      //   foregroundColor: Colors.black,
+      //   onPressed: () {
+      //     Navigator.of(context).pushNamed(SIGNUP_ROUTE);
+      //   },
+      //   label: Text(
+      //     "New User",
+      //     style: TextStyle(
+      //         color: Colors.black,
+      //         fontWeight: FontWeight.w400,
+      //         fontSize: 20,
+      //         fontFamily: 'Poppins',
+      //         letterSpacing: 1),
+      //   ),
+      // ),
     );
   }
 

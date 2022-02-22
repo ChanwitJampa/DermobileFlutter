@@ -375,10 +375,3 @@ class _ExperimentScreen extends State<ExperimentScreen> {
     return ost;
   }
 }
-
-// getUserFromSF() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   userNameNow = prefs.getString('userNow').toString();
-//   print("Test: ${userNameNow}");
-//    return username;
-// }

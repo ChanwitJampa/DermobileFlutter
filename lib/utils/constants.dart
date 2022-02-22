@@ -20,6 +20,7 @@ const String ASSESSMENT_ROUTE = '13';
 const String DIGIT_ROUTE = '14';
 const String EXISTED_ROUTE = '15';
 const String NEWLOGIN_ROUTE = '16';
+const String FIRSTPAGE_ROUTE = '17';
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,

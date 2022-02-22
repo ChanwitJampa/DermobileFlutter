@@ -552,7 +552,6 @@ class _PlotsScreen extends State<PlotsScreen> {
         ]);
       });
     });
-    ;
 
     // Navigator.of(context).pushNamed(PLOT_ROUTE);
   }
