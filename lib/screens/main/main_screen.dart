@@ -647,19 +647,3 @@ class _MainScreenState extends State<MainScreen> {
     throw UnimplementedError();
   }
 }
-
-loadData() async {
-  String token = _UserBox!.get(userNameNow).token;
-  //------------------------ get trials ---------------------------------------
-  String url = "$SERVER_IP/syngenta/api/trial/user/trials";
-  var response = await Http.get(
-    Uri.parse(url),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ${token}'
-    },
-  );
-  var json = jsonDecode(response.body);
-  trials = ObjectList<Trial>.fromJson(
-      jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
-}

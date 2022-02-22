@@ -1,5 +1,8 @@
 //use to dowload data from http
+import 'dart:io';
+
 import 'package:der/entities/site/user.dart';
+import 'package:der/screens/main/main_screen.dart';
 import 'package:http/http.dart' as Http;
 import 'dart:convert';
 import 'package:der/entities/objectlist.dart';
@@ -24,10 +27,14 @@ import 'package:der/screens/signup_screen.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:der/screens/main/qr_screen.dart';
 
+//check internet
+import 'package:connectivity_plus/connectivity_plus.dart';
+
 int i = 0;
 Box? _UserBox;
+bool _isConnectionSuccessful = false;
 
-List<Trial>? trials;
+List<Trial> trials = [];
 //String? userNameNow;
 
 class DownloadScreen extends StatefulWidget {
@@ -43,20 +50,9 @@ class DownloadScreen extends StatefulWidget {
 class _DownloadScreen extends State<DownloadScreen> {
   initState() {
     super.initState();
-    getBox();
 
-    _loadData().then((value) => {
-          experimentItems!.clear(),
-          for (i = 0; i < trials!.length; i++)
-            {
-              experimentItems!.addAll([
-                WidgetCheckBoxModel(
-                    title: '${i + 1}',
-                    trial:
-                        '${trials![i].trialId}\n${(new DateTime.fromMillisecondsSinceEpoch(trials![i].lastUpdate)).toString()}')
-              ])
-            }
-        });
+    getBox();
+    loadData();
   }
 
   bool isLoading = false;
@@ -69,54 +65,55 @@ class _DownloadScreen extends State<DownloadScreen> {
 
   _LoadDataScreen() {}
 
-  Future _loadData() async {
+  Future loadData() async {
     int i, page = 1;
-    String token = _UserBox!.get(userNameNow).token;
-    //------------------------ get trials ---------------------------------------
-    String url = "$SERVER_IP/syngenta/api/trial/user/trials";
-    var response = await Http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${token}'
-      },
-    );
-    var json = jsonDecode(response.body);
-    trials = ObjectList<Trial>.fromJson(
-        jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
 
+    String token = _UserBox!.get(userNameNow).token;
+
+    await _tryConnection();
+    if (_isConnectionSuccessful) {
+      String url = "$SERVER_IP/syngenta/api/trial/user/trials";
+      var response = await Http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${token}'
+        },
+      );
+      var json = jsonDecode(response.body);
+      trials = ObjectList<Trial>.fromJson(
+          jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
+    } else {
+      trials = [];
+    }
+    //trial on phone
     List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
+
     /////////////////////////////more faster if sorting////////////////////////////////////////////////////////////////////////////////////
     trialsUser.forEach((e) {
-      //  print(e.trialId);
-      for (int i = 0; i < trials!.length; i++) {
-        // print("       " + trials![i].trialId.toString());
-        if (trials![i].trialId == e.trialId) {
-          trials!.removeAt(i);
+      for (int i = 0; i < trials.length; i++) {
+        if (trials[i].trialId == e.trialId) {
+          //check id
+          if (trials[i].lastUpdate <= e.lastUpdate) {
+            //check last uupdate
+            trials.removeAt(i);
+          }
         }
       }
     });
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    print("Trial length : " +
-        trials!.length.toString() +
-        "   trialsUser : " +
-        trialsUser.length.toString());
 
-    //await new Future.delayed(new Duration(seconds: 1));
     setState(() {
       experimentItems!.clear();
 
-      for (i = 0; i < trials!.length; i++) {
+      for (i = 0; i < trials.length; i++) {
         experimentItems!.addAll([
           WidgetCheckBoxModel(
               title: '$page',
               trial:
-                  '${trials![i].trialId}\n${(new DateTime.fromMillisecondsSinceEpoch(trials![i].lastUpdate)).toString()}')
+                  '${trials[i].trialId}\n${(new DateTime.fromMillisecondsSinceEpoch(trials[i].lastUpdate)).toString()}')
         ]);
-
         page++;
       }
-
       isLoading = false;
     });
   }
@@ -418,14 +415,37 @@ class _DownloadScreen extends State<DownloadScreen> {
                       height: 660,
                       child: NotificationListener<ScrollNotification>(
                         onNotification: (ScrollNotification scrollInfo) {
+                          // if (!isLoading) {
+                          //   if (_isConnectionSuccessful == false) {
+                          //     showDialog<void>(
+                          //       context: context,
+                          //       builder: (BuildContext context) {
+                          //         return AlertDialog(
+                          //           title: const Text('Internet have problem'),
+                          //           content: Text('Please try again'),
+                          //           actions: <Widget>[
+                          //             TextButton(
+                          //               onPressed: () {
+                          //                 Navigator.pop(context);
+                          //               },
+                          //               child: const Text('OK'),
+                          //             ),
+                          //           ],
+                          //         );
+                          //       },
+                          //     );
+                          //   }
+                          // }
                           if (!isLoading &&
                               scrollInfo.metrics.pixels ==
                                   scrollInfo.metrics.maxScrollExtent) {
-                            _loadData();
+                            loadData();
                             setState(() {
+                              print("isloading");
                               isLoading = true;
                             });
                           }
+
                           return isLoading;
                         },
                         child: RefreshIndicator(
@@ -438,12 +458,6 @@ class _DownloadScreen extends State<DownloadScreen> {
                             itemCount: experimentItems!.length,
                             itemBuilder: (context, index) => Padding(
                               padding: EdgeInsets.all(8.0),
-                              /*child: makeExperiment(
-                                storyImage: 'assets/images/story/story-1.jpg',
-                                userImage: 'assets/images/corn.png',
-                                userName: 'Aatik Tasneem',
-                                index:index ),
-                              ),*/
                               child: Column(
                                 children: [
                                   makeExperiment(
@@ -510,13 +524,12 @@ class _DownloadScreen extends State<DownloadScreen> {
     List<OnSiteTrial> allTrialOnLoad = [];
     // String userNameNow = await getUserFromSF();
     //await new Future.delayed(new Duration(seconds: 2));
-    ////////////////////////////more faster if sorting with "value" //////////////////////////////
-    ///
+
     for (int k = 0; k < experimentItems!.length; k++) {
       if (experimentItems![k].value) {
         List<OnSitePlot> osps = [];
-        if (trials![k].plots.isNotEmpty) {
-          trials![k].plots.forEach((e) {
+        if (trials[k].plots.isNotEmpty) {
+          trials[k].plots.forEach((e) {
             osps.add(OnSitePlot(
                 e.plotId,
                 e.barcode,
@@ -544,7 +557,7 @@ class _DownloadScreen extends State<DownloadScreen> {
             List<OnSitePlot> listOspUnmatch =
                 _UserBox?.get(userNameNow).unMatchPlots;
             for (int j = 0; j < listOspUnmatch.length; j++) {
-              print("j : ${j}");
+              // print("j : ${j}");
               if (listOspUnmatch[j].barcode == e.barcode) {
                 un_match_onload.add(e.barcode);
               }
@@ -552,13 +565,14 @@ class _DownloadScreen extends State<DownloadScreen> {
           });
         }
         OnSiteTrial ost = OnSiteTrial(
-            trials![k].trialId,
-            trials![k].aliasName,
-            trials![k].trialActive,
-            trials![k].trialStatus,
-            trials![k].createDate,
-            trials![k].lastUpdate,
+            trials[k].trialId,
+            trials[k].aliasName,
+            trials[k].trialActive,
+            trials[k].trialStatus,
+            trials[k].createDate,
+            trials[k].lastUpdate,
             osps);
+        removeTrialsOnPhoneMatch(ost);
         allTrialOnLoad.add(ost);
       }
     }
@@ -580,10 +594,35 @@ class _DownloadScreen extends State<DownloadScreen> {
     });
   }
 
+  removeTrialsOnPhoneMatch(OnSiteTrial ost) {
+    List<OnSiteTrial> trialOnPhone = _UserBox?.get(userNameNow).onSiteTrials;
+    for (int z = 0; z < trialOnPhone.length; z++) {
+      if (ost.trialId == trialOnPhone[z].trialId) {
+        _UserBox?.get(userNameNow).onSiteTrials.removeAt(z);
+        print("remove trial on phone :${ost.trialId}");
+      }
+    }
+    _UserBox?.get(userNameNow).save();
+  }
+
   onItemClicked(CheckBoxModal item) {
     setState(() {
       item.value = !item.value;
     });
+  }
+
+  Future<void> _tryConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+
+      setState(() {
+        _isConnectionSuccessful = response.isNotEmpty;
+      });
+    } on SocketException catch (e) {
+      setState(() {
+        _isConnectionSuccessful = false;
+      });
+    }
   }
 }
 

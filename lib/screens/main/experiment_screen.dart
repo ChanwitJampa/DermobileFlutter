@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:der/entities/site/plot.dart';
+
 import 'package:der/entities/site/trial.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/plot/plot_screen.dart';
@@ -10,6 +14,12 @@ import 'package:der/entities/trial.dart';
 
 import 'package:der/screens/signup_screen.dart';
 
+import 'package:der/screens/main/main_screen.dart';
+import 'package:http/http.dart' as Http;
+import 'dart:convert';
+import 'package:der/entities/objectlist.dart';
+import 'package:der/entities/trial.dart';
+
 class ExperimentScreen extends StatefulWidget {
   _ExperimentScreen createState() => _ExperimentScreen();
 }
@@ -17,41 +27,15 @@ class ExperimentScreen extends StatefulWidget {
 Box? _UserBox;
 
 List<Widget> makeExperiments = [];
+bool _isConnectionSuccessful = false;
 
 class _ExperimentScreen extends State<ExperimentScreen> {
   List<OnSiteTrial>? ost;
   initState() {
     super.initState();
     _UserBox = Hive.box("Users");
-    int i = 0;
-    ost = _UserBox?.get(userNameNow).onSiteTrials;
-    makeExperiments.clear();
-    ost?.forEach((e) {
-      makeExperiments.addAll([
-        makeExperiment(
-            index: i,
-            experimentID: e.trialId,
-            userImage: 'assets/images/aiony-haust.jpg',
-            feedTime: 'create time ' +
-                (new DateTime.fromMillisecondsSinceEpoch(e.lastUpdate))
-                    .toString()
-            //     +
-            // "  (" +
-            // DateTime.now()
-            //     .difference(
-            //         new DateTime.fromMicrosecondsSinceEpoch(e.lastUpdate))
-            //     .inDays
-            //     .toString() +
-            // ") "
-            ,
-            feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
-            feedImage: 'assets/images/corn.png')
-      ]);
-      i++;
-    });
-
-    // print(userNameNow);
-    // print(_UserBox?.get(userNameNow).onSiteTrials[0].trialId.toString());
+    fetchTrialsOnSever()
+        .then((e) => {loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials)});
   }
 
   Widget makeDoughnutProgress({double? inProgress, double? finished}) {
@@ -140,11 +124,18 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                 ),
                 IconButton(
                   icon: Icon(
-                    Icons.more_horiz,
+                    Icons.delete,
                     size: 30,
-                    color: Colors.grey[600],
+                    color: Colors.red[500],
+                    // color: Colors.grey[600],
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    print(index);
+                    //--------------------------------delete trial-------------------------------------
+                    _UserBox!.get(userNameNow).onSiteTrials.removeAt(index);
+                    _UserBox!.get(userNameNow).save();
+                    loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials);
+                  },
                 )
               ],
             ),
@@ -183,23 +174,6 @@ class _ExperimentScreen extends State<ExperimentScreen> {
             SizedBox(
               height: 20,
             ),
-            /*    Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        makeLike(),
-                        Transform.translate(
-                            offset: Offset(-5, 0),
-                            child: makeLove()
-                        ),
-                        SizedBox(width: 5,),
-                        Text("2.5K", style: TextStyle(fontSize: 15, color: Colors.grey[800]),)
-                      ],
-                    ),
-                    //Text("400 Comments", style: TextStyle(fontSize: 13, color: Colors.grey[800]),)
-                  ],
-                ),*/
             SizedBox(
               height: 20,
             ),
@@ -242,10 +216,11 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.search,
-                        color: Colors.grey,
+                        color: Colors.grey[600],
                       ),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
+                      hintStyle:
+                          TextStyle(color: Colors.grey[600], fontSize: 20),
                       hintText: "Search Experiment",
                     ),
                   ),
@@ -283,6 +258,121 @@ class _ExperimentScreen extends State<ExperimentScreen> {
         onTap: (int i) => Navigator.of(context).pushNamed('$i'),
       ),
     );
+  }
+
+  loadAllTrials(List<OnSiteTrial> ost) {
+    //print("load All");
+    //print(ost.length);
+
+    int i = 0;
+    setState(() {
+      makeExperiments.clear();
+      ost.forEach((e) {
+        makeExperiments.addAll([
+          makeExperiment(
+              index: i,
+              experimentID: e.trialId,
+              userImage: 'assets/images/aiony-haust.jpg',
+              feedTime: 'last update ' +
+                  (new DateTime.fromMillisecondsSinceEpoch(e.lastUpdate))
+                      .toString(),
+              feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
+              feedImage: 'assets/images/corn.png')
+        ]);
+        i++;
+      });
+    });
+  }
+
+  fetchTrialsOnSever() async {
+    String token = _UserBox!.get(userNameNow).token;
+    List<Trial> trials = [];
+    await _tryConnection();
+    if (_isConnectionSuccessful) {
+      String url = "$SERVER_IP/syngenta/api/trial/user/trials";
+      var response = await Http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${token}'
+        },
+      );
+      var json = jsonDecode(response.body);
+      trials = ObjectList<Trial>.fromJson(
+          jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
+
+      print(trials.length);
+      List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
+
+      for (int i = 0; i < trials.length; i++) {
+        for (int j = 0; j < trialsUser.length; j++) {
+          if (trials[i].trialId == trialsUser[j].trialId) {
+            if (trials[i].lastUpdate > trialsUser[j].lastUpdate) {
+              _UserBox?.get(userNameNow).onSiteTrials[j] =
+                  createOnSiteTrialsWithTrials(trials[i]);
+
+              print("Update Trials : ${trials[i].trialId}");
+            }
+          }
+        }
+      }
+      _UserBox?.get(userNameNow).save();
+    }
+  }
+
+  Future<void> _tryConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+
+      setState(() {
+        _isConnectionSuccessful = response.isNotEmpty;
+      });
+    } on SocketException catch (e) {
+      setState(() {
+        _isConnectionSuccessful = false;
+      });
+    }
+  }
+
+  OnSiteTrial createOnSiteTrialsWithTrials(Trial trial) {
+    List<OnSitePlot> osps = [];
+    OnSiteTrial ost = OnSiteTrial(
+        trial.trialId,
+        trial.aliasName,
+        trial.trialActive,
+        trial.trialStatus,
+        trial.createDate,
+        trial.lastUpdate,
+        osps);
+    if (trial.plots.isNotEmpty) {
+      trial.plots.forEach((e) {
+        osps.add(OnSitePlot(
+            e.plotId,
+            e.barcode,
+            e.repNo,
+            e.abbrc,
+            e.entno,
+            e.notet,
+            e.plotImgPath,
+            e.plotImgPathS,
+            e.plotImgBoxPath,
+            e.plotImgBoxPathS,
+            e.uploadDate,
+            e.eartnA,
+            e.dlernA,
+            e.dlerpA,
+            e.drwapA,
+            e.eartnM,
+            e.dlernM,
+            e.dlerpM,
+            e.drwapM,
+            e.approveDate,
+            e.plotProgress,
+            e.plotStatus,
+            e.plotActive));
+      });
+    }
+    return ost;
   }
 }
 

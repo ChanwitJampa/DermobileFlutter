@@ -32,17 +32,17 @@ class _PinScreenState extends State<PinScreen> {
   TextEditingController pinFiveController = TextEditingController();
   TextEditingController pinSixController = TextEditingController();
 
-  var outlineInputBorder = OutlineInputBorder(
+  /*var outlineInputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(20.0),
     borderSide: BorderSide(color: Colors.transparent),
-  );
+  );*/
 
   int pinIndex = 0;
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          buildExitButton(),
+          //buildExitButton(),
           Expanded(
               child: Container(
             alignment: Alignment(0, 0.5),
@@ -157,19 +157,17 @@ class _PinScreenState extends State<PinScreen> {
                     },
                   ),
                   Container(
-                    width: 60.0,
+                    width: 61.0,
                     child: MaterialButton(
-                      height: 60.0,
+                      height: 61.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(60.0),
                       ),
                       onPressed: () {
                         clearPin();
                       },
-                      child: Image.asset(
-                        "assets/images/delete_clear.png",
-                        color: Colors.white,
-                      ),
+                      child: Image.asset("assets/images/delete_clear.png",
+                          color: Colors.white),
                     ),
                   ),
                 ],
@@ -236,36 +234,55 @@ class _PinScreenState extends State<PinScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         PINNumber(
-          outlineInputBorder: outlineInputBorder,
+          //outlineInputBorder: outlineInputBorder,
           textEditingController: pinOneController,
         ),
         PINNumber(
-          outlineInputBorder: outlineInputBorder,
+          //outlineInputBorder: outlineInputBorder,
           textEditingController: pinTwoController,
         ),
         PINNumber(
-          outlineInputBorder: outlineInputBorder,
+          //outlineInputBorder: outlineInputBorder,
           textEditingController: pinThreeController,
         ),
         PINNumber(
-          outlineInputBorder: outlineInputBorder,
+          //outlineInputBorder: outlineInputBorder,
           textEditingController: pinFourController,
         ),
         PINNumber(
-          outlineInputBorder: outlineInputBorder,
+          //outlineInputBorder: outlineInputBorder,
           textEditingController: pinFiveController,
         ),
         PINNumber(
-          outlineInputBorder: outlineInputBorder,
+          //outlineInputBorder: outlineInputBorder,
           textEditingController: pinSixController,
         ),
       ],
     );
   }
 
+  /*List<Widget> _buildCircles() {
+    var list = <Widget>[];
+    var config = widget.circleUIConfig;
+    var extraSize = animation.value;
+    for (int i = 0; i < widget.passwordDigits; i++) {
+      list.add(
+        Container(
+          margin: EdgeInsets.all(8),
+          child: Circle(
+            filled: i < enteredPasscode.length,
+            circleUIConfig: config,
+            extraSize: extraSize,
+          ),
+        ),
+      );
+    }
+    return list;
+  }*/
+
   buildSecurityText() {
     return Text(
-      "Enter Your Pin Code",
+      "Enter Pin Code",
       style: TextStyle(
         color: Colors.white70,
         fontSize: 35.0,
@@ -274,7 +291,7 @@ class _PinScreenState extends State<PinScreen> {
     );
   }
 
-  buildExitButton() {
+  /*buildExitButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -292,32 +309,36 @@ class _PinScreenState extends State<PinScreen> {
         )
       ],
     );
-  }
+  }*/
 }
 
 class PINNumber extends StatelessWidget {
   final TextEditingController textEditingController;
-  final OutlineInputBorder outlineInputBorder;
-  PINNumber(
-      {required this.textEditingController, required this.outlineInputBorder});
+  //final OutlineInputBorder outlineInputBorder;
+  PINNumber({
+    required this.textEditingController,
+    /*required this.outlineInputBorder*/
+  });
 
   Widget build(BuildContext context) {
     return Container(
-      width: 70.0,
+      //width: 70.0,
+      width: 35.0,
       child: TextField(
         controller: textEditingController,
         enabled: false,
         obscureText: true,
         textAlign: TextAlign.center,
-        decoration: InputDecoration(
+        /*decoration: InputDecoration(
           contentPadding: EdgeInsets.all(26.0),
-          border: outlineInputBorder,
+          //border: outlineInputBorder,
           filled: true,
           fillColor: Colors.white30,
-        ),
+        ),*/
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 21.0,
+          fontSize: 70.0,
+          //fontSize: 21.0,
           color: Colors.white,
         ),
       ),
@@ -352,6 +373,50 @@ class KeyboardNumber extends StatelessWidget {
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CircleUIConfig {
+  final Color borderColor;
+  final Color fillColor;
+  final double borderWidth;
+  final double circleSize;
+
+  const CircleUIConfig({
+    this.borderColor = Colors.white,
+    this.borderWidth = 1,
+    this.fillColor = Colors.white,
+    this.circleSize = 20,
+  });
+}
+
+class Circle extends StatelessWidget {
+  final bool filled;
+  final CircleUIConfig circleUIConfig;
+  final double extraSize;
+
+  Circle({
+    Key? key,
+    this.filled = false,
+    required this.circleUIConfig,
+    this.extraSize = 0,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: extraSize),
+      width: circleUIConfig.circleSize,
+      height: circleUIConfig.circleSize,
+      decoration: BoxDecoration(
+        color: filled ? circleUIConfig.fillColor : Colors.transparent,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: circleUIConfig.borderColor,
+          width: circleUIConfig.borderWidth,
         ),
       ),
     );

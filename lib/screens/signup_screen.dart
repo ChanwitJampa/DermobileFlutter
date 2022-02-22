@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 //import 'dart:html';
 
 import 'package:der/entities/site/plot.dart';
@@ -14,6 +15,8 @@ import 'package:der/entities/token.dart';
 import 'package:der/entities/user.dart';
 import 'package:der/entities/objectlist.dart';
 
+//check internet
+import 'package:connectivity_plus/connectivity_plus.dart';
 //hive
 import 'package:der/entities/site/user.dart';
 
@@ -24,10 +27,16 @@ import 'package:path_provider/path_provider.dart';
 Box? _UserBox;
 //const SERVER_IP = 'http://10.0.2.2:8080';
 String? userNameNow;
+ConnectivityResult? _connectivityResult;
+bool _isConnectionSuccessful = false;
 
 // const SERVER_IP = 'http://10.0.2.2:8005';
 //const SERVER_IP = 'http://10.0.2.2:8080';
-const SERVER_IP = 'http://192.168.3.199:8080';
+//const SERVER_IP = 'http://192.168.3.199:8080';
+
+//const SERVER_IP = 'http://10.0.2.2:8005';
+const SERVER_IP = 'http://10.0.2.2:8080';
+//const SERVER_IP = 'http://192.168.3.199:8080';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -39,6 +48,21 @@ class _SignupScreen extends State<SignupScreen> {
   void initState() {
     _openBox();
     super.initState();
+  }
+
+  Future<void> _tryConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      setState(() {
+        _isConnectionSuccessful = response.isNotEmpty;
+        print("Sucess");
+      });
+    } on SocketException catch (e) {
+      setState(() {
+        _isConnectionSuccessful = false;
+        print("failed");
+      });
+    }
   }
 
   @override
@@ -115,18 +139,40 @@ class _SignupScreen extends State<SignupScreen> {
                             elevation: 7.0,
                             child: InkWell(
                               onTap: () async {
-                                if (await signIn(usernameController.text,
-                                    passwordController.text)) {
-                                  Navigator.of(context).pushNamed(HOME_ROUTE);
+                                await _tryConnection();
+                                if (_isConnectionSuccessful) {
+                                  if (await signIn(usernameController.text,
+                                      passwordController.text)) {
+                                    Navigator.of(context).pushNamed(HOME_ROUTE);
+                                  } else {
+                                    usernameController.clear();
+                                    passwordController.clear();
+                                    await showDialog<void>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                              'Wrong username or Password'),
+                                          content: Text('Please try again'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
                                 } else {
-                                  usernameController.clear();
-                                  passwordController.clear();
                                   await showDialog<void>(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: const Text(
-                                            'Wrong username or Password'),
+                                            'Internet Connection Issues'),
                                         content: Text('Please try again'),
                                         actions: <Widget>[
                                           TextButton(
@@ -224,6 +270,22 @@ class _SignupScreen extends State<SignupScreen> {
     // print(_UserBox?.length);
 
     return true;
+  }
+
+  Future<void> _checkConnectivityState() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+
+    if (result == ConnectivityResult.wifi) {
+      print('Connected to a Wi-Fi network');
+    } else if (result == ConnectivityResult.mobile) {
+      print('Connected to a mobile network');
+    } else {
+      print('Not connected to any network');
+    }
+
+    setState(() {
+      _connectivityResult = result;
+    });
   }
 }
 
