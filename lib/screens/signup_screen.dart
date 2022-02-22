@@ -29,23 +29,18 @@ Box? _UserBox;
 String? userNameNow;
 ConnectivityResult? _connectivityResult;
 bool _isConnectionSuccessful = false;
-<<<<<<< HEAD
+
 List<String> caseLogin = [
   "sucess",
   "wrong userName or password",
   "no internet",
   "no web"
 ];
-=======
 
 // const SERVER_IP = 'http://10.0.2.2:8005';
 //const SERVER_IP = 'http://10.0.2.2:8080';
 //const SERVER_IP = 'http://192.168.3.199:8080';
 
-<<<<<<< HEAD
->>>>>>> 2f532bc915dffea1afdecb5f88687af02a6df8ad
-=======
->>>>>>> 2f532bc915dffea1afdecb5f88687af02a6df8ad
 //const SERVER_IP = 'http://10.0.2.2:8005';
 const SERVER_IP = 'http://10.0.2.2:8080';
 //const SERVER_IP = 'http://192.168.3.199:8080';
