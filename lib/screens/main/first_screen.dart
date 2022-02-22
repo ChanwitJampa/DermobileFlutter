@@ -18,12 +18,12 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:der/utils/constants.dart';
 
-class LoginScreen extends StatefulWidget {
+class FirstScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _FirstScreen createState() => _FirstScreen();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _FirstScreen extends State<FirstScreen> {
   bool _rememberMe = false;
 
   Widget _buildEmailTF() {
@@ -141,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
+      height: 150,
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
@@ -152,11 +153,40 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         color: Colors.white,
         child: Text(
-          'LOGIN',
+          'New User',
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,
-            fontSize: 18.0,
+            fontSize: 30.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExistedBtn() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25.0),
+      width: double.infinity,
+      height: 150,
+      child: RaisedButton(
+        elevation: 5.0,
+        onPressed: () {
+          Navigator.of(context).pushNamed(EXISTED_ROUTE);
+        },
+        padding: EdgeInsets.all(15.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        color: Colors.white,
+        child: Text(
+          'User in this device',
+          style: TextStyle(
+            color: Colors.black,
+            letterSpacing: 1,
+            fontSize: 30.0,
             fontWeight: FontWeight.bold,
             fontFamily: 'OpenSans',
           ),
@@ -244,7 +274,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: const [
               Icon(
                 Icons.account_circle,
-                size: 30,
+                size: 40,
                 color: Color(0xFF398AE5),
               ),
               SizedBox(
@@ -254,8 +284,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   'User in this Device',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 30,
+                    fontWeight: FontWeight.normal,
                     color: Color(0xFF398AE5),
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -289,7 +319,7 @@ class _LoginScreenState extends State<LoginScreen> {
           iconSize: 14,
           iconEnabledColor: Color(0xFF398AE5),
           iconDisabledColor: Colors.grey,
-          buttonHeight: 70,
+          buttonHeight: 110,
           buttonWidth: 520,
           buttonPadding: const EdgeInsets.only(left: 14, right: 14),
           buttonDecoration: BoxDecoration(
@@ -421,72 +451,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Login',
+                        'Syngenta',
                         style: TextStyle(
                           // color: Color(0xFF398AE5),
                           color: Colors.white,
                           fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 60.0,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(height: 50.0),
-                      _buildDropdownUser(),
-                      // child: DropdownButtonFormField<String>(
-                      //   decoration: InputDecoration(
-                      //     enabledBorder: OutlineInputBorder(
-                      //       borderSide: BorderSide(
-                      //           color: Color(0xFF6CA8F1), width: 1),
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //     filled: true,
-                      //     fillColor: Colors.blueAccent,
-                      //   ),
-                      //   value: dropdownValue,
-                      //   dropdownColor: Colors.white,
-                      //   icon: const Icon(
-                      //     Icons.account_circle,
-                      //     color: Colors.white,
-                      //     size: 30,
-                      //   ),
-                      //   elevation: 16,
-                      //   style: kTest,
-                      //   onChanged: (String? newValue) {
-                      //     setState(() {
-                      //       dropdownValue = newValue!;
-                      //     });
-                      //   },
-                      //   items: <String>[
-                      //     'Existed User',
-                      //     'Test',
-                      //     'user1@ku.th',
-                      //   ].map<DropdownMenuItem<String>>((String value) {
-                      //     return DropdownMenuItem<String>(
-                      //       value: value,
-                      //       child: Text(value),
-                      //     );
-                      //   }).toList(),
-                      // ),
-                      //),
-                      SizedBox(height: 40.0),
-                      Container(
-                          child: Divider(
-                        color: Colors.white54,
-                        // color: Color(0xFF398AE5),
-                        height: 10,
-                        thickness: 3,
-                      )),
-                      SizedBox(height: 30.0),
-                      _buildEmailTF(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      _buildPasswordTF(),
-                      _buildForgotPasswordBtn(),
-                      // _buildRememberMeCheckbox(),
+
+                      // Container(
+                      //     child: Divider(
+                      //   color: Colors.white54,
+                      //   // color: Color(0xFF398AE5),
+                      //   height: 10,
+                      //   thickness: 3,
+                      // )),
+                      SizedBox(height: 150.0),
                       _buildLoginBtn(),
-                      _buildSignInWithText(),
-                      _buildSocialBtnRow(),
+                      SizedBox(height: 0.0),
+                      _buildExistedBtn(),
                       // _buildSignupBtn(),
                     ],
                   ),

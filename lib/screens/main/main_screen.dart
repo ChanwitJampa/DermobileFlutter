@@ -221,6 +221,7 @@ class _MainScreenState extends State<MainScreen> {
                   'Menu',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    // color: Colors.blue[600],
                     color: Colors.blue[600],
                     fontWeight: FontWeight.normal,
                     fontSize: 30,
@@ -499,7 +500,8 @@ class _MainScreenState extends State<MainScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    color: Colors.cyan[700],
+                    // color: Colors.cyan[700],
+                    color: Color(0xFF398AE5),
                     height: 80,
                     padding: EdgeInsets.only(
                         top: 65, right: 20, left: 20, bottom: 10),
@@ -553,7 +555,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           bottomNavigationBar: ConvexAppBar(
             style: TabStyle.react,
-            backgroundColor: Colors.cyan[700],
+            backgroundColor: Color(0xFF398AE5),
             items: [
               TabItem(icon: Icons.home, title: 'Home'),
               TabItem(icon: Icons.download, title: 'Download'),

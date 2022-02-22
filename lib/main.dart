@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 
 import 'package:der/screens/login_digit_screen.dart';
+import 'package:der/screens/main/first_screen.dart';
 import 'package:der/screens/select_user_screen.dart';
 
 import 'package:der/screens/main/newlogin_screen.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
             // home: new SignupScreen(),
             // home: new SignupScreen(),
             home: new LoginScreen(),
+            // home: new FirstScreen(),
           );
         }
         MyHomePage(cameras: cameras);
