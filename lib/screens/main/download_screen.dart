@@ -314,6 +314,11 @@ class _DownloadScreen extends State<DownloadScreen> {
                           if (!isLoading &&
                               scrollInfo.metrics.pixels ==
                                   scrollInfo.metrics.maxScrollExtent) {
+                            _tryConnection();
+                            if (!_isConnectionSuccessful) {
+                              useShowDialog("no internet connection", context);
+                            }
+
                             loadData();
 
                             // if (!_isConnectionSuccessful) {

@@ -18,12 +18,14 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:der/utils/constants.dart';
 
-class LoginScreen extends StatefulWidget {
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+
+class NewUserScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _NewUserScreenState createState() => _NewUserScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _NewUserScreenState extends State<NewUserScreen> {
   bool _rememberMe = false;
 
   Widget _buildEmailTF() {
@@ -141,19 +143,18 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
-      height: 120,
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          Navigator.of(context).pushNamed(NEWFIRSTPAGE_ROUTE);
+          Navigator.of(context).pushNamed(SIGNUP_ROUTE);
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(30.0),
         ),
         color: Colors.white,
         child: Text(
-          'First time Login',
+          'LOGIN',
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,
@@ -181,6 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
           'Sign in with',
           style: kLabelStyle,
         ),
+        SizedBox(height: 50.0),
       ],
     );
   }
@@ -236,86 +238,164 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildDropdownUser() {
+  Widget _buildSocialBtn2(
+    Function onTap,
+  ) {
     return Container(
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Row(
-            children: const [
-              Icon(
-                Icons.account_circle,
-                size: 30,
-                color: Color(0xFF398AE5),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Text(
-                  'User in this Device',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF398AE5),
+        color: Colors.white,
+        width: 280,
+        height: 60,
+        child: InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(DIGIT_ROUTE);
+            },
+            child: Center(
+              child: Ink(
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.all(6),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/googleLogo.png',
+                        height: 30,
+                        width: 30,
+                      ), // <-- Use 'Image.asset(...)' here
+                      SizedBox(width: 12),
+                      Text(
+                        'Sign in with Google',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF398AE5),
+                        ),
+                      ),
+                    ],
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-            ],
-          ),
-          items: items
-              .map((item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                        color: Color(0xFF398AE5),
+            )));
+  }
+
+  Widget _buildSocialBtn3(
+    Function onTap,
+  ) {
+    return Container(
+        color: Colors.white,
+        width: 280,
+        height: 60,
+        child: InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(DIGIT_ROUTE);
+            },
+            child: Center(
+              child: Ink(
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.all(6),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/microsoftLogo.jpg',
+                        height: 40,
+                        width: 40,
+                      ), // <-- Use 'Image.asset(...)' here
+                      SizedBox(width: 12),
+                      Text(
+                        'Sign in with Microsoft',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF398AE5),
+                        ),
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ))
-              .toList(),
-          value: selectedValue,
-          onChanged: (value) {
-            setState(() {
-              selectedValue = value as String;
-            });
-          },
-          icon: const Icon(
-            Icons.arrow_forward_ios_outlined,
-          ),
-          iconSize: 14,
-          iconEnabledColor: Color(0xFF398AE5),
-          iconDisabledColor: Colors.grey,
-          buttonHeight: 90,
-          buttonWidth: 520,
-          buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-          buttonDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: Colors.black26,
+                    ],
+                  ),
+                ),
+              ),
+            )));
+  }
+
+  Widget _buildDropdownUser() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        isExpanded: true,
+        hint: Row(
+          children: const [
+            Icon(
+              Icons.account_circle,
+              size: 30,
+              color: Color(0xFF398AE5),
             ),
-            color: Colors.white,
-          ),
-          buttonElevation: 2,
-          itemHeight: 50,
-          itemPadding: const EdgeInsets.only(left: 14, right: 14),
-          dropdownMaxHeight: 205,
-          dropdownWidth: 520,
-          dropdownPadding: null,
-          dropdownDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
-          ),
-          dropdownElevation: 8,
-          scrollbarRadius: const Radius.circular(10),
-          scrollbarThickness: 6,
-          scrollbarAlwaysShow: true,
-          offset: const Offset(0, -1),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: Text(
+                'User in this Device',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF398AE5),
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
+        items: items
+            .map((item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF398AE5),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
+            .toList(),
+        value: selectedValue,
+        onChanged: (value) {
+          setState(() {
+            selectedValue = value as String;
+          });
+        },
+        icon: const Icon(
+          Icons.arrow_forward_ios_outlined,
+        ),
+        iconSize: 14,
+        iconEnabledColor: Color(0xFF398AE5),
+        iconDisabledColor: Colors.grey,
+        buttonHeight: 70,
+        buttonWidth: 520,
+        buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+        buttonDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: Colors.black26,
+          ),
+          color: Colors.white,
+        ),
+        buttonElevation: 2,
+        itemHeight: 50,
+        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+        dropdownMaxHeight: 205,
+        dropdownWidth: 520,
+        dropdownPadding: null,
+        dropdownDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        dropdownElevation: 8,
+        scrollbarRadius: const Radius.circular(10),
+        scrollbarThickness: 6,
+        scrollbarAlwaysShow: true,
+        offset: const Offset(0, -1),
       ),
     );
   }
@@ -421,19 +501,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: 100.0),
                       Text(
-                        'Welcome',
+                        'Login',
                         style: TextStyle(
                           // color: Color(0xFF398AE5),
                           color: Colors.white,
                           fontFamily: 'OpenSans',
-                          fontSize: 70.0,
+                          fontSize: 30.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 250.0),
-                      _buildDropdownUser(),
+                      SizedBox(height: 50.0),
                       // child: DropdownButtonFormField<String>(
                       //   decoration: InputDecoration(
                       //     enabledBorder: OutlineInputBorder(
@@ -470,7 +548,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       //   }).toList(),
                       // ),
                       //),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: 40.0),
+                      // ignore: avoid_unnecessary_containers
                       // Container(
                       //     child: Divider(
                       //   color: Colors.white54,
@@ -478,25 +557,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       //   height: 10,
                       //   thickness: 3,
                       // )),
-                      Text(
-                        '- OR -',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 25),
+                      SizedBox(height: 30.0),
+                      _buildEmailTF(),
+                      SizedBox(
+                        height: 30.0,
                       ),
-                      SizedBox(height: 10.0),
-                      // SizedBox(height: 30.0),
-                      // // _buildEmailTF(),
-                      // SizedBox(
-                      //   height: 30.0,
-                      // ),
-                      // _buildPasswordTF(),
-                      // _buildForgotPasswordBtn(),
+                      _buildPasswordTF(),
+                      _buildForgotPasswordBtn(),
                       // _buildRememberMeCheckbox(),
                       _buildLoginBtn(),
-                      // _buildSignInWithText(),
+                      _buildSignInWithText(),
                       // _buildSocialBtnRow(),
+                      _buildSocialBtn2(
+                        () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
+                      ),
+                      SizedBox(height: 30.0),
+
+                      _buildSocialBtn3(
+                        () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
+                      ),
+
                       // _buildSignupBtn(),
                     ],
                   ),

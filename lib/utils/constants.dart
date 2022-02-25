@@ -21,6 +21,7 @@ const String DIGIT_ROUTE = '14';
 const String EXISTED_ROUTE = '15';
 const String NEWLOGIN_ROUTE = '16';
 const String FIRSTPAGE_ROUTE = '17';
+const String NEWFIRSTPAGE_ROUTE = '18';
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,
