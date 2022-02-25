@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -243,7 +245,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
   ) {
     return Container(
         color: Colors.white,
-        width: 280,
+        width: 500,
         height: 60,
         child: InkWell(
             onTap: () {
@@ -253,16 +255,18 @@ class _NewUserScreenState extends State<NewUserScreen> {
               child: Ink(
                 color: Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.all(6),
+                  // padding: EdgeInsets.all(6),
+                  padding: const EdgeInsets.only(
+                      left: 0, right: 14, top: 14, bottom: 14),
                   child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Image.asset(
                         'assets/images/googleLogo.png',
                         height: 30,
-                        width: 30,
+                        width: 60,
                       ), // <-- Use 'Image.asset(...)' here
-                      SizedBox(width: 12),
+                      SizedBox(width: 15),
                       Text(
                         'Sign in with Google',
                         style: TextStyle(
@@ -283,7 +287,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
   ) {
     return Container(
         color: Colors.white,
-        width: 280,
+        width: 500,
         height: 60,
         child: InkWell(
             onTap: () {
@@ -557,25 +561,24 @@ class _NewUserScreenState extends State<NewUserScreen> {
                       //   height: 10,
                       //   thickness: 3,
                       // )),
+                      _buildSocialBtn3(
+                        () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
+                      ),
                       SizedBox(height: 30.0),
+                      _buildSocialBtn2(
+                        () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
+                      ),
+                      SizedBox(height: 50.0),
+                      _buildSignInWithText(),
                       _buildEmailTF(),
                       SizedBox(
                         height: 30.0,
                       ),
                       _buildPasswordTF(),
-                      _buildForgotPasswordBtn(),
-                      // _buildRememberMeCheckbox(),
                       _buildLoginBtn(),
-                      _buildSignInWithText(),
+                      // _buildForgotPasswordBtn(),
+                      // _buildRememberMeCheckbox(),
                       // _buildSocialBtnRow(),
-                      _buildSocialBtn2(
-                        () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
-                      ),
-                      SizedBox(height: 30.0),
-
-                      _buildSocialBtn3(
-                        () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
-                      ),
 
                       // _buildSignupBtn(),
                     ],
