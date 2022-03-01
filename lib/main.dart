@@ -1,5 +1,5 @@
 import 'package:camera/camera.dart';
-
+import 'package:der/screens/setup_digit_screen.dart';
 import 'package:der/screens/login_digit_screen.dart';
 import 'package:der/screens/main/first_screen.dart';
 import 'package:der/screens/main/newUser_screen.dart';

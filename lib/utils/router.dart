@@ -20,6 +20,7 @@ import 'package:der/screens/test_der_report_screen.dart';
 import 'package:der/screens/test_der_screen.dar.dart';
 import 'package:der/screens/select_user_screen.dart';
 import 'package:der/screens/main/existed_screen.dart';
+import 'package:der/screens/setup_digit_screen.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -71,6 +72,8 @@ class Routers {
       case '18':
         print("1818181811818118");
         return MaterialPageRoute(builder: (_) => NewUserScreen());
+      case '19':
+        return MaterialPageRoute(builder: (_) => SetupDigitScreen());
 
       default:
         return MaterialPageRoute(
