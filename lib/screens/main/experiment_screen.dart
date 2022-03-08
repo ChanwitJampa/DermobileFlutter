@@ -12,7 +12,7 @@ import 'package:hive/hive.dart';
 import 'package:der/entities/site/trial.dart';
 import 'package:der/entities/trial.dart';
 
-import 'package:der/screens/signup_screen.dart';
+import 'package:der/screens/main/signup_screen.dart';
 
 import 'package:der/screens/main/main_screen.dart';
 import 'package:http/http.dart' as Http;

@@ -6,7 +6,7 @@ import 'package:der/entities/site/plot.dart';
 import 'package:der/entities/site/trial.dart';
 import 'package:der/main.dart';
 import 'package:der/screens/select_Image.dart';
-import 'package:der/screens/signup_screen.dart';
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:der/utils/router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,6 @@ import 'package:der/utils/app_popup_menu.dart';
 import 'package:der/utils/constants.dart';
 
 import 'package:hive/hive.dart';
-import 'package:der/screens/signup_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as p;
 

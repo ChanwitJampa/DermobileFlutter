@@ -56,12 +56,12 @@ List<String> caseLogin = [
   "no web"
 ];
 
-const SERVER_IP = 'http://10.0.2.2:8005';
+// const SERVER_IP = 'http://10.0.2.2:8005';
 //const SERVER_IP = 'http://10.0.2.2:8080';
 //const SERVER_IP = 'http://192.168.3.199:8080';
 
 //const SERVER_IP = 'http://10.0.2.2:8005';
-//const SERVER_IP = 'http://10.0.2.2:8080';
+const SERVER_IP = 'http://10.0.2.2:8080';
 //const SERVER_IP = 'http://192.168.3.199:8080';
 
 class NewUserScreen extends StatefulWidget {
@@ -712,6 +712,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
       return caseLogin[2];
     }
     userNameNow = username;
+    print("userNameNow " + userNameNow!);
     loginService dc = loginService();
     var res = await dc.attemptLogIn(username, password);
 

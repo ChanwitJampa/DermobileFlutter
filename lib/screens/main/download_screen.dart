@@ -13,7 +13,7 @@ import 'package:hive/hive.dart';
 import 'package:der/entities/site/trial.dart';
 import 'package:der/entities/site/plot.dart';
 import 'package:der/entities/site/enum.dart';
-import 'package:der/screens/signup_screen.dart';
+import 'package:der/screens/main/signup_screen.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -22,9 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:der/model/check_box.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 
-import 'package:der/screens/signup_screen.dart';
-
-import 'package:der/screens/signup_screen.dart';
 import 'package:der/screens/main/qr_screen.dart';
 
 //check internet

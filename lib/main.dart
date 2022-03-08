@@ -2,13 +2,13 @@ import 'package:camera/camera.dart';
 import 'package:der/screens/setup_digit_screen.dart';
 import 'package:der/screens/login_digit_screen.dart';
 import 'package:der/screens/main/first_screen.dart';
-import 'package:der/screens/main/newUser_screen.dart';
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:der/screens/select_user_screen.dart';
 
 import 'package:der/screens/main/newlogin_screen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:der/screens/signup_screen.dart';
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:der/utils/constants.dart';
 import "package:der/utils/router.dart";
 import 'package:reflectable/reflectable.dart';

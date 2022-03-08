@@ -1,8 +1,8 @@
 import 'package:der/screens/login_digit_screen.dart';
 import 'package:der/screens/main/first_screen.dart';
-import 'package:der/screens/main/newUser_screen.dart';
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:der/screens/main/newlogin_screen.dart';
-import 'package:der/screens/signup_screen.dart';
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/assessment_screen.dart';
 import 'package:der/screens/experiment_dashboard_screen.dart';
@@ -54,7 +54,7 @@ class Routers {
       case '11':
         return MaterialPageRoute(builder: (_) => ExperimanetDashBoardScreen());
       case '12':
-        return MaterialPageRoute(builder: (_) => SignupScreen());
+        return MaterialPageRoute(builder: (_) => NewUserScreen());
       case '13':
         return MaterialPageRoute(builder: (_) => AssessmentScreen());
       case '14':

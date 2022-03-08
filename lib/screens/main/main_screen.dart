@@ -17,7 +17,7 @@ import 'package:der/screens/select_Image.dart';
 import 'package:der/ui/page/dashboard/dashboard_one/dashboard_menu_row.dart';
 import 'package:der/ui/widgets/label_below_icon.dart';
 import '../../main.dart';
-import '../signup_screen.dart';
+import '../main/signup_screen.dart';
 import 'qr_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -157,8 +157,8 @@ class _MainScreenState extends State<MainScreen> {
       child: Row(
         children: [
           Container(
-            height: 100,
-            width: 50,
+            height: 90,
+            width: 90,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Color(0xFFEEEEEE).withOpacity(0.5),
@@ -178,7 +178,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           SizedBox(
-            width: 10,
+            width: 25,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,7 +237,7 @@ class _MainScreenState extends State<MainScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                            width: 250,
+                            width: 280,
                             child: InkWell(
                               onTap: () {
                                 Navigator.of(context)
@@ -249,7 +249,7 @@ class _MainScreenState extends State<MainScreen> {
                                   imageName: "assets/images/unknown_user.png"),
                             )),
                         Container(
-                            width: 250,
+                            width: 280,
                             child: InkWell(
                               onTap: () {
                                 Navigator.of(context)
@@ -273,7 +273,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        width: 250,
+                        width: 280,
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Trials",
@@ -287,7 +287,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                       Container(
-                        width: 250,
+                        width: 280,
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Plot",
@@ -310,7 +310,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        width: 250,
+                        width: 280,
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Uploaded",
@@ -322,7 +322,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                       Container(
-                        width: 250,
+                        width: 280,
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Info",
@@ -504,9 +504,9 @@ class _MainScreenState extends State<MainScreen> {
                     // color: Colors.cyan[700],
                     color: Color(0xFF398AE5),
                     //color top bar
-                    height: 80,
+                    height: 100,
                     padding: EdgeInsets.only(
-                        top: 10, right: 20, left: 20, bottom: 0),
+                        top: 15, right: 20, left: 20, bottom: 0),
 
                     child: Center(
                         child: Image.asset(
@@ -530,6 +530,10 @@ class _MainScreenState extends State<MainScreen> {
                                 storyImage: 'assets/images/corn.png',
                                 userImage: 'assets/images/unknown_user.png',
                                 userName: 'Aatik Tasneem'),
+                            makeRecentExperiment(
+                                storyImage: 'assets/images/corn.png',
+                                userImage: 'assets/images/unknown_user.png',
+                                userName: 'Aiony Haust'),
                             makeRecentExperiment(
                                 storyImage: 'assets/images/corn.png',
                                 userImage: 'assets/images/unknown_user.png',

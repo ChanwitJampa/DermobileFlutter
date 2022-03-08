@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:der/entities/site/plot.dart';
-import 'package:der/screens/signup_screen.dart';
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:der/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -293,13 +293,20 @@ class _SelectImage extends State<SelectImage> {
         Column(
           children: [
             Container(
-              // color: Colors.blue,
-              color: Color(0xFF398AE5),
-
-              height: 100,
-              padding:
-                  EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
-            ),
+                // color: Colors.blue,
+                color: Color(0xFF398AE5),
+                height: 100,
+                padding:
+                    EdgeInsets.only(top: 45, right: 20, left: 20, bottom: 10),
+                child: Center(
+                    child: Text(
+                  "Select Image",
+                  style: TextStyle(
+                    // fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
+                ))),
             Padding(
               padding: EdgeInsets.all(8),
               child: Column(
@@ -333,7 +340,7 @@ class _SelectImage extends State<SelectImage> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,
-                                        fontSize: 20,
+                                        fontSize: 25,
                                       ),
                                     ),
                                   ),
@@ -341,13 +348,13 @@ class _SelectImage extends State<SelectImage> {
                                     height: 20,
                                   ),
                                   Container(
-                                    width: 368,
+                                    width: 575,
                                     child: const Text(
                                       '  Img: ' + '-------???----------',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.blue,
-                                        fontSize: 20,
+                                        fontSize: 25,
                                       ),
                                     ),
                                   ), //Card(
@@ -364,22 +371,22 @@ class _SelectImage extends State<SelectImage> {
                   ),
                   Container(
                       //color: Colors.red,
-                      height: 350,
+                      height: 500,
                       child: Card(
                         child: Center(
                           child: _image != null
                               ? Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Container(
-                                    width: 300,
-                                    height: 300,
+                                    width: 500,
+                                    height: 500,
                                     child: Image.file(
                                       File(_image.path),
                                     ),
                                   ),
                                 )
                               : Container(
-                                  height: 300,
+                                  height: 200,
                                   width: 500,
                                   padding: const EdgeInsets.all(10.0),
                                   child: Image.asset(
