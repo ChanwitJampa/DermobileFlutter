@@ -56,12 +56,12 @@ List<String> caseLogin = [
   "no web"
 ];
 
-// const SERVER_IP = 'http://10.0.2.2:8005';
+const SERVER_IP = 'http://10.0.2.2:8005';
 //const SERVER_IP = 'http://10.0.2.2:8080';
 //const SERVER_IP = 'http://192.168.3.199:8080';
 
 //const SERVER_IP = 'http://10.0.2.2:8005';
-const SERVER_IP = 'http://10.0.2.2:8080';
+//const SERVER_IP = 'http://10.0.2.2:8080';
 //const SERVER_IP = 'http://192.168.3.199:8080';
 
 class NewUserScreen extends StatefulWidget {
@@ -217,7 +217,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
           print("result login : ${resultLogin}");
           //["sucess","wrong userName or password","no internet","no web"]
           if (resultLogin == caseLogin[0]) {
-            Navigator.of(context).pushNamed(HOME_ROUTE);
+            Navigator.of(context).pushNamed(SETDIGIT_ROUTE);
           } else if (resultLogin == caseLogin[1]) {
             usernameController.clear();
             passwordController.clear();

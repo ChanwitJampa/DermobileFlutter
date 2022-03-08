@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:der/screens/confirm_digit_screen.dart';
+import 'package:der/utils/constants.dart';
 
 String pinCode = "";
 
@@ -213,7 +214,8 @@ class _PinScreenState extends State<PinScreen> {
     //print(pinCode);
     if (pinIndex == 6) {
       //print(pinCode);
-      moveToNextScreen(context);
+      //moveToNextScreen(context);
+      Navigator.of(context).pushNamed(CONFIRMDIGIT_ROUTE);
     }
   }
 
@@ -240,10 +242,10 @@ class _PinScreenState extends State<PinScreen> {
     }
   }
 
-  void moveToNextScreen(context) {
+  /*void moveToNextScreen(context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ConfirmDigitScreen()));
-  }
+  }*/
 
   buildPinRow() {
     return Row(
@@ -298,7 +300,7 @@ class _PinScreenState extends State<PinScreen> {
 
   buildSecurityText() {
     return Text(
-      "Setup Pin Code",
+      "Setup PinCode",
       style: TextStyle(
         color: Colors.white70,
         fontSize: 35.0,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:der/screens/setup_digit_screen.dart';
+import 'package:der/utils/constants.dart';
 
 class ConfirmDigitScreen extends StatefulWidget {
   _ConfirmDigitScreen createState() => _ConfirmDigitScreen();
@@ -216,6 +217,7 @@ class _PinScreenState extends State<PinScreen> {
     });
     if (pinIndex == 6 && pinCode == pinCodeCheck) {
       print("success");
+      Navigator.of(context).pushNamed(HOME_ROUTE);
     } else if (pinIndex == 6 && pinCode != pinCodeCheck) {
       print("The entered pincode is wrong");
       clearAllPin();
@@ -298,7 +300,7 @@ class _PinScreenState extends State<PinScreen> {
 
   buildSecurityText() {
     return Text(
-      "Confirm Pin Code",
+      "Confirm PinCode",
       style: TextStyle(
         color: Colors.white70,
         fontSize: 35.0,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:der/utils/constants.dart';
 
 class LoginDigitScreen extends StatefulWidget {
   _LoginDigitScreen createState() => _LoginDigitScreen();
@@ -203,7 +204,10 @@ class _PinScreenState extends State<PinScreen> {
     currentPin.forEach((e) {
       strPin += e;
     });
-    if (pinIndex == 6) print(strPin);
+    if (pinIndex == 6) {
+      print(strPin);
+      Navigator.of(context).pushNamed(HOME_ROUTE);
+    }
   }
 
   setPin(int n, String text) {
