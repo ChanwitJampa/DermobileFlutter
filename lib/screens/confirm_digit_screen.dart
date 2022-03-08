@@ -206,9 +206,10 @@ class _PinScreenState extends State<PinScreen> {
     currentPin.forEach((e) {
       strPin1 += e;
     });
-    if (pinIndex == 6) {
+    if (pinIndex == 6 && strPin == strPin1) {
       print("success");
-    }
+    } else
+      print("error");
   }
 
   setPin(int n, String text) {

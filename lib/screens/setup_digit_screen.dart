@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:der/screens/confirm_digit_screen.dart';
 
-String pincode = "";
+String strPin = "";
 
 class SetupDigitScreen extends StatefulWidget {
   _SetupDigitScreen createState() => _SetupDigitScreen();
@@ -198,6 +198,7 @@ class _PinScreenState extends State<PinScreen> {
   }
 
   pinIndexSetup(String text) {
+    String strPin1 = "";
     if (pinIndex == 0) {
       pinIndex = 1;
     } else if (pinIndex < 6) {
@@ -205,12 +206,13 @@ class _PinScreenState extends State<PinScreen> {
     }
     setPin(pinIndex, text);
     currentPin[pinIndex - 1] = text;
-    String strPin = "";
     currentPin.forEach((e) {
-      pincode += e;
+      strPin1 += e;
     });
+    strPin = strPin1;
+    print(strPin);
     if (pinIndex == 6) {
-      print(pincode);
+      print(strPin);
       moveToNextScreen(context);
     }
   }
