@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:der/screens/confirm_digit_screen.dart';
+import 'package:der/screens/setup_digit_screen.dart';
 
-String strPin = "";
-
-class SetupDigitScreen extends StatefulWidget {
-  _SetupDigitScreen createState() => _SetupDigitScreen();
+class ConfirmDigitScreen extends StatefulWidget {
+  _ConfirmDigitScreen createState() => _ConfirmDigitScreen();
 }
 
-class _SetupDigitScreen extends State<SetupDigitScreen> {
+class _ConfirmDigitScreen extends State<ConfirmDigitScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -41,7 +39,6 @@ class _PinScreenState extends State<PinScreen> {
   );*/
 
   int pinIndex = 0;
-  //String pinCode = "";
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
@@ -81,19 +78,19 @@ class _PinScreenState extends State<PinScreen> {
                   KeyboardNumber(
                     n: 1,
                     onPressed: () {
-                      pinIndexSetup("1");
+                      pinIndexSetup1("1");
                     },
                   ),
                   KeyboardNumber(
                     n: 2,
                     onPressed: () {
-                      pinIndexSetup("2");
+                      pinIndexSetup1("2");
                     },
                   ),
                   KeyboardNumber(
                     n: 3,
                     onPressed: () {
-                      pinIndexSetup("3");
+                      pinIndexSetup1("3");
                     },
                   ),
                 ],
@@ -104,19 +101,19 @@ class _PinScreenState extends State<PinScreen> {
                   KeyboardNumber(
                     n: 4,
                     onPressed: () {
-                      pinIndexSetup("4");
+                      pinIndexSetup1("4");
                     },
                   ),
                   KeyboardNumber(
                     n: 5,
                     onPressed: () {
-                      pinIndexSetup("5");
+                      pinIndexSetup1("5");
                     },
                   ),
                   KeyboardNumber(
                     n: 6,
                     onPressed: () {
-                      pinIndexSetup("6");
+                      pinIndexSetup1("6");
                     },
                   ),
                 ],
@@ -127,19 +124,19 @@ class _PinScreenState extends State<PinScreen> {
                   KeyboardNumber(
                     n: 7,
                     onPressed: () {
-                      pinIndexSetup("7");
+                      pinIndexSetup1("7");
                     },
                   ),
                   KeyboardNumber(
                     n: 8,
                     onPressed: () {
-                      pinIndexSetup("8");
+                      pinIndexSetup1("8");
                     },
                   ),
                   KeyboardNumber(
                     n: 9,
                     onPressed: () {
-                      pinIndexSetup("9");
+                      pinIndexSetup1("9");
                     },
                   ),
                 ],
@@ -157,7 +154,7 @@ class _PinScreenState extends State<PinScreen> {
                   KeyboardNumber(
                     n: 0,
                     onPressed: () {
-                      pinIndexSetup("0");
+                      pinIndexSetup1("0");
                     },
                   ),
                   Container(
@@ -197,8 +194,7 @@ class _PinScreenState extends State<PinScreen> {
     }
   }
 
-  pinIndexSetup(String text) {
-    String strPin1 = "";
+  pinIndexSetup1(String text) {
     if (pinIndex == 0) {
       pinIndex = 1;
     } else if (pinIndex < 6) {
@@ -206,15 +202,14 @@ class _PinScreenState extends State<PinScreen> {
     }
     setPin(pinIndex, text);
     currentPin[pinIndex - 1] = text;
+    String strPin1 = "";
     currentPin.forEach((e) {
       strPin1 += e;
     });
-    strPin = strPin1;
-    print(strPin);
-    if (pinIndex == 6) {
-      print(strPin);
-      moveToNextScreen(context);
-    }
+    if (pinIndex == 6 && strPin == strPin1) {
+      print("success");
+    } else
+      print("error");
   }
 
   setPin(int n, String text) {
@@ -238,11 +233,6 @@ class _PinScreenState extends State<PinScreen> {
         pinSixController.text = text;
         break;
     }
-  }
-
-  void moveToNextScreen(context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ConfirmDigitScreen()));
   }
 
   buildPinRow() {
@@ -298,7 +288,7 @@ class _PinScreenState extends State<PinScreen> {
 
   buildSecurityText() {
     return Text(
-      "Setup Pin Code",
+      "Confirm Pin Code",
       style: TextStyle(
         color: Colors.white70,
         fontSize: 35.0,

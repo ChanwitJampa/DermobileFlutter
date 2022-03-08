@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -26,6 +27,9 @@ import 'package:hive/hive.dart';
 import 'package:der/screens/signup_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as p;
+
+import 'package:async/async.dart';
+import 'package:http/http.dart' as http;
 
 Box? _UserBox;
 
@@ -342,7 +346,7 @@ class _PlotsScreen extends State<PlotsScreen> {
             children: <Widget>[
               makeCameraButton(plotID),
               makeGallryButton(plotID),
-              if (isLock == "Open") ...[makeShareButton()]
+              if (isLock == "Open") ...[makeShareButton(plotID)]
             ],
           ),
           SizedBox(
@@ -401,6 +405,38 @@ class _PlotsScreen extends State<PlotsScreen> {
   }
 
   final picker = ImagePicker();
+  _upload(File imageFile, String plotID) async {
+    // open a bytestream
+    var stream =
+        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    // get file length
+    var length = await imageFile.length();
+
+    // string to uri
+    var uri = Uri.parse("$SERVER_IP/syngenta/api/plot/upload");
+
+    // create multipart request
+    var request = new http.MultipartRequest("POST", uri);
+
+    // multipart that takes file
+    var multipartFile = new http.MultipartFile('file', stream, length,
+        filename: p.basename(imageFile.path));
+
+    // add file to multipart
+    request.files.add(multipartFile);
+    request.fields['plot'] = plotID.toString();
+    request.fields['username'] = userNameNow.toString();
+    String token = _UserBox!.get(userNameNow).token;
+    request.headers.addAll({"Authorization": "Bearer ${token}"});
+    // send
+    var response = await request.send();
+    print(response.statusCode);
+
+    // listen for response
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
+  }
 
   _getImage(ImageSource imageSource, String plotId) async {
     final _imageFile = await picker.pickImage(
@@ -454,12 +490,11 @@ class _PlotsScreen extends State<PlotsScreen> {
               child: InkWell(
                 child: Container(
                   child: Text(
-                    "Camera",
+                    "Camera1",
                     style: TextStyle(color: Colors.blue, fontSize: 18),
                   ),
                 ),
                 onTap: () {
-                  print("camera plot iD is" + plotId);
                   _getImage(ImageSource.camera, plotId);
                 },
               ),
@@ -594,7 +629,7 @@ class _PlotsScreen extends State<PlotsScreen> {
     );
   }
 
-  Widget makeShareButton() {
+  Widget makeShareButton(String plotId) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
@@ -609,10 +644,38 @@ class _PlotsScreen extends State<PlotsScreen> {
             SizedBox(
               width: 5,
             ),
-            Text(
-              "Upload",
-              style: TextStyle(color: Colors.grey, fontSize: 18),
-            )
+            Container(
+              child: InkWell(
+                child: Container(
+                  child: Text(
+                    "upload1",
+                    style: TextStyle(color: Colors.blue, fontSize: 18),
+                  ),
+                ),
+                onTap: () {
+                  List<OnSitePlot> ost = _UserBox?.get(userNameNow)
+                      .onSiteTrials[title]
+                      .onSitePlots;
+
+                  int lenght = ost.length;
+
+                  print("upload plot iD is" +
+                      plotId.toString() +
+                      " length :" +
+                      lenght.toString());
+                  String filePath = "";
+                  for (int i = 0; i < lenght; i++) {
+                    print("${ost[i].pltId} +++ ${plotId}");
+                    if (ost[i].pltId.toString() == plotId.toString()) {
+                      filePath = ost[i].plotImgPath;
+                      print("${filePath}" + "plot id : " + plotId);
+                    }
+                  }
+
+                  _upload(File(filePath), plotId);
+                },
+              ),
+            ),
           ],
         ),
       ),

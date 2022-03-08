@@ -290,8 +290,10 @@ class _ExperimentScreen extends State<ExperimentScreen> {
     String token = _UserBox!.get(userNameNow).token;
     List<Trial> trials = [];
     await _tryConnection();
+
     if (_isConnectionSuccessful) {
       String url = "$SERVER_IP/syngenta/api/trial/user/trials";
+
       var response = await Http.get(
         Uri.parse(url),
         headers: <String, String>{
@@ -299,6 +301,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
           'Authorization': 'Bearer ${token}'
         },
       );
+
       var json = jsonDecode(response.body);
       trials = ObjectList<Trial>.fromJson(
           jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
@@ -306,20 +309,39 @@ class _ExperimentScreen extends State<ExperimentScreen> {
       print(trials.length);
       List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
 
+      //update trials on phone
       for (int i = 0; i < trials.length; i++) {
         for (int j = 0; j < trialsUser.length; j++) {
           if (trials[i].trialId == trialsUser[j].trialId) {
             if (trials[i].lastUpdate > trialsUser[j].lastUpdate) {
+              OnSiteTrial trial = createOnSiteTrialsWithTrials(trials[i]);
               _UserBox?.get(userNameNow).onSiteTrials[j] =
-                  createOnSiteTrialsWithTrials(trials[i]);
-
-              print("Update Trials : ${trials[i].trialId}");
+                  compareAndUpdateTrial(trial, trialsUser[j]);
+              print("Update Trials ${j}: ${trials[i].trialId}");
+              break;
             }
           }
         }
+
+        //update trials each on phone
+
       }
       _UserBox?.get(userNameNow).save();
     }
+  }
+
+  OnSiteTrial compareAndUpdateTrial(
+      OnSiteTrial trialsOnSever, OnSiteTrial trialOnPhone) {
+    for (int i = 0; i < trialOnPhone.onSitePlots.length; i++) {
+      for (int j = 0; j < trialsOnSever.onSitePlots.length; j++) {
+        if (trialOnPhone.onSitePlots[i].pltId ==
+            trialsOnSever.onSitePlots[j].pltId) {
+          trialsOnSever.onSitePlots[j].plotImgPath =
+              trialOnPhone.onSitePlots[i].plotImgPath;
+        }
+      }
+    }
+    return trialsOnSever;
   }
 
   Future<void> _tryConnection() async {
