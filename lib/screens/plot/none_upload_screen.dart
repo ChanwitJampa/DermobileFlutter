@@ -1,18 +1,18 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:der/utils/app_popup_menu.dart';
 
-class NoneUploadScreen extends StatefulWidget{
-
-
+class NoneUploadScreen extends StatefulWidget {
   _NoneUploadScreen createState() => _NoneUploadScreen();
 }
 
-class _NoneUploadScreen extends State<NoneUploadScreen>{
-
-  Widget makePlot({plotID, userImage="assets/images/unknown_user.png", feedTime, feedText, feedImage}) {
+class _NoneUploadScreen extends State<NoneUploadScreen> {
+  Widget makePlot(
+      {plotID,
+      userImage = "assets/images/unknown_user.png",
+      feedTime,
+      feedText,
+      feedImage}) {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
@@ -29,28 +29,40 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            image: AssetImage(userImage),
-                            fit: BoxFit.cover
-                        )
-                    ),
+                            image: AssetImage(userImage), fit: BoxFit.cover)),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(plotID, style: TextStyle(color: Colors.grey[900], fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1),),
-                      SizedBox(height: 3,),
-                      Text(feedTime, style: TextStyle(fontSize: 15, color: Colors.grey),),
+                      Text(
+                        plotID,
+                        style: TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1),
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        feedTime,
+                        style: TextStyle(fontSize: 15, color: Colors.grey),
+                      ),
                     ],
                   )
                 ],
               ),
               IconButton(
-                icon: Icon(Icons.more_horiz, size: 30, color: Colors.grey[600],),
-                onPressed: () {
-
-                }
-                ,
+                icon: Icon(
+                  Icons.more_horiz,
+                  size: 30,
+                  color: Colors.grey[600],
+                ),
+                onPressed: () {},
               ),
 
               /*PopupMenuButton(itemBuilder: (BuildContext context) {
@@ -76,28 +88,38 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
               ),*/
             ],
           ),
-          SizedBox(height: 20,),
-          Text(feedText, style: TextStyle(fontSize: 15, color: Colors.grey[800], height: 1.5, letterSpacing: .7),),
-          SizedBox(height: 20,),
-          feedImage != '' ?
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: AssetImage(feedImage),
-                    fit: BoxFit.cover
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            feedText,
+            style: TextStyle(
+                fontSize: 15,
+                color: Colors.grey[800],
+                height: 1.5,
+                letterSpacing: .7),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          feedImage != ''
+              ? Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          image: AssetImage(feedImage), fit: BoxFit.cover)),
                 )
-            ),
-          ) : Container(),
-          SizedBox(height: 10,),
+              : Container(),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  makeLock(isLock:true),
-
+                  makeLock(isLock: true),
                 ],
               ),
               //Text("400 Comments", style: TextStyle(fontSize: 13, color: Colors.grey[800]),)
@@ -112,12 +134,13 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
               makeShareButton(),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Container(
             height: 3,
             color: Colors.grey[300],
           ),
-
         ],
       ),
     );
@@ -128,12 +151,12 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
       width: 25,
       height: 25,
       decoration: BoxDecoration(
-          color: (isLock)?Colors.red:Colors.blue,
+          color: (isLock) ? Colors.red : Colors.blue,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white)
-      ),
+          border: Border.all(color: Colors.white)),
       child: Center(
-        child: Icon((isLock)?Icons.lock:Icons.thumb_up, size: 12, color: Colors.white),
+        child: Icon((isLock) ? Icons.lock : Icons.thumb_up,
+            size: 12, color: Colors.white),
       ),
     );
   }
@@ -145,8 +168,7 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
       decoration: BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white)
-      ),
+          border: Border.all(color: Colors.white)),
       child: Center(
         child: Icon(Icons.thumb_up, size: 12, color: Colors.white),
       ),
@@ -160,21 +182,19 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
       decoration: BoxDecoration(
           color: Colors.red,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white)
-      ),
+          border: Border.all(color: Colors.white)),
       child: Center(
         child: Icon(Icons.lock, size: 12, color: Colors.white),
       ),
     );
   }
 
-  final  picker = ImagePicker();
+  final picker = ImagePicker();
   var _image;
 
-  _getImage(ImageSource imageSource) async
-  {
-
-    final _imageFile  = await picker.pickImage(source: imageSource,
+  _getImage(ImageSource imageSource) async {
+    final _imageFile = await picker.pickImage(
+      source: imageSource,
       maxWidth: 1000,
       maxHeight: 1000,
       //imageQuality: quality,
@@ -182,9 +202,9 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
 //if user doesn't take any image, just return.
     if (_imageFile == null) return;
     setState(
-          () {
+      () {
         _image = _imageFile;
-        isSelected = true ;
+        isSelected = true;
         //_imageFileList = pickedFile;
 //Rebuild UI with the selected image.
         //print('$_image');
@@ -192,7 +212,8 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
       },
     );
   }
-  bool isSelected = false ;
+
+  bool isSelected = false;
 
   Widget makeCameraButton() {
     return Container(
@@ -204,27 +225,34 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-
-
           children: <Widget>[
-            Icon(Icons.camera, color: Colors.blue ,size: 18,),
-            SizedBox(width: 5,),
+            Icon(
+              Icons.camera,
+              color: Colors.blue,
+              size: 18,
+            ),
+            SizedBox(
+              width: 5,
+            ),
             Container(
               child: InkWell(
                 child: Container(
-                  child: Text("Camera", style: TextStyle(color:  Colors.blue),),
+                  child: Text(
+                    "Camera",
+                    style: TextStyle(color: Colors.blue),
+                  ),
                 ),
-                onTap: (){
+                onTap: () {
                   _getImage(ImageSource.camera);
                 },
               ),
             ),
-
           ],
         ),
       ),
     );
   }
+
   Widget makeGallryButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -236,14 +264,23 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.photo, color: Colors.blue ,size: 18,),
-            SizedBox(width: 5,),
+            Icon(
+              Icons.photo,
+              color: Colors.blue,
+              size: 18,
+            ),
+            SizedBox(
+              width: 5,
+            ),
             Container(
               child: InkWell(
                 child: Container(
-                  child: Text("Gallery", style: TextStyle(color:  Colors.blue),),
+                  child: Text(
+                    "Gallery",
+                    style: TextStyle(color: Colors.blue),
+                  ),
                 ),
-                onTap: (){
+                onTap: () {
                   _getImage(ImageSource.gallery);
                 },
               ),
@@ -253,6 +290,7 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
       ),
     );
   }
+
   Widget makeShareButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -265,92 +303,93 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(Icons.upload, color: Colors.blue, size: 18),
-            SizedBox(width: 5,),
-            Text("Upload", style: TextStyle(color: Colors.blue),)
+            SizedBox(
+              width: 5,
+            ),
+            Text(
+              "Upload",
+              style: TextStyle(color: Colors.blue),
+            )
           ],
         ),
       ),
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     //deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-
           Stack(
             children: [
               Container(
-                color: Colors.blue,
+                // color: Colors.blue,
+                color: Color(0xFF398AE5),
+
                 height: 135,
-                padding: EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
+                padding:
+                    EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
                 child: Row(
                   children: [
                     Expanded(
                         child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.grey[200]
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.grey[200]),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.grey,
                           ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.search, color: Colors.grey,),
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(color: Colors.grey),
-                              hintText: "Search Plot",
-                              suffixIcon: InkWell(
-                                child:Icon(Icons.qr_code, color: Colors.grey,),
-                                onTap: (){
-                                  print('test');
-                                },
-                              ),
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(color: Colors.grey),
+                          hintText: "Search Plot",
+                          suffixIcon: InkWell(
+                            child: Icon(
+                              Icons.qr_code,
+                              color: Colors.grey,
                             ),
+                            onTap: () {
+                              print('test');
+                            },
                           ),
-                        )
-                    ),
-
+                        ),
+                      ),
+                    )),
                   ],
                 ),
               ),
               Positioned(
                 right: -10.0,
                 top: 100.0,
-
                 child: Container(
                   height: 50,
                   child: Column(
-
                     //height: 10,
                     children: [
                       AppPopupMenu(
-
-                        icon: Icon(Icons.filter_list,size: 25,),
-                        items: [
-                          'test',
-                          'test'
-                        ],
+                        icon: Icon(
+                          Icons.filter_list,
+                          size: 25,
+                        ),
+                        items: ['test', 'test'],
                         offset: const Offset(0, 20),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                         padding: EdgeInsets.all(10),
-
                       ),
                     ],
-
                   ),
                 ),
               ),
             ],
           ),
-
-
 
           /*Container(
                height: 50,
@@ -369,43 +408,44 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
 
           Expanded(
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    children: [
-                      //SizedBox(height: 40,),
-                      Container(
-                        height: 3,
-                        color: Colors.grey[300],
-                      ),
-                      SizedBox(height: 15,),
-                      makePlot(
-                          plotID: '54155',
-                          //userImage: 'assets/images/aiony-haust.jpg',
-                          feedTime: '1 hr ago',
-                          feedText: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                          feedImage: 'assets/images/plot_corn.jpg'
-                      ),
-                      makePlot(
-                          plotID: '54156',
-                          //userImage: 'assets/images/aiony-haust.jpg',
-                          feedTime: '1 hr ago',
-                          feedText: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                          feedImage: 'assets/images/plot_corn.jpg'
-                      ),
-                      makePlot(
-                          plotID: '54157',
-                          //userImage: 'assets/images/aiony-haust.jpg',
-                          feedTime: '1 hr ago',
-                          feedText: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
-                          feedImage: 'assets/images/plot_corn.jpg'
-                      ),
-                    ],
+            scrollDirection: Axis.vertical,
+            child: Padding(
+              padding: EdgeInsets.all(5),
+              child: Column(
+                children: [
+                  //SizedBox(height: 40,),
+                  Container(
+                    height: 3,
+                    color: Colors.grey[300],
                   ),
-                ),
-              )
-          ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  makePlot(
+                      plotID: '54155',
+                      //userImage: 'assets/images/aiony-haust.jpg',
+                      feedTime: '1 hr ago',
+                      feedText:
+                          'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                      feedImage: 'assets/images/plot_corn.jpg'),
+                  makePlot(
+                      plotID: '54156',
+                      //userImage: 'assets/images/aiony-haust.jpg',
+                      feedTime: '1 hr ago',
+                      feedText:
+                          'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                      feedImage: 'assets/images/plot_corn.jpg'),
+                  makePlot(
+                      plotID: '54157',
+                      //userImage: 'assets/images/aiony-haust.jpg',
+                      feedTime: '1 hr ago',
+                      feedText:
+                          'All the Lorem Ipsum generators on the Internet tend to repeat predefined.',
+                      feedImage: 'assets/images/plot_corn.jpg'),
+                ],
+              ),
+            ),
+          )),
           /*Container(
                height: 600,
                child:ListView(
@@ -414,7 +454,6 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
                ),*/
 
           //allLayout(context),
-
 
           //),
 
@@ -483,5 +522,4 @@ class _NoneUploadScreen extends State<NoneUploadScreen>{
       ),
     );
   }
-
 }

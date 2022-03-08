@@ -39,6 +39,7 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
+// const color = const Color(0xffb74093);
 const color = const Color(0xffb74093);
 
 class _MainScreenState extends State<MainScreen> {
@@ -502,9 +503,17 @@ class _MainScreenState extends State<MainScreen> {
                   Container(
                     // color: Colors.cyan[700],
                     color: Color(0xFF398AE5),
+                    //color top bar
                     height: 80,
                     padding: EdgeInsets.only(
-                        top: 65, right: 20, left: 20, bottom: 10),
+                        top: 10, right: 20, left: 20, bottom: 0),
+
+                    child: Center(
+                        child: Image.asset(
+                      'assets/images/Syngenta-Logo.png',
+                      width: 200,
+                      height: 200,
+                    )),
                   ),
                   SizedBox(
                     height: 10,
@@ -555,6 +564,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           bottomNavigationBar: ConvexAppBar(
             style: TabStyle.react,
+            //color menubar
             backgroundColor: Color(0xFF398AE5),
             items: [
               TabItem(icon: Icons.home, title: 'Home'),

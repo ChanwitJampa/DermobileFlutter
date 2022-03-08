@@ -224,7 +224,7 @@ class _DownloadScreen extends State<DownloadScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            color: Colors.blue,
+            color: Color(0xFF398AE5),
             height: 100,
             padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 10),
             child: Row(
@@ -374,6 +374,7 @@ class _DownloadScreen extends State<DownloadScreen> {
       ),
       bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,
+        backgroundColor: Color(0xFF398AE5),
         items: [
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),

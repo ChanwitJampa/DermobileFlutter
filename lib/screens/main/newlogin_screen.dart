@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
-      height: 120,
+      height: 110,
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
@@ -149,11 +149,11 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         color: Colors.white,
         child: Text(
-          'First time Login',
+          'New login User',
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,
@@ -290,7 +290,7 @@ class _LoginScreenState extends State<LoginScreen> {
           iconSize: 14,
           iconEnabledColor: Color(0xFF398AE5),
           iconDisabledColor: Colors.grey,
-          buttonHeight: 90,
+          buttonHeight: 70,
           buttonWidth: 520,
           buttonPadding: const EdgeInsets.only(left: 14, right: 14),
           buttonDecoration: BoxDecoration(
@@ -421,18 +421,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: 100.0),
-                      Text(
-                        'Welcome',
-                        style: TextStyle(
-                          // color: Color(0xFF398AE5),
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 70.0,
-                          fontWeight: FontWeight.bold,
+                      SizedBox(height: 10.0),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(600),
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/syngenta_vector_logo.png',
+                          ),
+                          width: 200,
+                          height: 200,
                         ),
                       ),
-                      SizedBox(height: 250.0),
+                      // Text(
+                      //   'Welcome',
+                      //   style: TextStyle(
+                      //     // color: Color(0xFF398AE5),
+                      //     color: Colors.white,
+                      //     fontFamily: 'OpenSans',
+                      //     fontSize: 70.0,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
+                      SizedBox(height: 290.0),
                       _buildDropdownUser(),
                       // child: DropdownButtonFormField<String>(
                       //   decoration: InputDecoration(
@@ -483,7 +493,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w400,
-                            fontSize: 25),
+                            fontSize: 20),
                       ),
                       SizedBox(height: 10.0),
                       // SizedBox(height: 30.0),

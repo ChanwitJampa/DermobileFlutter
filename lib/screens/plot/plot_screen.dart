@@ -639,7 +639,9 @@ class _PlotsScreen extends State<PlotsScreen> {
           Stack(
             children: [
               Container(
-                color: Colors.blue,
+                // color: Colors.blue,
+                color: Color(0xFF398AE5),
+
                 height: 135,
                 padding:
                     EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
@@ -898,6 +900,7 @@ class _PlotsScreen extends State<PlotsScreen> {
       ),
       bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,
+        backgroundColor: Color(0xFF398AE5),
         items: [
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),

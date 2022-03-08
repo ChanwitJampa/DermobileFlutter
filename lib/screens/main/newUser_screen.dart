@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
-
+import 'dart:convert';
+import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,13 +23,74 @@ import 'package:der/utils/constants.dart';
 
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
+import 'package:der/entities/site/plot.dart';
+import 'package:der/entities/site/trial.dart';
+import 'package:der/entities/site/user.dart';
+import 'package:flutter/material.dart';
+import 'package:der/utils/constants.dart';
+import 'package:hive/hive.dart';
+import 'package:http/http.dart' as Http;
+import 'package:der/entities/token.dart';
+import 'package:der/entities/user.dart';
+import 'package:der/entities/objectlist.dart';
+
+//check internet
+import 'package:connectivity_plus/connectivity_plus.dart';
+//hive
+import 'package:der/entities/site/user.dart';
+
+import 'package:der/entities/response.dart';
+import 'package:der/entities/trial.dart';
+import 'package:path_provider/path_provider.dart';
+
+Box? _UserBox;
+//const SERVER_IP = 'http://10.0.2.2:8080';
+String? userNameNow;
+ConnectivityResult? _connectivityResult;
+bool _isConnectionSuccessful = false;
+
+List<String> caseLogin = [
+  "sucess",
+  "wrong userName or password",
+  "no internet",
+  "no web"
+];
+
+// const SERVER_IP = 'http://10.0.2.2:8005';
+//const SERVER_IP = 'http://10.0.2.2:8080';
+//const SERVER_IP = 'http://192.168.3.199:8080';
+
+//const SERVER_IP = 'http://10.0.2.2:8005';
+const SERVER_IP = 'http://10.0.2.2:8080';
+//const SERVER_IP = 'http://192.168.3.199:8080';
+
 class NewUserScreen extends StatefulWidget {
-  @override
   _NewUserScreenState createState() => _NewUserScreenState();
 }
 
 class _NewUserScreenState extends State<NewUserScreen> {
   bool _rememberMe = false;
+
+  @override
+  void initState() {
+    _openBox();
+    super.initState();
+  }
+
+  Future<void> _tryConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      setState(() {
+        _isConnectionSuccessful = response.isNotEmpty;
+        print("Sucess");
+      });
+    } on SocketException catch (e) {
+      setState(() {
+        _isConnectionSuccessful = false;
+        print("failed");
+      });
+    }
+  }
 
   Widget _buildEmailTF() {
     return Column(
@@ -44,6 +106,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: usernameController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.white,
@@ -79,6 +142,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: passwordController,
             obscureText: true,
             style: TextStyle(
               color: Colors.white,
@@ -147,9 +211,34 @@ class _NewUserScreenState extends State<NewUserScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () {
-          Navigator.of(context).pushNamed(SIGNUP_ROUTE);
+        onPressed: () async {
+          String resultLogin =
+              await signIn(usernameController.text, passwordController.text);
+          print("result login : ${resultLogin}");
+          //["sucess","wrong userName or password","no internet","no web"]
+          if (resultLogin == caseLogin[0]) {
+            Navigator.of(context).pushNamed(HOME_ROUTE);
+          } else if (resultLogin == caseLogin[1]) {
+            usernameController.clear();
+            passwordController.clear();
+            useShowDialog("wrong user name or password", context);
+          } else if (resultLogin == caseLogin[2]) {
+            usernameController.clear();
+            passwordController.clear();
+            useShowDialog("no internet connection", context);
+          } else if (resultLogin == caseLogin[3]) {
+            usernameController.clear();
+            passwordController.clear();
+            useShowDialog("no web", context);
+          }
         },
+
+        // {
+        //   Navigator.of(context).pushNamed(SIGNUP_ROUTE);
+        // },
+        // onPressed: () {
+        //   Navigator.of(context).pushNamed(SIGNUP_ROUTE);
+        // },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -179,12 +268,12 @@ class _NewUserScreenState extends State<NewUserScreen> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        SizedBox(height: 20.0),
+        SizedBox(height: 10.0),
         Text(
           'Sign in with',
           style: kLabelStyle,
         ),
-        SizedBox(height: 50.0),
+        SizedBox(height: 0.0),
       ],
     );
   }
@@ -244,9 +333,12 @@ class _NewUserScreenState extends State<NewUserScreen> {
     Function onTap,
   ) {
     return Container(
-        color: Colors.white,
         width: 500,
         height: 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(7.0),
+          color: Colors.white,
+        ),
         child: InkWell(
             onTap: () {
               Navigator.of(context).pushNamed(DIGIT_ROUTE);
@@ -286,9 +378,12 @@ class _NewUserScreenState extends State<NewUserScreen> {
     Function onTap,
   ) {
     return Container(
-        color: Colors.white,
         width: 500,
         height: 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(7.0),
+          color: Colors.white,
+        ),
         child: InkWell(
             onTap: () {
               Navigator.of(context).pushNamed(DIGIT_ROUTE);
@@ -462,6 +557,8 @@ class _NewUserScreenState extends State<NewUserScreen> {
   ];
 
   @override
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -500,11 +597,21 @@ class _NewUserScreenState extends State<NewUserScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(
                     horizontal: 40.0,
-                    vertical: 120.0,
+                    vertical: 50.0,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(0),
+                        child: Image(
+                          image: AssetImage(
+                            'assets/images/Syngenta-Logo.png',
+                          ),
+                          width: 250,
+                          height: 100,
+                        ),
+                      ),
                       Text(
                         'Login',
                         style: TextStyle(
@@ -515,7 +622,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 50.0),
+                      SizedBox(height: 0.0),
                       // child: DropdownButtonFormField<String>(
                       //   decoration: InputDecoration(
                       //     enabledBorder: OutlineInputBorder(
@@ -561,6 +668,13 @@ class _NewUserScreenState extends State<NewUserScreen> {
                       //   height: 10,
                       //   thickness: 3,
                       // )),
+                      _buildEmailTF(),
+                      SizedBox(height: 10.0),
+                      _buildPasswordTF(),
+                      SizedBox(height: 50.0),
+                      _buildLoginBtn(),
+                      _buildSignInWithText(),
+                      SizedBox(height: 50.0),
                       _buildSocialBtn3(
                         () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
                       ),
@@ -568,14 +682,9 @@ class _NewUserScreenState extends State<NewUserScreen> {
                       _buildSocialBtn2(
                         () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
                       ),
-                      SizedBox(height: 50.0),
-                      _buildSignInWithText(),
-                      _buildEmailTF(),
                       SizedBox(
                         height: 30.0,
                       ),
-                      _buildPasswordTF(),
-                      _buildLoginBtn(),
                       // _buildForgotPasswordBtn(),
                       // _buildRememberMeCheckbox(),
                       // _buildSocialBtnRow(),
@@ -591,4 +700,110 @@ class _NewUserScreenState extends State<NewUserScreen> {
       ),
     );
   }
+
+  Future<String> signIn(String username, String password) async {
+    //["sucess","wrong userName or password","no internet","no web"]
+
+    // print("-----------------------get token---------------------");
+    // username = "Test";
+    //password = "Test";
+    await _tryConnection();
+    if (!_isConnectionSuccessful) {
+      return caseLogin[2];
+    }
+    userNameNow = username;
+    loginService dc = loginService();
+    var res = await dc.attemptLogIn(username, password);
+
+    if (res == null) {
+      //res == null if dont' have web service
+      print("web don't have service or don't have web");
+      return caseLogin[3];
+    } else if (res.statusCode != 200) {
+      print("fails to  join");
+
+      return caseLogin[1];
+    }
+
+    Response<Token> t = Response<Token>.fromJson(
+        jsonDecode(res.body), (body) => Token.fromJson(body));
+    String token = t.body.token;
+    User u = t.body.user;
+    u.userName = username;
+    print("token " + token);
+    if (_UserBox?.get(username) == null) {
+      OnSiteUser user = OnSiteUser(u.userName, u.firstName, u.lastName,
+          u.picture, token, 123, "", [], []);
+      _UserBox?.put(u.userName, user);
+    } else {
+      _UserBox?.get(username).token = token;
+    }
+
+    //["sucess","wrong userName or password","no internet","no web"]
+    return caseLogin[0];
+  }
+}
+
+useShowDialog(String title, BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text('Please try again'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+class loginService {
+  static late String token = "";
+
+  attemptLogIn(String username, String password) async {
+    var url = "$SERVER_IP/syngenta/api/authenticate";
+    var res = null;
+    try {
+      res = await Http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, String>{'username': username, 'password': password}),
+      );
+    } on SocketException {
+      print('No Internet connection 😑');
+    } on HttpException {
+      print("Couldn't find the post 😱");
+    } on FormatException {
+      print("Bad response format 👎");
+    }
+    return res;
+  }
+}
+
+void _openBox() async {
+  if (!Hive.isAdapterRegistered(OnSiteUserAdapter().typeId)) {
+    Hive.registerAdapter(OnSiteUserAdapter());
+  }
+  if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
+    Hive.registerAdapter(OnSiteTrialAdapter());
+  }
+  if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
+    Hive.registerAdapter(OnSitePlotAdapter());
+  }
+  var dir = await getApplicationDocumentsDirectory();
+  Hive.init(dir.path);
+  print("DIR PATH = " + dir.path);
+
+  await Hive.openBox('Users');
+  _UserBox = Hive.box('Users');
 }

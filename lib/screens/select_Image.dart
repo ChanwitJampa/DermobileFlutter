@@ -293,7 +293,9 @@ class _SelectImage extends State<SelectImage> {
         Column(
           children: [
             Container(
-              color: Colors.blue,
+              // color: Colors.blue,
+              color: Color(0xFF398AE5),
+
               height: 100,
               padding:
                   EdgeInsets.only(top: 65, right: 20, left: 20, bottom: 10),
@@ -430,6 +432,7 @@ class _SelectImage extends State<SelectImage> {
       body: makeSelectedImage(),
       bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,
+        backgroundColor: Color(0xFF398AE5),
         items: [
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),

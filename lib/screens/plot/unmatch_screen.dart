@@ -376,6 +376,7 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
       ),
       bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,
+        backgroundColor: Color(0xFF398AE5),
         items: [
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.download, title: 'Download'),
