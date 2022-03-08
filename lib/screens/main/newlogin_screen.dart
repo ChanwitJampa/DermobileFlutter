@@ -283,6 +283,11 @@ class _LoginScreenState extends State<LoginScreen> {
             setState(() {
               selectedValue = value as String;
             });
+
+            Navigator.of(context).pushNamed(DIGIT_ROUTE);
+          },
+          onTap: () => {
+            () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
           },
           icon: const Icon(
             Icons.arrow_forward_ios_outlined,

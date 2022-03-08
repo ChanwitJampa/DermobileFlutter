@@ -225,7 +225,7 @@ class _MainScreenState extends State<MainScreen> {
                     // color: Colors.blue[600],
                     color: Colors.blue[600],
                     fontWeight: FontWeight.normal,
-                    fontSize: 30,
+                    fontSize: 40,
                   ),
                 ),
               ),
@@ -519,7 +519,7 @@ class _MainScreenState extends State<MainScreen> {
                     height: 10,
                   ),
                   Container(
-                      height: 240,
+                      height: 200,
                       //color:Colors.red,
                       child: Padding(
                         padding: EdgeInsets.all(8),
