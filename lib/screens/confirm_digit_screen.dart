@@ -194,7 +194,16 @@ class _PinScreenState extends State<PinScreen> {
     }
   }
 
+  clearAllPin() {
+    for (int n = pinIndex; n > 0; n--) {
+      setPin(pinIndex, "");
+      currentPin[pinIndex - 1] = "";
+      pinIndex--;
+    }
+  }
+
   pinIndexSetup1(String text) {
+    String pinCodeCheck = "";
     if (pinIndex == 0) {
       pinIndex = 1;
     } else if (pinIndex < 6) {
@@ -202,14 +211,15 @@ class _PinScreenState extends State<PinScreen> {
     }
     setPin(pinIndex, text);
     currentPin[pinIndex - 1] = text;
-    String strPin1 = "";
     currentPin.forEach((e) {
-      strPin1 += e;
+      pinCodeCheck += e;
     });
-    if (pinIndex == 6 && strPin == strPin1) {
+    if (pinIndex == 6 && pinCode == pinCodeCheck) {
       print("success");
-    } else
-      print("error");
+    } else if (pinIndex == 6 && pinCode != pinCodeCheck) {
+      print("The entered pincode is wrong");
+      clearAllPin();
+    }
   }
 
   setPin(int n, String text) {
