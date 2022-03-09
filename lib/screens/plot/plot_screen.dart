@@ -170,6 +170,46 @@ class _PlotsScreen extends State<PlotsScreen> {
     ));
   }
 
+  imagepathLoader(String feedImage) {
+    Image image;
+
+    print("NOW IS IMAGE LOADERRRRRRRRRRRRRR");
+
+    // try {
+    //   image = Image.file(File(feedImage));
+    // } on FileSystemException {
+    //   print("--------------------------");
+    //   feedImage = "assets/images/img_not.png";
+    // } catch (error) {
+    //   print(error);
+
+    //   feedImage = "assets/images/img_not.png";
+    // }
+
+    if (File(feedImage).existsSync()) {
+      return new RotationTransition(
+        turns: new AlwaysStoppedAnimation(0 / 360),
+        child: new Image.file(
+          File(feedImage),
+          // child: new Image.asset(
+          //   feedImage,
+          height: 500,
+          width: 700,
+        ),
+      );
+    } else {
+      return Container(
+        margin: const EdgeInsets.all(50.0),
+        height: 300,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            image: DecorationImage(
+                image: AssetImage("assets/images/img_not.png"),
+                fit: BoxFit.cover)),
+      );
+    }
+  }
+
   Widget makePlot(
       {isLock,
       plotID,
@@ -206,7 +246,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                         plotID,
                         style: TextStyle(
                             color: Colors.grey[900],
-                            fontSize: 25,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1),
                       ),
@@ -215,7 +255,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                       ),
                       Text(
                         feedTime,
-                        style: TextStyle(fontSize: 20, color: Colors.grey),
+                        style: TextStyle(fontSize: 15, color: Colors.grey),
                       ),
                     ],
                   )
@@ -284,17 +324,11 @@ class _PlotsScreen extends State<PlotsScreen> {
               letterSpacing: .7,
             ),
           )),
+          SizedBox(
+            height: 10,
+          ),
           feedImage != "null"
-              ? new RotationTransition(
-                  turns: new AlwaysStoppedAnimation(90 / 360),
-                  child: new Image.file(
-                    File(feedImage),
-                    // child: new Image.asset(
-                    //   feedImage,
-                    height: 500,
-                    width: 700,
-                  ),
-                )
+              ? imagepathLoader(feedImage)
               // Container(
               //     height: 200,
               //     decoration: BoxDecoration(
@@ -311,6 +345,9 @@ class _PlotsScreen extends State<PlotsScreen> {
                           image: AssetImage("assets/images/img_not.png"),
                           fit: BoxFit.cover)),
                 ),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -510,7 +547,7 @@ class _PlotsScreen extends State<PlotsScreen> {
     Directory? directory;
     String testpath = "";
 
-    GallerySaver.saveImage(impath.path);
+    await GallerySaver.saveImage(impath.path);
 
     final _filename = p.basename(impath.path);
     directory = await getExternalStorageDirectory();
