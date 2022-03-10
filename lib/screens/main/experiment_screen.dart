@@ -130,11 +130,37 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                     // color: Colors.grey[600],
                   ),
                   onPressed: () {
-                    print(index);
-                    //--------------------------------delete trial-------------------------------------
-                    _UserBox!.get(userNameNow).onSiteTrials.removeAt(index);
-                    _UserBox!.get(userNameNow).save();
-                    loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Delete trial'),
+                            content: Text('Confirm to delete this trial'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  //--------------------------------delete trial-------------------------------------
+                                  print(index);
+                                  _UserBox!
+                                      .get(userNameNow)
+                                      .onSiteTrials
+                                      .removeAt(index);
+                                  _UserBox!.get(userNameNow).save();
+                                  loadAllTrials(
+                                      _UserBox?.get(userNameNow).onSiteTrials);
+                                  Navigator.pop(context);
+                                },
+                                child: Text('ConfirmDelete'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Cancle'),
+                              )
+                            ],
+                          );
+                        });
                   },
                 )
               ],
