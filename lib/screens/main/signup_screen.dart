@@ -568,6 +568,13 @@ class _NewUserScreenState extends State<NewUserScreen> {
   @override
   TextEditingController usernameController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
