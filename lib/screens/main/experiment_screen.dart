@@ -350,8 +350,8 @@ class _ExperimentScreen extends State<ExperimentScreen> {
             }
           }
         }
+        _UserBox?.get(userNameNow).save();
       }
-      _UserBox?.get(userNameNow).save();
     }
   }
 

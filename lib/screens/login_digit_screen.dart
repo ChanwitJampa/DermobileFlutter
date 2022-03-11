@@ -10,6 +10,13 @@ class LoginDigitScreen extends StatefulWidget {
 }
 
 class _LoginDigitScreen extends State<LoginDigitScreen> {
+  void initState() {
+    _UserBox = Hive.box("Users");
+    // print("---------reset token----------");
+    // _UserBox!.get(userNameNow).token = "123";
+    // _UserBox!.get(userNameNow).save();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
