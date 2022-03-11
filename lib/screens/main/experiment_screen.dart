@@ -34,8 +34,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
   initState() {
     super.initState();
     _UserBox = Hive.box("Users");
-    _UserBox!.get(userNameNow).token = "";
-    _UserBox!.get(userNameNow).save();
+
     fetchTrialsOnSever()
         .then((e) => {loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials)});
   }
