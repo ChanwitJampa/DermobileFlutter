@@ -235,7 +235,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       color: Colors.grey[200]),
-                  child: TextField(
+                  child: const TextField(
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.search,
@@ -243,7 +243,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                       ),
                       border: InputBorder.none,
                       hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
-                      hintText: "Search trail",
+                      hintText: "Search Trial",
                     ),
                   ),
                 )),

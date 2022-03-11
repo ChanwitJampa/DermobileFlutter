@@ -485,12 +485,12 @@ class _PlotsScreen extends State<PlotsScreen> {
 
 //if user doesn't take any image, just return.
     if (_imageFile == null) {
-      print("null");
+     // print("null");
       return;
     }
     setState(
       () {
-        print("not null");
+        //print("not null");
         _image = _imageFile;
         isSelected = true;
         saveExperiment(_image, plotId);
@@ -587,20 +587,20 @@ class _PlotsScreen extends State<PlotsScreen> {
     int i = 0, j = 0;
     for (i = 0; i < ost.length; i++) {
       for (j = 0; j < ost[i].onSitePlots.length; j++) {
-        print("${plotId}" +
-            ost[i].onSitePlots[j].pltId.toString() +
-            "    ${plotId == ost[i].onSitePlots[j].pltId.toString()}");
+        // print("${plotId}" +
+        //     ost[i].onSitePlots[j].pltId.toString() +
+        //     "    ${plotId == ost[i].onSitePlots[j].pltId.toString()}");
         if (plotId == ost[i].onSitePlots[j].pltId.toString()) {
           _UserBox?.get(userNameNow)
               .onSiteTrials[i]
               .onSitePlots[j]
               .plotImgPath = testpath;
           _UserBox?.get(userNameNow).save();
-          print("this is save now ----------------------- " +
-              _UserBox?.get(userNameNow)
-                  .onSiteTrials[i]
-                  .onSitePlots[j]
-                  .plotImgPath);
+          // print("this is save now ----------------------- " +
+          //     _UserBox?.get(userNameNow)
+          //         .onSiteTrials[i]
+          //         .onSitePlots[j]
+          //         .plotImgPath);
         }
       }
     }
@@ -752,9 +752,6 @@ class _PlotsScreen extends State<PlotsScreen> {
       super.dispose();
     }
 
-    List<OnSitePlot> osp = [];
-    osp.addAll(_UserBox!.get(userNameNow).onSiteTrials[title].onSitePlots);
-
     deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
@@ -777,27 +774,10 @@ class _PlotsScreen extends State<PlotsScreen> {
                           borderRadius: BorderRadius.circular(50),
                           color: Colors.grey[200]),
                       child: TextField(
+                        autofocus: false,
+                        // serch by barcode or plot id
                         onChanged: (text) async {
-                          print(
-                              "First text field: $text  length osp is : ${osp.length} test : ${osp[0].pltId.toString().contains("333333")}");
-
-                          String namePlot;
-                          for (int i = 0; i < osp.length; i++) {
-                            if (osp[i]
-                                    .pltId
-                                    .toString()
-                                    .contains(text.toString()) ||
-                                osp[i]
-                                    .barcode
-                                    .toString()
-                                    .contains(text.toString())) {
-                            } else {
-                              osp.removeAt(i);
-                              i--;
-                            }
-                          }
-
-                          await displayPlots(osp);
+                          await serchPlots(text);
                         },
                         decoration: InputDecoration(
                           prefixIcon: const Icon(
@@ -1073,6 +1053,23 @@ class _PlotsScreen extends State<PlotsScreen> {
     setState(() {
       item.value = !item.value;
     });
+  }
+
+  serchPlots(String text) async {
+    List<OnSitePlot> osp = [];
+    List<OnSitePlot> ospAll = [];
+    ospAll.addAll(_UserBox!.get(userNameNow).onSiteTrials[title].onSitePlots);
+    // print(
+    //     "First text field: $text  length osp is : ${osp.length} test : ${osp[0].pltId.toString().contains("333333")}");
+    String namePlot;
+    for (int i = 0; i < ospAll.length; i++) {
+      if (ospAll[i].pltId.toString().contains(text.toString()) ||
+          ospAll[i].barcode.toString().contains(text.toString())) {
+        osp.add(ospAll[i]);
+      }
+    }
+
+    await displayPlots(osp);
   }
 
   displayPlots(List<OnSitePlot> ost) {

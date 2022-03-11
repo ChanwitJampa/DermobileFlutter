@@ -19,7 +19,7 @@ import 'package:http/http.dart' as Http;
 import 'dart:convert';
 import 'package:der/entities/objectlist.dart';
 import 'package:der/entities/trial.dart';
-
+final _formKey = GlobalKey<FormState>();
 class ExperimentScreen extends StatefulWidget {
   _ExperimentScreen createState() => _ExperimentScreen();
 }
@@ -249,7 +249,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                       border: InputBorder.none,
                       hintStyle:
                           TextStyle(color: Colors.grey[600], fontSize: 20),
-                      hintText: "Search Experiment",
+                      hintText: "Search Trials",
                     ),
                   ),
                 )),
