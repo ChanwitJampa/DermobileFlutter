@@ -684,31 +684,53 @@ class _PlotsScreen extends State<PlotsScreen> {
               child: InkWell(
                 child: Container(
                   child: Text(
-                    "upload1",
+                    "upload",
                     style: TextStyle(color: Colors.blue, fontSize: 18),
                   ),
                 ),
                 onTap: () {
-                  List<OnSitePlot> ost = _UserBox?.get(userNameNow)
-                      .onSiteTrials[title]
-                      .onSitePlots;
-
-                  int lenght = ost.length;
-
-                  print("upload plot iD is" +
-                      plotId.toString() +
-                      " length :" +
-                      lenght.toString());
-                  String filePath = "";
-                  for (int i = 0; i < lenght; i++) {
-                    print("${ost[i].pltId} +++ ${plotId}");
-                    if (ost[i].pltId.toString() == plotId.toString()) {
-                      filePath = ost[i].plotImgPath;
-                      print("${filePath}" + "plot id : " + plotId);
-                    }
-                  }
-
-                  _upload(File(filePath), plotId);
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Upload Plot'),
+                          content: Text('Confirm to upload this plot'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                List<OnSitePlot> ost =
+                                    _UserBox?.get(userNameNow)
+                                        .onSiteTrials[title]
+                                        .onSitePlots;
+                                int lenght = ost.length;
+                                print("upload plot iD is" +
+                                    plotId.toString() +
+                                    " length :" +
+                                    lenght.toString());
+                                String filePath = "";
+                                for (int i = 0; i < lenght; i++) {
+                                  print("${ost[i].pltId} +++ ${plotId}");
+                                  if (ost[i].pltId.toString() ==
+                                      plotId.toString()) {
+                                    filePath = ost[i].plotImgPath;
+                                    print(
+                                        "${filePath}" + "plot id : " + plotId);
+                                  }
+                                }
+                                _upload(File(filePath), plotId);
+                                Navigator.pop(context);
+                              },
+                              child: Text('Upload'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Cancle'),
+                            )
+                          ],
+                        );
+                      });
                 },
               ),
             ),

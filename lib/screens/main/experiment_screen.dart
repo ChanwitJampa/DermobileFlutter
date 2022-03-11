@@ -150,7 +150,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                                       _UserBox?.get(userNameNow).onSiteTrials);
                                   Navigator.pop(context);
                                 },
-                                child: Text('ConfirmDelete'),
+                                child: Text('Delete'),
                               ),
                               TextButton(
                                 onPressed: () {
