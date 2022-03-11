@@ -195,7 +195,7 @@ class _WelcomeScreen extends State<WelcomeScreen> {
     print("token " + token);
     if (_UserBox?.get(username) == null) {
       OnSiteUser user = OnSiteUser(u.userName, u.firstName, u.lastName,
-          u.picture, token, 123, "", [], []);
+          u.picture, token, 123, "", [], [], "");
       // print("username not have : create User ");
       // print("---------------test-----------");
       // OnSiteUser(u.userName, u.firstName, u.lastName, u.picture, []);

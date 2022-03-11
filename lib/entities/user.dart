@@ -15,7 +15,13 @@ class User {
 
   List<Trial> trials;
 
-  User(this.userName, this.firstName, this.lastName, this.picture, this.trials);
+  User(
+    this.userName,
+    this.firstName,
+    this.lastName,
+    this.picture,
+    this.trials,
+  );
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

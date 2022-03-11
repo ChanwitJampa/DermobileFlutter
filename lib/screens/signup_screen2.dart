@@ -53,7 +53,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreen extends State<SignupScreen> {
   @override
   void initState() {
-    _openBox();
+    _UserBox = Hive.box("Users");
     super.initState();
   }
 
@@ -258,7 +258,7 @@ class _SignupScreen extends State<SignupScreen> {
     print("token " + token);
     if (_UserBox?.get(username) == null) {
       OnSiteUser user = OnSiteUser(u.userName, u.firstName, u.lastName,
-          u.picture, token, 123, "", [], []);
+          u.picture, token, 123, "", [], [], "");
       _UserBox?.put(u.userName, user);
     } else {
       _UserBox?.get(username).token = token;
@@ -293,22 +293,4 @@ class loginService {
     }
     return res;
   }
-}
-
-void _openBox() async {
-  if (!Hive.isAdapterRegistered(OnSiteUserAdapter().typeId)) {
-    Hive.registerAdapter(OnSiteUserAdapter());
-  }
-  if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
-    Hive.registerAdapter(OnSiteTrialAdapter());
-  }
-  if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
-    Hive.registerAdapter(OnSitePlotAdapter());
-  }
-  var dir = await getApplicationDocumentsDirectory();
-  Hive.init(dir.path);
-  print("DIR PATH = " + dir.path);
-
-  await Hive.openBox('Users');
-  _UserBox = Hive.box('Users');
 }

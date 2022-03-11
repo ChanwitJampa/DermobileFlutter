@@ -69,8 +69,9 @@ class _DownloadScreen extends State<DownloadScreen> {
 
   Future loadData() async {
     int i, page = 1;
-
+    // print("-------load data1------ ${userNameNow}");
     String token = _UserBox!.get(userNameNow).token;
+    // print("-------token1------ ${token}");
     await _tryConnection();
     if (_isConnectionSuccessful) {
       String url = "$SERVER_IP/syngenta/api/trial/user/trials";
@@ -81,9 +82,12 @@ class _DownloadScreen extends State<DownloadScreen> {
           'Authorization': 'Bearer ${token}'
         },
       );
-      var json = jsonDecode(response.body);
-      trials = ObjectList<Trial>.fromJson(
-          jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
+      print("dowload token is : ${token}");
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        trials = ObjectList<Trial>.fromJson(
+            jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
+      }
     } else {
       trials = [];
     }
@@ -322,7 +326,7 @@ class _DownloadScreen extends State<DownloadScreen> {
                             //   useShowDialog("no internet connection", context);
                             // }
                             setState(() {
-                              print("isloading");
+                              //print("isloading");
                               isLoading = true;
                             });
                           }

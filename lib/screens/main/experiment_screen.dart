@@ -34,6 +34,8 @@ class _ExperimentScreen extends State<ExperimentScreen> {
   initState() {
     super.initState();
     _UserBox = Hive.box("Users");
+    _UserBox!.get(userNameNow).token = "";
+    _UserBox!.get(userNameNow).save();
     fetchTrialsOnSever()
         .then((e) => {loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials)});
   }
@@ -327,30 +329,28 @@ class _ExperimentScreen extends State<ExperimentScreen> {
           'Authorization': 'Bearer ${token}'
         },
       );
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        trials = ObjectList<Trial>.fromJson(
+            jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
 
-      var json = jsonDecode(response.body);
-      trials = ObjectList<Trial>.fromJson(
-          jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
+        print(trials.length);
+        List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
 
-      print(trials.length);
-      List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
-
-      //update trials on phone
-      for (int i = 0; i < trials.length; i++) {
-        for (int j = 0; j < trialsUser.length; j++) {
-          if (trials[i].trialId == trialsUser[j].trialId) {
-            if (trials[i].lastUpdate > trialsUser[j].lastUpdate) {
-              OnSiteTrial trial = createOnSiteTrialsWithTrials(trials[i]);
-              _UserBox?.get(userNameNow).onSiteTrials[j] =
-                  compareAndUpdateTrial(trial, trialsUser[j]);
-              print("Update Trials ${j}: ${trials[i].trialId}");
-              break;
+        //update trials on phone
+        for (int i = 0; i < trials.length; i++) {
+          for (int j = 0; j < trialsUser.length; j++) {
+            if (trials[i].trialId == trialsUser[j].trialId) {
+              if (trials[i].lastUpdate > trialsUser[j].lastUpdate) {
+                OnSiteTrial trial = createOnSiteTrialsWithTrials(trials[i]);
+                _UserBox?.get(userNameNow).onSiteTrials[j] =
+                    compareAndUpdateTrial(trial, trialsUser[j]);
+                print("Update Trials ${j}: ${trials[i].trialId}");
+                break;
+              }
             }
           }
         }
-
-        //update trials each on phone
-
       }
       _UserBox?.get(userNameNow).save();
     }

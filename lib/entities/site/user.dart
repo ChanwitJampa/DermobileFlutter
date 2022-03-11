@@ -32,6 +32,8 @@ class OnSiteUser extends HiveObject {
   @HiveField(9)
   List<OnSitePlot> unMatchPlots;
 
+  @HiveField(10)
+  String password;
   OnSiteUser(
       this.userName,
       this.firstName,
@@ -41,7 +43,8 @@ class OnSiteUser extends HiveObject {
       this.tokenDateTime,
       this.passwordDigit,
       this.onSiteTrials,
-      this.unMatchPlots
+      this.unMatchPlots,
+      this.password
       //
       );
 }

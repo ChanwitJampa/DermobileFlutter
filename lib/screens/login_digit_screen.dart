@@ -1,5 +1,9 @@
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:der/utils/constants.dart';
+import 'package:hive/hive.dart';
+
+Box? _UserBox;
 
 class LoginDigitScreen extends StatefulWidget {
   _LoginDigitScreen createState() => _LoginDigitScreen();
@@ -206,7 +210,23 @@ class _PinScreenState extends State<PinScreen> {
     });
     if (pinIndex == 6) {
       print(strPin);
-      Navigator.of(context).pushNamed(HOME_ROUTE);
+      _UserBox = Hive.box("Users");
+      // print("userNameNow is ${userNameNow} and password is :");
+      //print(" ${_UserBox!.get(userNameNow).password}");
+      _UserBox = Hive.box("Users");
+      if (_UserBox!.get(userNameNow).password == strPin) {
+        Navigator.of(context).pushNamed(HOME_ROUTE);
+      } else {
+        clearAllPin();
+      }
+    }
+  }
+
+  clearAllPin() {
+    for (int n = pinIndex; n > 0; n--) {
+      setPin(pinIndex, "");
+      currentPin[pinIndex - 1] = "";
+      pinIndex--;
     }
   }
 

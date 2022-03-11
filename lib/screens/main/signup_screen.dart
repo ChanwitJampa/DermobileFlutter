@@ -73,7 +73,10 @@ class _NewUserScreenState extends State<NewUserScreen> {
 
   @override
   void initState() {
-    _openBox();
+    print("--------test--------");
+    print(Hive.box("Users"));
+    _UserBox = Hive.box("Users");
+
     super.initState();
   }
 
@@ -217,7 +220,13 @@ class _NewUserScreenState extends State<NewUserScreen> {
           print("result login : ${resultLogin}");
           //["sucess","wrong userName or password","no internet","no web"]
           if (resultLogin == caseLogin[0]) {
-            Navigator.of(context).pushNamed(SETDIGIT_ROUTE);
+            if (_UserBox?.get(userNameNow).password == "") {
+              Navigator.of(context).pushNamed(SETDIGIT_ROUTE);
+            } else {
+              print(
+                  "pass word ${userNameNow} is ${_UserBox!.get(userNameNow).password}");
+              Navigator.of(context).pushNamed(HOME_ROUTE);
+            }
           } else if (resultLogin == caseLogin[1]) {
             usernameController.clear();
             passwordController.clear();
@@ -245,7 +254,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
         ),
         color: Colors.white,
         child: Text(
-          'LOGIN',
+          'LOGIN3',
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,
@@ -711,6 +720,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
     if (!_isConnectionSuccessful) {
       return caseLogin[2];
     }
+
     userNameNow = username;
     print("userNameNow " + userNameNow!);
     loginService dc = loginService();
@@ -728,16 +738,21 @@ class _NewUserScreenState extends State<NewUserScreen> {
 
     Response<Token> t = Response<Token>.fromJson(
         jsonDecode(res.body), (body) => Token.fromJson(body));
+
     String token = t.body.token;
+    print("####################### ${token}");
     User u = t.body.user;
     u.userName = username;
-    print("token " + token);
-    if (_UserBox?.get(username) == null) {
+
+    if (_UserBox?.get(userNameNow) == null) {
+      print(" not  token null");
       OnSiteUser user = OnSiteUser(u.userName, u.firstName, u.lastName,
-          u.picture, token, 123, "", [], []);
+          u.picture, token, 123, "", [], [], "");
       _UserBox?.put(u.userName, user);
     } else {
-      _UserBox?.get(username).token = token;
+      print(" save token");
+      _UserBox?.get(userNameNow).token = token;
+      _UserBox?.get(userNameNow).save();
     }
 
     //["sucess","wrong userName or password","no internet","no web"]
@@ -789,22 +804,4 @@ class loginService {
     }
     return res;
   }
-}
-
-void _openBox() async {
-  if (!Hive.isAdapterRegistered(OnSiteUserAdapter().typeId)) {
-    Hive.registerAdapter(OnSiteUserAdapter());
-  }
-  if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
-    Hive.registerAdapter(OnSiteTrialAdapter());
-  }
-  if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
-    Hive.registerAdapter(OnSitePlotAdapter());
-  }
-  var dir = await getApplicationDocumentsDirectory();
-  Hive.init(dir.path);
-  print("DIR PATH = " + dir.path);
-
-  await Hive.openBox('Users');
-  _UserBox = Hive.box('Users');
 }

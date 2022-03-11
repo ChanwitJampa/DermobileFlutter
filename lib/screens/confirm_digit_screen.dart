@@ -1,10 +1,14 @@
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/setup_digit_screen.dart';
 import 'package:der/utils/constants.dart';
+import 'package:hive/hive.dart';
 
 class ConfirmDigitScreen extends StatefulWidget {
   _ConfirmDigitScreen createState() => _ConfirmDigitScreen();
 }
+
+Box? _UserBox;
 
 class _ConfirmDigitScreen extends State<ConfirmDigitScreen> {
   Widget build(BuildContext context) {
@@ -217,9 +221,16 @@ class _PinScreenState extends State<PinScreen> {
     });
     if (pinIndex == 6 && pinCode == pinCodeCheck) {
       print("success");
+
+      _UserBox = Hive.box("Users");
+      _UserBox!.get(userNameNow).password = pinCode;
+      _UserBox!.get(userNameNow).save();
+      print(" set pass word : ");
+      print(_UserBox!.get(userNameNow).password);
       Navigator.of(context).pushNamed(HOME_ROUTE);
     } else if (pinIndex == 6 && pinCode != pinCodeCheck) {
       print("The entered pincode is wrong");
+
       clearAllPin();
     }
   }

@@ -2,11 +2,15 @@ import 'dart:convert';
 
 import 'package:camera/camera.dart';
 import 'package:der/entities/objectlist.dart';
+import 'package:der/entities/site/plot.dart';
+import 'package:der/entities/site/trial.dart';
+import 'package:der/entities/site/user.dart';
 import 'package:der/entities/trial.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:spincircle_bottom_bar/modals.dart';
 import 'package:spincircle_bottom_bar/spincircle_bottom_bar.dart';
 import 'package:der/screens/camera_screen.dart';
@@ -56,7 +60,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    _UserBox = Hive.box("Users");
 
     // final _UserBox = ModalRoute.of(context)!.settings.arguments as Box;
     // print("User Box len:" + _UserBox.length.toString());

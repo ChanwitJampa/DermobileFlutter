@@ -11,9 +11,16 @@ import 'package:flutter/material.dart';
 import 'package:der/screens/main/signup_screen.dart';
 import 'package:der/utils/constants.dart';
 import "package:der/utils/router.dart";
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:reflectable/reflectable.dart';
 import 'package:der/screens/main/existed_screen.dart';
 
+import 'entities/site/plot.dart';
+import 'entities/site/trial.dart';
+import 'entities/site/user.dart';
+
+Box? _UserBox;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
@@ -39,6 +46,8 @@ class MyApp extends StatelessWidget {
   }*/
 
   Widget build(BuildContext context) {
+    print("%%%% openBox %%%%");
+    _openBox();
     return FutureBuilder(
       future: Init.instance.initialize(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -70,6 +79,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  void initState() {}
+
   final List<CameraDescription> cameras;
 
   MyHomePage({required this.cameras});
@@ -109,4 +120,22 @@ class Init {
     // delaying the user experience is a bad design practice!
     await Future.delayed(const Duration(seconds: 2));
   }
+}
+
+void _openBox() async {
+  if (!Hive.isAdapterRegistered(OnSiteUserAdapter().typeId)) {
+    Hive.registerAdapter(OnSiteUserAdapter());
+  }
+  if (!Hive.isAdapterRegistered(OnSiteTrialAdapter().typeId)) {
+    Hive.registerAdapter(OnSiteTrialAdapter());
+  }
+  if (!Hive.isAdapterRegistered(OnSitePlotAdapter().typeId)) {
+    Hive.registerAdapter(OnSitePlotAdapter());
+  }
+  var dir = await getApplicationDocumentsDirectory();
+  Hive.init(dir.path);
+  print("DIR PATH = " + dir.path);
+
+  await Hive.openBox('Users');
+  _UserBox = Hive.box('Users');
 }

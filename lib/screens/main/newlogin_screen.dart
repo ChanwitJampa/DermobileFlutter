@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:der/screens/main/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,6 +19,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:der/utils/constants.dart';
 
+Box? _UserBox;
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -25,6 +28,16 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
+  void initState() {
+    super.initState();
+    //print("--------test--------");
+    // print(Hive.box("Users"));
+    _UserBox = Hive.box("Users");
+    for (int i = 0; i < _UserBox!.length; i++) {
+      //print("user Name ${i} : ${_UserBox!.getAt(i).userName.toString()}");
+      items.add(_UserBox!.getAt(i).userName.toString());
+    }
+  }
 
   Widget _buildEmailTF() {
     return Column(
@@ -282,6 +295,8 @@ class _LoginScreenState extends State<LoginScreen> {
           onChanged: (value) {
             setState(() {
               selectedValue = value as String;
+              print("selectedValue  : ${selectedValue}");
+              userNameNow = selectedValue;
             });
 
             Navigator.of(context).pushNamed(DIGIT_ROUTE);
@@ -371,16 +386,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? selectedValue;
 
-  List<String> items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6',
-    'Item7',
-    'Item8',
-  ];
+  List<String> items = [];
 
   @override
   Widget build(BuildContext context) {
