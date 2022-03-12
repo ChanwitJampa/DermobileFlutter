@@ -19,7 +19,9 @@ import 'package:http/http.dart' as Http;
 import 'dart:convert';
 import 'package:der/entities/objectlist.dart';
 import 'package:der/entities/trial.dart';
+
 final _formKey = GlobalKey<FormState>();
+
 class ExperimentScreen extends StatefulWidget {
   _ExperimentScreen createState() => _ExperimentScreen();
 }
@@ -113,11 +115,11 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                               letterSpacing: 1),
                         ),
                         SizedBox(
-                          height: 3,
+                          height: 10,
                         ),
                         Text(
                           feedTime,
-                          style: TextStyle(fontSize: 20, color: Colors.grey),
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
                         ),
                       ],
                     )
@@ -127,7 +129,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                   icon: Icon(
                     Icons.delete,
                     size: 30,
-                    color: Colors.red[500],
+                    color: Colors.red[900],
                     // color: Colors.grey[600],
                   ),
                   onPressed: () {
@@ -167,12 +169,12 @@ class _ExperimentScreen extends State<ExperimentScreen> {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 0,
             ),
             Text(
               feedText,
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.grey[800],
                   height: 1.5,
                   letterSpacing: .7),
@@ -195,7 +197,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                                 fit: BoxFit.cover)),
                       )
                     : Container(),
-                makeDoughnutProgress(inProgress: 0.6, finished: 0.6),
+                makeDoughnutProgress(inProgress: 0.9, finished: 0.6),
               ],
             ),
             SizedBox(

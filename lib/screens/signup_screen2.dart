@@ -250,19 +250,19 @@ class _SignupScreen extends State<SignupScreen> {
       return caseLogin[1];
     }
 
-    Response<Token> t = Response<Token>.fromJson(
-        jsonDecode(res.body), (body) => Token.fromJson(body));
-    String token = t.body.token;
-    User u = t.body.user;
-    u.userName = username;
-    print("token " + token);
-    if (_UserBox?.get(username) == null) {
-      OnSiteUser user = OnSiteUser(u.userName, u.firstName, u.lastName,
-          u.picture, token, 123, "", [], [], "");
-      _UserBox?.put(u.userName, user);
-    } else {
-      _UserBox?.get(username).token = token;
-    }
+    // Response<Token> t = Response<Token>.fromJson(
+    //     jsonDecode(res.body), (body) => Token.fromJson(body));
+    // String token = t.body.token;
+    // User u = t.body.user;
+    // u.userName = username;
+    // print("token " + token);
+    // if (_UserBox?.get(username) == null) {
+    //   OnSiteUser user = OnSiteUser(u.userName, u.firstName, u.lastName,
+    //       u.picture, token, 123, "", [], [], "");
+    //   _UserBox?.put(u.userName, user);
+    // } else {
+    //   _UserBox?.get(username).token = token;
+    // }
 
     //["sucess","wrong userName or password","no internet","no web"]
     return caseLogin[0];
