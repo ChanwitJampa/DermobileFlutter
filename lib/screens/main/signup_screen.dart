@@ -254,7 +254,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
         ),
         color: Colors.white,
         child: Text(
-          'LOGIN3',
+          'LOGIN',
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,

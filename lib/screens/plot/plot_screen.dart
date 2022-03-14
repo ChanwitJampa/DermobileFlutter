@@ -174,19 +174,6 @@ class _PlotsScreen extends State<PlotsScreen> {
   imagepathLoader(String feedImage) {
     Image image;
 
-    // print("NOW IS IMAGE LOADERRRRRRRRRRRRRR");
-
-    // try {
-    //   image = Image.file(File(feedImage));
-    // } on FileSystemException {
-    //   print("--------------------------");
-    //   feedImage = "assets/images/img_not.png";
-    // } catch (error) {
-    //   print(error);
-
-    //   feedImage = "assets/images/img_not.png";
-    // }
-
     if (File(feedImage).existsSync()) {
       return new RotationTransition(
         turns: new AlwaysStoppedAnimation(0 / 360),
@@ -279,37 +266,6 @@ class _PlotsScreen extends State<PlotsScreen> {
                   Navigator.of(context).pushNamed(ASSESSMENT_ROUTE);
                 },
               )
-
-              /*IconButton(
-
-                icon: Icon(Icons.more_horiz, size: 30, color: Colors.grey[600],),
-                onPressed: () {
-
-                }
-                ,
-              ),*/
-
-              /*PopupMenuButton(itemBuilder: (BuildContext context) {
-                        var list =  <PopupMenuEntry<Object>>[
-
-                          PopupMenuItem(
-                            value:1,
-                            child: Text('test'),
-
-                          ),
-
-
-                          PopupMenuItem(
-                            value:1,
-                            child: Text('test'),
-
-                          ),
-
-                        ];
-                        return list ;
-              },
-
-              ),*/
             ],
           ),
           SizedBox(
@@ -485,7 +441,7 @@ class _PlotsScreen extends State<PlotsScreen> {
 
 //if user doesn't take any image, just return.
     if (_imageFile == null) {
-     // print("null");
+      // print("null");
       return;
     }
     setState(
@@ -891,22 +847,6 @@ class _PlotsScreen extends State<PlotsScreen> {
               ),
             ],
           ),
-
-          /*Container(
-               height: 50,
-                child: Column(
-
-                  //height: 10,
-                  children: [
-                    AppPopupMenu(
-
-                      icon: Icon(Icons.filter_list,size: 15,),
-                    ),
-                  ],
-
-                ),
-             ),*/
-
           Expanded(
               child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -949,78 +889,6 @@ class _PlotsScreen extends State<PlotsScreen> {
               ),
             ),
           )),
-          /*Container(
-               height: 600,
-               child:ListView(
-                 scrollDirection: Axis.vertical,
-
-               ),*/
-
-          //allLayout(context),
-
-          //),
-
-          //SpinCircleBottomBarHolder(
-          /*bottomNavigationBar: SCBottomBarDetails(
-               circleColors: [Colors.white, Colors.orange, Colors.redAccent],
-               iconTheme: IconThemeData(color: Colors.black45),
-               activeIconTheme: IconThemeData(color: Colors.orange),
-               backgroundColor: Colors.white,
-               titleStyle: TextStyle(color: Colors.black45,fontSize: 12),
-               activeTitleStyle: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),
-               actionButtonDetails: SCActionButtonDetails(
-                   color: Colors.redAccent,
-                   icon: Icon(
-                     Icons.expand_less,
-                     color: Colors.white,
-                   ),
-                   elevation: 2
-               ),
-               elevation: 2.0,
-               items: [
-                 // Suggested count : 4
-                 SCBottomBarItem(icon: Icons.home, title: "Home", onPressed: () {
-
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MainScreen()));
-
-                 }),
-                 SCBottomBarItem(icon: Icons.details, title: "New Data", onPressed: () {
-
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DownloadScreen()));
-
-                 }),
-                 SCBottomBarItem(icon: Icons.upload_file_sharp, title: "Upload", onPressed: () {}),
-                 SCBottomBarItem(icon: Icons.details, title: "New Data", onPressed: () {}),
-               ],
-               circleItems: [
-                 //Suggested Count: 3
-                 SCItem(icon: Icon(Icons.search), onPressed: () async  {
-
-                   //WidgetsFlutterBinding.ensureInitialized();
-
-                   //final firstCamera = cameras.first;
-                   // _onImageButtonPressed(ImageSource.camera, context: context);
-                   //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CameraScreen(camera:cameras.first)));
-
-                 }),
-
-                 SCItem(icon: Icon(Icons.qr_code_outlined), onPressed: () async  {
-
-                   //WidgetsFlutterBinding.ensureInitialized();
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>QRScreen()));
-                   //final firstCamera = cameras.first;
-                   //_onImageButtonPressed(ImageSource.camera, context: context);
-                   //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CameraScreen(camera:cameras.first)));
-
-                 }),
-                 SCItem(icon: Icon(Icons.camera), onPressed: () {
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SelectedImage()));
-                 })
-               ],
-               bnbHeight: 80 // Suggested Height 80
-           ),*/
-
-          //),
         ],
       ),
       bottomNavigationBar: ConvexAppBar(

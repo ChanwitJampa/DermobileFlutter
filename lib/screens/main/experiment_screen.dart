@@ -67,7 +67,10 @@ class _ExperimentScreen extends State<ExperimentScreen> {
       userImage = "assets/images/unknown_user.jpg",
       feedTime,
       feedText,
-      feedImage}) {
+      feedImage,
+      finishPercent = 0.5,
+      inprogressPercent = 0.9,
+      percentText}) {
     return GestureDetector(
       onTap: () {
         //Navigator.pushNamedAndRemoveUntil(context, PLOT_ROUTE, (route) => false,arguments: experimentID);
@@ -197,14 +200,35 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                                 fit: BoxFit.cover)),
                       )
                     : Container(),
-                makeDoughnutProgress(inProgress: 0.9, finished: 0.6),
               ],
             ),
             SizedBox(
               height: 20,
             ),
+            Container(
+              child: Center(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      makeDoughnutProgress(
+                          inProgress: inprogressPercent,
+                          finished: finishPercent),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        percentText,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey[800],
+                            height: 1.5,
+                            letterSpacing: .7),
+                      ),
+                    ]),
+              ),
+            ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -308,7 +332,10 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                   (new DateTime.fromMillisecondsSinceEpoch(e.lastUpdate))
                       .toString(),
               feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
-              feedImage: 'assets/images/corn.png')
+              feedImage: 'assets/images/corn.png',
+              inprogressPercent: 0.9,
+              finishPercent: 0.5,
+              percentText: 'inprogressPercent 0.9 % + finishPercent 0.5%')
         ]);
         i++;
       });
