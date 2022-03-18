@@ -267,6 +267,11 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                       borderRadius: BorderRadius.circular(50),
                       color: Colors.grey[200]),
                   child: TextField(
+                    autofocus: false,
+                    // serch by barcode or plot id
+                    onChanged: (text) async {
+                      await serchTrials(text);
+                    },
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.search,
@@ -313,6 +318,20 @@ class _ExperimentScreen extends State<ExperimentScreen> {
         onTap: (int i) => Navigator.of(context).pushNamed('$i'),
       ),
     );
+  }
+
+  serchTrials(String text) async {
+    List<OnSiteTrial> ost = [];
+    List<OnSiteTrial> ostAll = [];
+    ostAll.addAll(_UserBox!.get(userNameNow).onSiteTrials);
+    String nameTrial;
+    for (int i = 0; i < ostAll.length; i++) {
+      if (ostAll[i].trialId.toString().contains(text.toString())) {
+        ost.add(ostAll[i]);
+      }
+    }
+
+    await loadAllTrials(ost);
   }
 
   loadAllTrials(List<OnSiteTrial> ost) {

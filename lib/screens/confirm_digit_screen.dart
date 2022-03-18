@@ -44,32 +44,64 @@ class _PinScreenState extends State<PinScreen> {
   );*/
 
   int pinIndex = 0;
+  int stackPin = 1;
+  bool visibility = true;
+  int countError = 0;
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          //buildExitButton(),
           Expanded(
+              flex: 5,
               child: Container(
-            alignment: Alignment(0, 0.5),
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                buildSecurityText(),
-                SizedBox(height: 40.0),
-                buildPinRow(),
-              ],
-            ),
-          )),
+                alignment: Alignment(0, 0.3),
+                padding: EdgeInsets.symmetric(horizontal: 80.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    buildSecurityText(),
+                    SizedBox(height: 10.0),
+                    IgnorePointer(
+                      ignoring: visibility,
+                      child: Opacity(
+                        opacity: visibility ? 0 : 1,
+                        child: buildBox(text: 'Pincode is wrong'),
+                      ),
+                    ),
+                    buildPinRow(),
+                  ],
+                ),
+              )),
           buildNumberPad(),
+          buildSpace()
         ],
       ),
     );
   }
 
+  Widget buildBox({
+    @required String text = "",
+  }) =>
+      GestureDetector(
+        child: Container(
+          width: double.infinity,
+          height: 40,
+          child: Center(
+            child: Text(
+              text + '  $countError/3',
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      );
+
   buildNumberPad() {
     return Expanded(
+      flex: 6,
       child: Container(
         alignment: Alignment.bottomCenter,
         child: Padding(
@@ -83,19 +115,19 @@ class _PinScreenState extends State<PinScreen> {
                   KeyboardNumber(
                     n: 1,
                     onPressed: () {
-                      pinIndexSetup1("1");
+                      pinIndexSetup("1");
                     },
                   ),
                   KeyboardNumber(
                     n: 2,
                     onPressed: () {
-                      pinIndexSetup1("2");
+                      pinIndexSetup("2");
                     },
                   ),
                   KeyboardNumber(
                     n: 3,
                     onPressed: () {
-                      pinIndexSetup1("3");
+                      pinIndexSetup("3");
                     },
                   ),
                 ],
@@ -106,19 +138,19 @@ class _PinScreenState extends State<PinScreen> {
                   KeyboardNumber(
                     n: 4,
                     onPressed: () {
-                      pinIndexSetup1("4");
+                      pinIndexSetup("4");
                     },
                   ),
                   KeyboardNumber(
                     n: 5,
                     onPressed: () {
-                      pinIndexSetup1("5");
+                      pinIndexSetup("5");
                     },
                   ),
                   KeyboardNumber(
                     n: 6,
                     onPressed: () {
-                      pinIndexSetup1("6");
+                      pinIndexSetup("6");
                     },
                   ),
                 ],
@@ -129,19 +161,19 @@ class _PinScreenState extends State<PinScreen> {
                   KeyboardNumber(
                     n: 7,
                     onPressed: () {
-                      pinIndexSetup1("7");
+                      pinIndexSetup("7");
                     },
                   ),
                   KeyboardNumber(
                     n: 8,
                     onPressed: () {
-                      pinIndexSetup1("8");
+                      pinIndexSetup("8");
                     },
                   ),
                   KeyboardNumber(
                     n: 9,
                     onPressed: () {
-                      pinIndexSetup1("9");
+                      pinIndexSetup("9");
                     },
                   ),
                 ],
@@ -149,23 +181,39 @@ class _PinScreenState extends State<PinScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Container(
+                  /*Container(
                     width: 60.0,
                     child: MaterialButton(
                       onPressed: null,
                       child: SizedBox(),
                     ),
+                  ),*/
+                  Container(
+                    width: 90.0,
+                    height: 90.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white10.withOpacity(0),
+                    ),
+                    alignment: Alignment.center,
+                    child: MaterialButton(
+                      padding: EdgeInsets.all(8.0),
+                      onPressed: null,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60.0)),
+                      height: 90.0,
+                    ),
                   ),
                   KeyboardNumber(
                     n: 0,
                     onPressed: () {
-                      pinIndexSetup1("0");
+                      pinIndexSetup("0");
                     },
                   ),
-                  Container(
-                    width: 61.0,
+                  /*Container(
+                    width: 65.0,
                     child: MaterialButton(
-                      height: 61.0,
+                      height: 65.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(60.0),
                       ),
@@ -175,6 +223,28 @@ class _PinScreenState extends State<PinScreen> {
                       child: Image.asset("assets/images/delete_clear.png",
                           color: Colors.white),
                     ),
+                  ),*/
+                  Container(
+                    width: 90.0,
+                    height: 90.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white10.withOpacity(0.05),
+                    ),
+                    alignment: Alignment.center,
+                    child: MaterialButton(
+                      padding: EdgeInsets.all(27.0),
+                      onPressed: () {
+                        clearPin();
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60.0)),
+                      height: 90.0,
+                      child: Image.asset(
+                        "assets/images/delete_clear.png",
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -182,6 +252,13 @@ class _PinScreenState extends State<PinScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  buildSpace() {
+    return Expanded(
+      flex: 1,
+      child: Container(),
     );
   }
 
@@ -207,7 +284,7 @@ class _PinScreenState extends State<PinScreen> {
     }
   }
 
-  pinIndexSetup1(String text) {
+  pinIndexSetup(String text) {
     String pinCodeCheck = "";
     if (pinIndex == 0) {
       pinIndex = 1;
@@ -230,8 +307,22 @@ class _PinScreenState extends State<PinScreen> {
       Navigator.of(context).pushNamed(HOME_ROUTE);
     } else if (pinIndex == 6 && pinCode != pinCodeCheck) {
       print("The entered pincode is wrong");
-
       clearAllPin();
+      stackPinError();
+    }
+  }
+
+  stackPinError() {
+    if (stackPin < 3) {
+      if (visibility == true) setState(() => visibility = !visibility);
+      stackPin++;
+      setState(() => countError = countError += 1);
+      //print(countError);
+      //print(stackPin);
+    } else {
+      stackPin = 0;
+      countError = 1;
+      Navigator.of(context).pushNamed(SETDIGIT_ROUTE);
     }
   }
 
@@ -311,7 +402,7 @@ class _PinScreenState extends State<PinScreen> {
 
   buildSecurityText() {
     return Text(
-      "Confirm PinCode",
+      "Confirm Pincode",
       style: TextStyle(
         color: Colors.white70,
         fontSize: 35.0,
