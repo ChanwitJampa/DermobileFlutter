@@ -305,7 +305,7 @@ class _PinScreenState extends State<PinScreen> {
       //print(" ${_UserBox!.get(userNameNow).password}");
       _UserBox = Hive.box("Users");
       if (_UserBox!.get(userNameNow).password == strPin) {
-        Navigator.of(context).pushNamed(HOME_ROUTE);
+        Navigator.of(context).pushReplacementNamed(HOME_ROUTE);
       } else {
         clearAllPin();
         stackPinError();

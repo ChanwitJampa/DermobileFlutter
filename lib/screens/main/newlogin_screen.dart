@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          Navigator.of(context).pushNamed(NEWFIRSTPAGE_ROUTE);
+          Navigator.of(context).pushReplacementNamed(NEWFIRSTPAGE_ROUTE);
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -299,10 +299,10 @@ class _LoginScreenState extends State<LoginScreen> {
               userNameNow = selectedValue;
             });
 
-            Navigator.of(context).pushNamed(DIGIT_ROUTE);
+            Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE);
           },
           onTap: () => {
-            () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
+            () => Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE),
           },
           icon: const Icon(
             Icons.arrow_forward_ios_outlined,
