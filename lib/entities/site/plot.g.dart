@@ -40,6 +40,7 @@ class OnSitePlotAdapter extends TypeAdapter<OnSitePlot> {
       reader.readString(),
       reader.readString(),
       reader.readString(),
+      reader.readInt(),
 
       // fields[0] as int,
       // fields[1] as String,
@@ -93,7 +94,8 @@ class OnSitePlotAdapter extends TypeAdapter<OnSitePlot> {
       ..writeInt(obj.approveDate)
       ..writeString(obj.plotProgress)
       ..writeString(obj.plotStatus)
-      ..writeString(obj.plotActive);
+      ..writeString(obj.plotActive)
+      ..writeInt(obj.isUpload);
 
     // ..writeByte(24)
     // ..writeByte(0)

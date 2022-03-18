@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:der/screens/setup_digit_screen.dart';
 import 'package:der/screens/login_digit_screen.dart';
-import 'package:der/screens/main/first_screen.dart';
 import 'package:der/screens/main/signup_screen.dart';
 import 'package:der/screens/select_user_screen.dart';
 
@@ -48,32 +47,50 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     print("%%%% openBox %%%%");
     _openBox();
-    return FutureBuilder(
-      future: Init.instance.initialize(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(home: Splash());
-        } else {
-          return MaterialApp(
-            debugShowCheckedModeBanner: true,
-            onGenerateRoute: Routers.generateRoute,
-            routes: <String, WidgetBuilder>{
-              //'12': (BuildContext context) => new SignupScreen()
-              HOME_ROUTE: (BuildContext context) =>
-                  new MyHomePage(cameras: cameras)
-            },
+    DateTime _lastExitTime = DateTime.now();
 
-            //home: new LoginDigitScreen(),
-
-            // home: new SignupScreen(),
-            // home: new SignupScreen(),
-            // home: new FirstScreen(),
-            home: new LoginScreen(),
-            // home: new NewUserScreen(),
+    return WillPopScope(
+      onWillPop: () async {
+        if (DateTime.now().difference(_lastExitTime) >= Duration(seconds: 2)) {
+          //showing message to user
+          final snack = SnackBar(
+            content: Text("Press the back button again to exist the app"),
+            duration: Duration(seconds: 2),
           );
+          ScaffoldMessenger.of(context).showSnackBar(snack);
+          _lastExitTime = DateTime.now();
+          return false; // disable back press
+        } else {
+          return true; //  exit the app
         }
-        MyHomePage(cameras: cameras);
       },
+      child: FutureBuilder(
+        future: Init.instance.initialize(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return MaterialApp(home: Splash());
+          } else {
+            return MaterialApp(
+              debugShowCheckedModeBanner: true,
+              onGenerateRoute: Routers.generateRoute,
+              routes: <String, WidgetBuilder>{
+                //'12': (BuildContext context) => new SignupScreen()
+                HOME_ROUTE: (BuildContext context) =>
+                    new MyHomePage(cameras: cameras)
+              },
+
+              //home: new LoginDigitScreen(),
+
+              // home: new SignupScreen(),
+              // home: new SignupScreen(),
+              // home: new FirstScreen(),
+              home: new LoginScreen(),
+              // home: new NewUserScreen(),
+            );
+          }
+          MyHomePage(cameras: cameras);
+        },
+      ),
     );
   }
 }

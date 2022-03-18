@@ -7,6 +7,7 @@ import 'package:der/entities/site/trial.dart';
 import 'package:flutter/material.dart';
 import 'package:der/screens/plot/plot_screen.dart';
 import 'package:der/utils/constants.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 import 'package:der/entities/site/trial.dart';
@@ -146,7 +147,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                               TextButton(
                                 onPressed: () {
                                   //--------------------------------delete trial-------------------------------------
-                                  print(index);
+                                  // print(index);
                                   _UserBox!
                                       .get(userNameNow)
                                       .onSiteTrials
@@ -248,9 +249,38 @@ class _ExperimentScreen extends State<ExperimentScreen> {
     );
   }
 
+Future<bool> _onWillPop() async {
+
+
+    return (await showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit an App'),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text('No'),
+          ),
+          new FlatButton(
+            onPressed: () {
+
+              SystemNavigator.pop();
+            },
+            child: new Text('Yes'),
+          ),
+        ],
+      ),
+    )) ??
+        false;
+  }
+
   @override
-  Widget build(context) {
-    return Scaffold(
+  Widget build(BuildContext context) {
+
+    return WillPopScope(
+        onWillPop:  _onWillPop,
+        child:Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -312,13 +342,51 @@ class _ExperimentScreen extends State<ExperimentScreen> {
         initialActiveIndex: 3,
         onTap: (int i) => Navigator.of(context).pushNamed('$i'),
       ),
-    );
+    ))
+    ;
   }
+
+  int numPlot = 0;
+  int numImg = 0 ; 
+
+  double percentPath = 0.00;
+
+  List<double> listPercent = [];
 
   loadAllTrials(List<OnSiteTrial> ost) {
     //print("load All");
     //print(ost.length);
 
+    List<OnSiteTrial> ListTrial = _UserBox?.get(userNameNow).onSiteTrials;
+
+    for (int i = 0; i < ListTrial.length; i++) {
+      numPlot = 0 ;
+      numImg = 0 ;
+      print("Trial = " + (i+1).toString());
+
+      for (int j = 0; j < ListTrial[i].onSitePlots.length; j++) {
+
+        // print("trial[i] = " +(i+1).toString() +" plot[j] = " + (j+1).toString() +" path : " + ListTrial[i].onSitePlots[j].plotImgPath);
+
+        numPlot++;
+
+        if(ListTrial[i].onSitePlots[j].plotImgPath != "null")
+        {
+          numImg++;
+
+        }
+
+        // print("numplot :" + numPlot.toString() + " numImg :" + numImg.toString());
+
+      }
+      percentPath = numImg.toDouble()/numPlot.toDouble();
+      listPercent.add(percentPath);
+
+      // print("percent Trial " + (i+1).toString() + " : " + percentPath.toString() + "%");
+    }
+
+  print(listPercent);
+    
     int i = 0;
     setState(() {
       makeExperiments.clear();
@@ -333,9 +401,10 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                       .toString(),
               feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
               feedImage: 'assets/images/corn.png',
-              inprogressPercent: 0.9,
-              finishPercent: 0.5,
-              percentText: 'inprogressPercent 0.9 % + finishPercent 0.5%')
+              inprogressPercent: listPercent[i],
+              finishPercent: listPercent[i],
+              // percentText: 'inprogress: 90 % finished: 50 %')
+              percentText: "percent of work = " + listPercent[i].toString())
         ]);
         i++;
       });
@@ -362,7 +431,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
         trials = ObjectList<Trial>.fromJson(
             jsonDecode(response.body), (body) => Trial.fromJson(body)).list;
 
-        print(trials.length);
+        // print(trials.length);
         List<OnSiteTrial> trialsUser = _UserBox?.get(userNameNow).onSiteTrials;
 
         //update trials on phone
@@ -447,7 +516,8 @@ class _ExperimentScreen extends State<ExperimentScreen> {
             e.approveDate,
             e.plotProgress,
             e.plotStatus,
-            e.plotActive));
+            e.plotActive,
+            0));
       });
     }
     return ost;

@@ -221,11 +221,11 @@ class _NewUserScreenState extends State<NewUserScreen> {
           //["sucess","wrong userName or password","no internet","no web"]
           if (resultLogin == caseLogin[0]) {
             if (_UserBox?.get(userNameNow).password == "") {
-              Navigator.of(context).pushNamed(SETDIGIT_ROUTE);
+              Navigator.of(context).pushReplacementNamed(SETDIGIT_ROUTE);
             } else {
               print(
                   "pass word ${userNameNow} is ${_UserBox!.get(userNameNow).password}");
-              Navigator.of(context).pushNamed(HOME_ROUTE);
+              Navigator.of(context).pushReplacementNamed(HOME_ROUTE);
             }
           } else if (resultLogin == caseLogin[1]) {
             usernameController.clear();
@@ -290,7 +290,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
   Widget _buildSocialBtn(Function onTap, AssetImage logo) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(DIGIT_ROUTE);
+        Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE);
       },
       child: Container(
         height: 60.0,
@@ -350,7 +350,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
         ),
         child: InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed(DIGIT_ROUTE);
+              Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE);
             },
             child: Center(
               child: Ink(
@@ -395,7 +395,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
         ),
         child: InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed(DIGIT_ROUTE);
+              Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE);
             },
             child: Center(
               child: Ink(
@@ -692,11 +692,11 @@ class _NewUserScreenState extends State<NewUserScreen> {
                       _buildSignInWithText(),
                       SizedBox(height: 50.0),
                       _buildSocialBtn3(
-                        () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
+                        () => Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE),
                       ),
                       SizedBox(height: 30.0),
                       _buildSocialBtn2(
-                        () => Navigator.of(context).pushNamed(DIGIT_ROUTE),
+                        () => Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE),
                       ),
                       SizedBox(
                         height: 30.0,

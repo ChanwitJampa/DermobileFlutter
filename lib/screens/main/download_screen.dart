@@ -439,7 +439,8 @@ class _DownloadScreen extends State<DownloadScreen> {
                 e.approveDate,
                 e.plotProgress,
                 e.plotStatus,
-                e.plotActive));
+                e.plotActive,
+                0));
           });
         }
         OnSiteTrial ost = OnSiteTrial(

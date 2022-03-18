@@ -387,146 +387,106 @@ class _LoginScreenState extends State<LoginScreen> {
   String? selectedValue;
 
   List<String> items = [];
+  DateTime _lastExitTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      // Colors.white
-                      //Blue
-                      Color(0xFF73AEF5),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      Color(0xFF398AE5),
-                      //Green
-                      // Color(0xFF2EB62C),
-                      // Color(0xFF2EB62C),
-                      // Color(0xFF57C84D),
-                      // Color(0xFF57C84D),
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.9],
+    return WillPopScope(
+        onWillPop: () async {
+          if (DateTime.now().difference(_lastExitTime) >=
+              Duration(seconds: 2)) {
+            //showing message to user
+            final snack = SnackBar(
+              content: Text("Press the back button again to quit the app"),
+              duration: Duration(seconds: 2),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snack);
+            _lastExitTime = DateTime.now();
+            return false; // disable back press
+          } else {
+            return true; //  exit the app
+          }
+        },
+        child: Scaffold(
+          body: AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle.light,
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          // Colors.white
+                          //Blue
+                          Color(0xFF73AEF5),
+                          Color(0xFF61A4F1),
+                          Color(0xFF478DE0),
+                          Color(0xFF398AE5),
+                          //Green
+                          // Color(0xFF2EB62C),
+                          // Color(0xFF2EB62C),
+                          // Color(0xFF57C84D),
+                          // Color(0xFF57C84D),
+                        ],
+                        stops: [0.1, 0.4, 0.7, 0.9],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(height: 10.0),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(600),
-                        child: Image(
-                          image: AssetImage(
-                            'assets/images/syngenta_vector_logo.png',
+                  Container(
+                    height: double.infinity,
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40.0,
+                        vertical: 120.0,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: 10.0),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(600),
+                            child: Image(
+                              image: AssetImage(
+                                'assets/images/syngenta_vector_logo.png',
+                              ),
+                              width: 200,
+                              height: 200,
+                            ),
                           ),
-                          width: 200,
-                          height: 200,
-                        ),
+                          SizedBox(height: 290.0),
+                          _buildDropdownUser(),
+                          SizedBox(height: 30.0),
+                          Text(
+                            '- OR -',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 20),
+                          ),
+                          SizedBox(height: 10.0),
+                          // // _buildEmailTF(),
+                          // _buildPasswordTF(),
+                          // _buildForgotPasswordBtn(),
+                          // _buildRememberMeCheckbox(),
+                          _buildLoginBtn(),
+                          // _buildSignInWithText(),
+                          // _buildSocialBtnRow(),
+                          // _buildSignupBtn(),
+                        ],
                       ),
-                      // Text(
-                      //   'Welcome',
-                      //   style: TextStyle(
-                      //     // color: Color(0xFF398AE5),
-                      //     color: Colors.white,
-                      //     fontFamily: 'OpenSans',
-                      //     fontSize: 70.0,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      SizedBox(height: 290.0),
-                      _buildDropdownUser(),
-                      // child: DropdownButtonFormField<String>(
-                      //   decoration: InputDecoration(
-                      //     enabledBorder: OutlineInputBorder(
-                      //       borderSide: BorderSide(
-                      //           color: Color(0xFF6CA8F1), width: 1),
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //     filled: true,
-                      //     fillColor: Colors.blueAccent,
-                      //   ),
-                      //   value: dropdownValue,
-                      //   dropdownColor: Colors.white,
-                      //   icon: const Icon(
-                      //     Icons.account_circle,
-                      //     color: Colors.white,
-                      //     size: 30,
-                      //   ),
-                      //   elevation: 16,
-                      //   style: kTest,
-                      //   onChanged: (String? newValue) {
-                      //     setState(() {
-                      //       dropdownValue = newValue!;
-                      //     });
-                      //   },
-                      //   items: <String>[
-                      //     'Existed User',
-                      //     'Test',
-                      //     'user1@ku.th',
-                      //   ].map<DropdownMenuItem<String>>((String value) {
-                      //     return DropdownMenuItem<String>(
-                      //       value: value,
-                      //       child: Text(value),
-                      //     );
-                      //   }).toList(),
-                      // ),
-                      //),
-                      SizedBox(height: 30.0),
-                      // Container(
-                      //     child: Divider(
-                      //   color: Colors.white54,
-                      //   // color: Color(0xFF398AE5),
-                      //   height: 10,
-                      //   thickness: 3,
-                      // )),
-                      Text(
-                        '- OR -',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 20),
-                      ),
-                      SizedBox(height: 10.0),
-                      // SizedBox(height: 30.0),
-                      // // _buildEmailTF(),
-                      // SizedBox(
-                      //   height: 30.0,
-                      // ),
-                      // _buildPasswordTF(),
-                      // _buildForgotPasswordBtn(),
-                      // _buildRememberMeCheckbox(),
-                      _buildLoginBtn(),
-                      // _buildSignInWithText(),
-                      // _buildSocialBtnRow(),
-                      // _buildSignupBtn(),
-                    ],
-                  ),
-                ),
-              )
-            ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

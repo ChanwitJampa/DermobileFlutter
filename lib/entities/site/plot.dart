@@ -75,6 +75,9 @@ class OnSitePlot extends HiveObject {
   @HiveField(23)
   String plotActive;
 
+  @HiveField(24)
+  int isUpload;
+
   OnSitePlot(
       this.pltId,
       this.barcode,
@@ -98,5 +101,6 @@ class OnSitePlot extends HiveObject {
       this.approveDate,
       this.plotProgress,
       this.plotStatus,
-      this.plotActive);
+      this.plotActive,
+      this.isUpload);
 }

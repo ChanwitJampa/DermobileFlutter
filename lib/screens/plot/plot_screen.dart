@@ -398,7 +398,7 @@ class _PlotsScreen extends State<PlotsScreen> {
   }
 
   final picker = ImagePicker();
-  _upload(File imageFile, String plotID) async {
+  _upload(File imageFile, String plotID, int index) async {
     // open a bytestream
     var stream =
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
@@ -424,6 +424,17 @@ class _PlotsScreen extends State<PlotsScreen> {
     // send
     var response = await request.send();
     print(response.statusCode);
+
+
+    if(response.statusCode == 200)
+    {
+      _UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[index].isUpload = 1 ;
+    }
+    else
+    {
+      //ALERTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+    }
+
 
     // listen for response
     response.stream.transform(utf8.decoder).listen((value) {
@@ -672,11 +683,17 @@ class _PlotsScreen extends State<PlotsScreen> {
                                   if (ost[i].pltId.toString() ==
                                       plotId.toString()) {
                                     filePath = ost[i].plotImgPath;
+
+                                    _upload(File(filePath), plotId, i);
+
+                                    // _UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[i].isUpload = 1 ;
+
                                     print(
-                                        "${filePath}" + "plot id : " + plotId);
+                                        "${filePath}" + " plot id : " + plotId + " UPLOAD " + "${_UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[i].isUpload}");
+
+                                        break;
                                   }
                                 }
-                                _upload(File(filePath), plotId);
                                 Navigator.pop(context);
                               },
                               child: Text('Upload'),

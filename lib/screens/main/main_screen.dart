@@ -7,6 +7,7 @@ import 'package:der/entities/site/trial.dart';
 import 'package:der/entities/site/user.dart';
 import 'package:der/entities/trial.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -462,29 +463,39 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  DateTime timeBackPressed = DateTime.now();
+  Future<bool> _onWillPop() async {
+    print("ONWILPOP CALLL!!!!!!!!!!!!!!!!!!");
+
+    return (await showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              new FlatButton(
+                onPressed: () {
+                  SystemNavigator.pop();
+                },
+                child: new Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
+  DateTime _lastExitTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     deviceSize = MediaQuery.of(context).size;
+    print("ttest");
     return WillPopScope(
-        onWillPop: () async {
-          final difference = DateTime.now().difference(timeBackPressed);
-          final isExitWarning = difference >= Duration(seconds: 2);
-
-          timeBackPressed = DateTime.now();
-
-          if (isExitWarning) {
-            const message = "Press back again to exit";
-            Fluttertoast.showToast(msg: message, fontSize: 18);
-
-            return false;
-          } else {
-            Fluttertoast.cancel();
-
-            return true;
-          }
-        },
+        onWillPop: _onWillPop,
         child: Scaffold(
           /*appBar: AppBar(
         centerTitle: true,
