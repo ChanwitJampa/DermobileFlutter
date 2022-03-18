@@ -42,33 +42,63 @@ class _PinScreenState extends State<PinScreen> {
   );*/
 
   int pinIndex = 0;
-  //String pinCode = "";
+  bool visibility = true;
+  int countError = 0;
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          //buildExitButton(),
           Expanded(
+              flex: 5,
               child: Container(
-            alignment: Alignment(0, 0.5),
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                buildSecurityText(),
-                SizedBox(height: 40.0),
-                buildPinRow(),
-              ],
-            ),
-          )),
+                alignment: Alignment(0, 0.3),
+                padding: EdgeInsets.symmetric(horizontal: 80.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    buildSecurityText(),
+                    SizedBox(height: 10.0),
+                    IgnorePointer(
+                      ignoring: visibility,
+                      child: Opacity(
+                        opacity: visibility ? 0 : 1,
+                        child: buildBox(text: 'Pincode is wrong'),
+                      ),
+                    ),
+                    buildPinRow(),
+                  ],
+                ),
+              )),
           buildNumberPad(),
+          buildSpace(),
         ],
       ),
     );
   }
 
+  Widget buildBox({
+    @required String text = "",
+  }) =>
+      GestureDetector(
+        child: Container(
+          width: double.infinity,
+          height: 40,
+          child: Center(
+            child: Text(
+              text + '  $countError/3',
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      );
+
   buildNumberPad() {
     return Expanded(
+      flex: 6,
       child: Container(
         alignment: Alignment.bottomCenter,
         child: Padding(
@@ -148,11 +178,27 @@ class _PinScreenState extends State<PinScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Container(
+                  /*Container(
                     width: 60.0,
                     child: MaterialButton(
                       onPressed: null,
                       child: SizedBox(),
+                    ),
+                  ),*/
+                  Container(
+                    width: 90.0,
+                    height: 90.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white10.withOpacity(0),
+                    ),
+                    alignment: Alignment.center,
+                    child: MaterialButton(
+                      padding: EdgeInsets.all(8.0),
+                      onPressed: null,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60.0)),
+                      height: 90.0,
                     ),
                   ),
                   KeyboardNumber(
@@ -161,10 +207,10 @@ class _PinScreenState extends State<PinScreen> {
                       pinIndexSetup("0");
                     },
                   ),
-                  Container(
-                    width: 61.0,
+                  /*Container(
+                    width: 65.0,
                     child: MaterialButton(
-                      height: 61.0,
+                      height: 65.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(60.0),
                       ),
@@ -174,6 +220,28 @@ class _PinScreenState extends State<PinScreen> {
                       child: Image.asset("assets/images/delete_clear.png",
                           color: Colors.white),
                     ),
+                  ),*/
+                  Container(
+                    width: 90.0,
+                    height: 90.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white10.withOpacity(0.05),
+                    ),
+                    alignment: Alignment.center,
+                    child: MaterialButton(
+                      padding: EdgeInsets.all(27.0),
+                      onPressed: () {
+                        clearPin();
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60.0)),
+                      height: 90.0,
+                      child: Image.asset(
+                        "assets/images/delete_clear.png",
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -181,6 +249,13 @@ class _PinScreenState extends State<PinScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  buildSpace() {
+    return Expanded(
+      flex: 1,
+      child: Container(),
     );
   }
 
@@ -300,7 +375,7 @@ class _PinScreenState extends State<PinScreen> {
 
   buildSecurityText() {
     return Text(
-      "Setup PinCode",
+      "Setup Pincode",
       style: TextStyle(
         color: Colors.white70,
         fontSize: 35.0,
