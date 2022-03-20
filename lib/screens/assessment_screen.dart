@@ -159,7 +159,7 @@ class _AssessmentScreen extends State<AssessmentScreen>{
 
         ],
         initialActiveIndex: 0,
-        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
 
       ),
     );

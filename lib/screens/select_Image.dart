@@ -448,7 +448,7 @@ class _SelectImage extends State<SelectImage> {
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 2,
-        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
       ),
     );
   }

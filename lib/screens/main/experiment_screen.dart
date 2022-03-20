@@ -29,6 +29,9 @@ class ExperimentScreen extends StatefulWidget {
 
 Box? _UserBox;
 
+List<double> listPercent = [];
+List<double> listPercent2 = [];
+
 List<Widget> makeExperiments = [];
 bool _isConnectionSuccessful = false;
 
@@ -36,10 +39,11 @@ class _ExperimentScreen extends State<ExperimentScreen> {
   List<OnSiteTrial>? ost;
   initState() {
     super.initState();
+    
     _UserBox = Hive.box("Users");
 
     fetchTrialsOnSever()
-        .then((e) => {loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials)});
+        .then((e) => {calculatePercent(_UserBox?.get(userNameNow).onSiteTrials),loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials,listPercent,listPercent2)});
   }
 
   Widget makeDoughnutProgress({double? inProgress, double? finished}) {
@@ -71,7 +75,9 @@ class _ExperimentScreen extends State<ExperimentScreen> {
       feedImage,
       finishPercent = 0.5,
       inprogressPercent = 0.9,
-      percentText}) {
+      percentText,
+      percentText2
+      }) {
     return GestureDetector(
       onTap: () {
         //Navigator.pushNamedAndRemoveUntil(context, PLOT_ROUTE, (route) => false,arguments: experimentID);
@@ -152,9 +158,14 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                                       .get(userNameNow)
                                       .onSiteTrials
                                       .removeAt(index);
+
+                                    listPercent.removeAt(index);
+                                    listPercent2.removeAt(index);
+
+
                                   _UserBox!.get(userNameNow).save();
                                   loadAllTrials(
-                                      _UserBox?.get(userNameNow).onSiteTrials);
+                                      _UserBox?.get(userNameNow).onSiteTrials,listPercent,listPercent2);
                                   Navigator.pop(context);
                                 },
                                 child: Text('Delete'),
@@ -216,14 +227,29 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                           finished: finishPercent),
                       SizedBox(
                         width: 20,
-                      ),
-                      Text(
+                      ),Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
                         percentText,
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                             color: Colors.grey[800],
                             height: 1.5,
                             letterSpacing: .7),
+                      ),Text(
+                        percentText2,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[800],
+                            height: 1.5,
+                            letterSpacing: .7),
+                      )
+
+                        ],
+                        
                       ),
                     ]),
               ),
@@ -345,70 +371,140 @@ Future<bool> _onWillPop() async {
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 3,
-        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
       ),
     ))
     ;
+  }
+
+
+  serchTrials(String text) async {
+
+    List<double> listPercentDisplay = [];
+    List<double> listPercentDisplay2 = [];
+
+
+        listPercentDisplay.clear();
+        listPercentDisplay2.clear();
+
+    List<OnSiteTrial> ost = [];
+    List<OnSiteTrial> ostAll = [];
+    ostAll.addAll(_UserBox!.get(userNameNow).onSiteTrials);
+
+    String nameTrial;
+    for (int i = 0; i < ostAll.length; i++) {
+      if (ostAll[i].trialId.toString().contains(text.toString())) {
+        ost.add(ostAll[i]);
+
+        listPercentDisplay.add(listPercent[i]);
+        listPercentDisplay2.add(listPercent2[i]);
+
+        print("----------------------");
+
+      }
+      else {
+        
+      }
+    }
+
+    await loadAllTrials(ost, listPercentDisplay, listPercentDisplay2);
   }
 
   int numPlot = 0;
   int numImg = 0 ; 
 
   double percentPath = 0.00;
+  int numUploaded = 0;
 
-  List<double> listPercent = [];
-  serchTrials(String text) async {
-    List<OnSiteTrial> ost = [];
-    List<OnSiteTrial> ostAll = [];
-    ostAll.addAll(_UserBox!.get(userNameNow).onSiteTrials);
-    String nameTrial;
-    for (int i = 0; i < ostAll.length; i++) {
-      if (ostAll[i].trialId.toString().contains(text.toString())) {
-        ost.add(ostAll[i]);
-      }
-    }
+  double percentUpload = 0.00;
+  int nPlot = 0;
 
-    await loadAllTrials(ost);
-  }
+  double imgAllPlot = 0;
+  double uploadAllPlot = 0;
 
-  loadAllTrials(List<OnSiteTrial> ost) {
-    //print("load All");
-    //print(ost.length);
+  double allPercentI = 0;
+  double allPercentU = 0;
 
+
+  calculatePercent(ost) {
+    
+    listPercent.clear();
+    listPercent2.clear();
+  
+  setState(() {
+    
     List<OnSiteTrial> ListTrial = _UserBox?.get(userNameNow).onSiteTrials;
 
     for (int i = 0; i < ListTrial.length; i++) {
       numPlot = 0 ;
       numImg = 0 ;
+      numUploaded = 0;
       print("Trial = " + (i+1).toString());
 
       for (int j = 0; j < ListTrial[i].onSitePlots.length; j++) {
-
         // print("trial[i] = " +(i+1).toString() +" plot[j] = " + (j+1).toString() +" path : " + ListTrial[i].onSitePlots[j].plotImgPath);
-
         numPlot++;
 
         if(ListTrial[i].onSitePlots[j].plotImgPath != "null")
         {
           numImg++;
-
+          imgAllPlot++;
         }
-
+        if(ListTrial[i].onSitePlots[j].isUpload == 1)
+        {
+          numUploaded++;
+          uploadAllPlot++;
+        }
         // print("numplot :" + numPlot.toString() + " numImg :" + numImg.toString());
-
+        // print("numplot :" + numPlot.toString() + " numupload :" + numUploaded.toString());
+        //print("Plot ID : " + ListTrial[i].onSitePlots[j].pltId.toString() + " isUpload : " + ListTrial[i].onSitePlots[j].isUpload.toString());
+        
+        nPlot++;
       }
       percentPath = numImg.toDouble()/numPlot.toDouble();
+
+      percentUpload = numUploaded.toDouble()/numPlot.toDouble();
+
+
       listPercent.add(percentPath);
+      listPercent2.add(percentUpload);
 
       // print("percent Trial " + (i+1).toString() + " : " + percentPath.toString() + "%");
     }
 
   print(listPercent);
+  print(listPercent2);
+
+  print(nPlot);
+  print(imgAllPlot);
+  print(uploadAllPlot);
+  
+  allPercentI = imgAllPlot.toDouble()/nPlot.toDouble();
+  print("All Image Percent : " + allPercentI.toString());
+
+  allPercentU = uploadAllPlot.toDouble()/nPlot.toDouble();
+  print("All Upload Percent : " + allPercentU.toString());
+
     
-    int i = 0;
+  });
+
+
+  }
+
+  loadAllTrials(List<OnSiteTrial> ost, List<double> listP1,List<double> listP2) {
+    //print("load All");
+    //print(ost.length);
+
+
+    
+    // int i = 0;
     setState(() {
+      int i=0;
       makeExperiments.clear();
+
+
       ost.forEach((e) {
+
         makeExperiments.addAll([
           makeExperiment(
               index: i,
@@ -417,14 +513,18 @@ Future<bool> _onWillPop() async {
               feedTime: 'last update ' +
                   (new DateTime.fromMillisecondsSinceEpoch(e.lastUpdate))
                       .toString(),
-              feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
+              // feedText: '  index : ${i}  plots = ${e.onSitePlots.length}',
+              feedText: '  ${e.onSitePlots.length} plot',
               feedImage: 'assets/images/corn.png',
-              inprogressPercent: listPercent[i],
-              finishPercent: listPercent[i],
+              inprogressPercent: listP1[i],
+              finishPercent: listP2[i],
               // percentText: 'inprogress: 90 % finished: 50 %')
-              percentText: "percent of work = " + listPercent[i].toString())
+              percentText: "have photo: " + (listP1[i]*100).toString() + "%",
+              percentText2: "Uploaded: " + (listP2[i]*100).toString() + "%"
+              )
         ]);
         i++;
+        // i++;
       });
     });
   }
@@ -479,6 +579,8 @@ Future<bool> _onWillPop() async {
             trialsOnSever.onSitePlots[j].pltId) {
           trialsOnSever.onSitePlots[j].plotImgPath =
               trialOnPhone.onSitePlots[i].plotImgPath;
+          trialsOnSever.onSitePlots[j].isUpload =
+              trialOnPhone.onSitePlots[i].isUpload;
         }
       }
     }

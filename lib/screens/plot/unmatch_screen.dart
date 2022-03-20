@@ -385,7 +385,7 @@ class _UnMatchPlotScreen extends State<UnMatchPlotScreen> {
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 3,
-        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
       ),
     );
   }

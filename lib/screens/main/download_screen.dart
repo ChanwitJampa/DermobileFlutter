@@ -384,7 +384,7 @@ class _DownloadScreen extends State<DownloadScreen> {
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 1,
-        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: onDownload,

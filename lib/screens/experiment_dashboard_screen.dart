@@ -420,7 +420,7 @@ class _ExperimanetDashBoardScreen extends State<ExperimanetDashBoardScreen> {
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 0,
-        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
       ),
     );
   }

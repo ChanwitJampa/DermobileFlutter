@@ -290,7 +290,7 @@ class _PinScreenState extends State<PinScreen> {
     if (pinIndex == 6) {
       //print(pinCode);
       //moveToNextScreen(context);
-      Navigator.of(context).pushNamed(CONFIRMDIGIT_ROUTE);
+      Navigator.of(context).pushReplacementNamed(CONFIRMDIGIT_ROUTE);
     }
   }
 

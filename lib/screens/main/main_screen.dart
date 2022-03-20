@@ -593,7 +593,7 @@ class _MainScreenState extends State<MainScreen> {
             ],
             initialActiveIndex: 0,
             onTap: (int i) =>
-                Navigator.of(context).pushNamed('$i', arguments: _UserBox),
+                Navigator.of(context).pushReplacementNamed('$i', arguments: _UserBox),
           ),
 
           /*(

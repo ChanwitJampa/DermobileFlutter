@@ -136,7 +136,7 @@ class _TestDERScreen extends State<TestDERScreen>{
 
       ],
       initialActiveIndex: 0,
-      onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+      onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
 
     ),
 

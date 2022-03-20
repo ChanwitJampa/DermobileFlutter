@@ -429,15 +429,22 @@ class _PlotsScreen extends State<PlotsScreen> {
     if(response.statusCode == 200)
     {
       _UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[index].isUpload = 1 ;
+      // print(_UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[index].isUpload);
+      
+      // _UserBox?.get(userNameNow).save();
+
     }
     else
     {
       //ALERTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+
     }
+      _UserBox?.get(userNameNow).save();
+      print(_UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[index].isUpload);
 
 
     // listen for response
-    response.stream.transform(utf8.decoder).listen((value) {
+      response.stream.transform(utf8.decoder).listen((value) {
       print(value);
     });
   }
@@ -686,10 +693,10 @@ class _PlotsScreen extends State<PlotsScreen> {
 
                                     _upload(File(filePath), plotId, i);
 
-                                    // _UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[i].isUpload = 1 ;
+                                    _UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[i].isUpload = 1 ;
 
                                     print(
-                                        "${filePath}" + " plot id : " + plotId + " UPLOAD " + "${_UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[i].isUpload}");
+                                        "${filePath}" + " plot id : " + plotId + " UPLOAD " + " : ${_UserBox?.get(userNameNow).onSiteTrials[title].onSitePlots[i].isUpload}");
 
                                         break;
                                   }
@@ -806,7 +813,7 @@ class _PlotsScreen extends State<PlotsScreen> {
                           if (value == "all") {
                             displayPlots(ost);
                           } else if (value == 'have picture') {
-                            String isStatus = "";
+                            // String isStatus = "";
                             plotList.clear();
                             //print("length ost is : ${ost.length}");
                             for (int j = 0; j < ost.length; j++) {
@@ -842,6 +849,8 @@ class _PlotsScreen extends State<PlotsScreen> {
                                       .onSiteTrials[title]
                                       .onSitePlots[j]
                                       .plotImgPath = "null";
+                                  _UserBox?.get(userNameNow).save();
+
                                 } else {
                                   // มี path มีรูป
                                   ost.removeAt(j);
@@ -919,7 +928,7 @@ class _PlotsScreen extends State<PlotsScreen> {
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 3,
-        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
       ),
     );
   }
