@@ -304,7 +304,7 @@ class _PinScreenState extends State<PinScreen> {
       _UserBox!.get(userNameNow).save();
       print(" set pass word : ");
       print(_UserBox!.get(userNameNow).password);
-      Navigator.of(context).pushNamed(HOME_ROUTE);
+      Navigator.of(context).pushReplacementNamed(HOME_ROUTE);
     } else if (pinIndex == 6 && pinCode != pinCodeCheck) {
       print("The entered pincode is wrong");
       clearAllPin();
