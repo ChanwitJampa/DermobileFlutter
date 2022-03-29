@@ -21,7 +21,7 @@ class _ReportScreen extends State<ReportScreen> {
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 4,
-        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
       ),
     );
   }

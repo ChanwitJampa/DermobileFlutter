@@ -140,7 +140,7 @@ class _QRScreen extends State<QRScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             type = "UNMATCH";
-                            dataCode = "DR2346585394";
+                            dataCode = "DR234658394";
                             controller?.pauseCamera();
                             Navigator.of(context).pushNamed(SELECT_IMAGE_ROUTE);
                           },

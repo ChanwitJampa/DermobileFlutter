@@ -43,6 +43,8 @@ import 'package:der/entities/response.dart';
 import 'package:der/entities/trial.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:der/env.dart';
+
 Box? _UserBox;
 //const SERVER_IP = 'http://10.0.2.2:8080';
 String? userNameNow;
@@ -61,7 +63,7 @@ List<String> caseLogin = [
 //const SERVER_IP = 'http://192.168.3.199:8080';
 
 //const SERVER_IP = 'http://10.0.2.2:8005';
-const SERVER_IP = 'http://10.0.2.2:8080';
+
 //const SERVER_IP = 'http://192.168.3.199:8080';
 
 class NewUserScreen extends StatefulWidget {
@@ -692,11 +694,13 @@ class _NewUserScreenState extends State<NewUserScreen> {
                       _buildSignInWithText(),
                       SizedBox(height: 50.0),
                       _buildSocialBtn3(
-                        () => Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE),
+                        () => Navigator.of(context)
+                            .pushReplacementNamed(DIGIT_ROUTE),
                       ),
                       SizedBox(height: 30.0),
                       _buildSocialBtn2(
-                        () => Navigator.of(context).pushReplacementNamed(DIGIT_ROUTE),
+                        () => Navigator.of(context)
+                            .pushReplacementNamed(DIGIT_ROUTE),
                       ),
                       SizedBox(
                         height: 30.0,

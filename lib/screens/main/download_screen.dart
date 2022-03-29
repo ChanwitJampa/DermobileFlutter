@@ -24,6 +24,8 @@ import 'package:der/screens/plot/plot_screen.dart';
 
 import 'package:der/screens/main/qr_screen.dart';
 
+
+import 'package:der/env.dart';
 //check internet
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -384,7 +386,7 @@ class _DownloadScreen extends State<DownloadScreen> {
           TabItem(icon: Icons.bar_chart, title: 'Report'),
         ],
         initialActiveIndex: 1,
-        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
+        onTap: (int i) => Navigator.of(context).pushNamed('$i'),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: onDownload,
@@ -423,10 +425,10 @@ class _DownloadScreen extends State<DownloadScreen> {
                 e.abbrc,
                 e.entno,
                 e.notet,
-                e.plotImgPath,
-                e.plotImgPathS,
-                e.plotImgBoxPath,
-                e.plotImgBoxPathS,
+                "null",
+                "null",
+                "null",
+                "null",
                 e.uploadDate,
                 e.eartnA,
                 e.dlernA,

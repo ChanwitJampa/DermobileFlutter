@@ -30,6 +30,7 @@ import 'package:path/path.dart' as p;
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:der/env.dart';
 Box? _UserBox;
 
 class PlotsScreen extends StatefulWidget {
