@@ -399,7 +399,6 @@ Future<bool> _onWillPop() async {
         listPercentDisplay.add(listPercent[i]);
         listPercentDisplay2.add(listPercent2[i]);
 
-        print("----------------------");
 
       }
       else {
@@ -486,10 +485,9 @@ Future<bool> _onWillPop() async {
   print("All Upload Percent : " + allPercentU.toString());
 
     
-  });
-
-
+    });
   }
+  
 
   loadAllTrials(List<OnSiteTrial> ost, List<double> listP1,List<double> listP2) {
     //print("load All");

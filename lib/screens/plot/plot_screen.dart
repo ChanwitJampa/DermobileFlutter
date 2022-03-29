@@ -967,6 +967,15 @@ class _PlotsScreen extends State<PlotsScreen> {
   }
 
   displayPlots(List<OnSitePlot> ost) {
+
+    // print("Path");
+    // for(int i = 0 ; i< _UserBox?.get(userNameNow)
+    //                                     .onSiteTrials[title]
+    //                                     .onSitePlots.length ; i++){
+    //         print(ost[i].plotImgPath);
+    //                                     }
+
+
     setState(() {
       _UserBox = Hive.box("Users");
       int i = 0;
