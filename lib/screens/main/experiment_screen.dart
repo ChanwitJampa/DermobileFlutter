@@ -21,6 +21,8 @@ import 'dart:convert';
 import 'package:der/entities/objectlist.dart';
 import 'package:der/entities/trial.dart';
 
+import 'package:der/env.dart';
+
 final _formKey = GlobalKey<FormState>();
 
 class ExperimentScreen extends StatefulWidget {
@@ -39,11 +41,14 @@ class _ExperimentScreen extends State<ExperimentScreen> {
   List<OnSiteTrial>? ost;
   initState() {
     super.initState();
-    
+
     _UserBox = Hive.box("Users");
 
-    fetchTrialsOnSever()
-        .then((e) => {calculatePercent(_UserBox?.get(userNameNow).onSiteTrials),loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials,listPercent,listPercent2)});
+    fetchTrialsOnSever().then((e) => {
+          calculatePercent(_UserBox?.get(userNameNow).onSiteTrials),
+          loadAllTrials(_UserBox?.get(userNameNow).onSiteTrials, listPercent,
+              listPercent2)
+        });
   }
 
   Widget makeDoughnutProgress({double? inProgress, double? finished}) {
@@ -76,8 +81,7 @@ class _ExperimentScreen extends State<ExperimentScreen> {
       finishPercent = 0.5,
       inprogressPercent = 0.9,
       percentText,
-      percentText2
-      }) {
+      percentText2}) {
     return GestureDetector(
       onTap: () {
         //Navigator.pushNamedAndRemoveUntil(context, PLOT_ROUTE, (route) => false,arguments: experimentID);
@@ -159,13 +163,14 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                                       .onSiteTrials
                                       .removeAt(index);
 
-                                    listPercent.removeAt(index);
-                                    listPercent2.removeAt(index);
-
+                                  listPercent.removeAt(index);
+                                  listPercent2.removeAt(index);
 
                                   _UserBox!.get(userNameNow).save();
                                   loadAllTrials(
-                                      _UserBox?.get(userNameNow).onSiteTrials,listPercent,listPercent2);
+                                      _UserBox?.get(userNameNow).onSiteTrials,
+                                      listPercent,
+                                      listPercent2);
                                   Navigator.pop(context);
                                 },
                                 child: Text('Delete'),
@@ -227,29 +232,29 @@ class _ExperimentScreen extends State<ExperimentScreen> {
                           finished: finishPercent),
                       SizedBox(
                         width: 20,
-                      ),Column(
+                      ),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                        percentText,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800],
-                            height: 1.5,
-                            letterSpacing: .7),
-                      ),Text(
-                        percentText2,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800],
-                            height: 1.5,
-                            letterSpacing: .7),
-                      )
-
+                            percentText,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[800],
+                                height: 1.5,
+                                letterSpacing: .7),
+                          ),
+                          Text(
+                            percentText2,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[800],
+                                height: 1.5,
+                                letterSpacing: .7),
+                          )
                         ],
-                        
                       ),
                     ]),
               ),
@@ -275,117 +280,110 @@ class _ExperimentScreen extends State<ExperimentScreen> {
     );
   }
 
-Future<bool> _onWillPop() async {
-
-
+  Future<bool> _onWillPop() async {
     return (await showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('No'),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              new FlatButton(
+                onPressed: () {
+                  SystemNavigator.pop();
+                },
+                child: new Text('Yes'),
+              ),
+            ],
           ),
-          new FlatButton(
-            onPressed: () {
-
-              SystemNavigator.pop();
-            },
-            child: new Text('Yes'),
-          ),
-        ],
-      ),
-    )) ??
+        )) ??
         false;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
-        onWillPop:  _onWillPop,
-        child:Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            // color: Colors.blue,
-            color: Color(0xFF398AE5),
-            height: 100,
-            padding: EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 10),
-            child: Row(
-              children: [
-                Expanded(
-                    child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.grey[200]),
-                  child: TextField(
-                    autofocus: false,
-                    // serch by barcode or plot id
-                    onChanged: (text) async {
-                      await serchTrials(text);
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.grey[600],
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                // color: Colors.blue,
+                color: Color(0xFF398AE5),
+                height: 100,
+                padding:
+                    EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.grey[200]),
+                      child: TextField(
+                        autofocus: false,
+                        // serch by barcode or plot id
+                        onChanged: (text) async {
+                          await serchTrials(text);
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.grey[600],
+                          ),
+                          border: InputBorder.none,
+                          hintStyle:
+                              TextStyle(color: Colors.grey[600], fontSize: 20),
+                          hintText: "Search Trials",
+                        ),
                       ),
-                      border: InputBorder.none,
-                      hintStyle:
-                          TextStyle(color: Colors.grey[600], fontSize: 20),
-                      hintText: "Search Trials",
-                    ),
-                  ),
-                )),
-              ],
-            ),
-          ),
-          Container(
-            height: 3,
-            color: Colors.grey[300],
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Padding(
-                padding: EdgeInsets.all(5),
-                child: Column(
-                  children: makeExperiments,
+                    )),
+                  ],
                 ),
               ),
-            ),
+              Container(
+                height: 3,
+                color: Colors.grey[300],
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      children: makeExperiments,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      bottomNavigationBar: ConvexAppBar(
-        style: TabStyle.react,
-        backgroundColor: Color(0xFF398AE5),
-        items: [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.download, title: 'Download'),
-          TabItem(icon: Icons.qr_code, title: 'Scan'),
-          TabItem(icon: Icons.art_track, title: 'Trials'),
-          TabItem(icon: Icons.bar_chart, title: 'Report'),
-        ],
-        initialActiveIndex: 3,
-        onTap: (int i) => Navigator.of(context).pushReplacementNamed('$i'),
-      ),
-    ))
-    ;
+          bottomNavigationBar: ConvexAppBar(
+            style: TabStyle.react,
+            backgroundColor: Color(0xFF398AE5),
+            items: [
+              TabItem(icon: Icons.home, title: 'Home'),
+              TabItem(icon: Icons.download, title: 'Download'),
+              TabItem(icon: Icons.qr_code, title: 'Scan'),
+              TabItem(icon: Icons.art_track, title: 'Trials'),
+              TabItem(icon: Icons.bar_chart, title: 'Report'),
+            ],
+            initialActiveIndex: 3,
+            onTap: (int i) => Navigator.of(context).pushNamed('$i'),
+          ),
+        ));
   }
 
-
   serchTrials(String text) async {
-
     List<double> listPercentDisplay = [];
     List<double> listPercentDisplay2 = [];
 
-
-        listPercentDisplay.clear();
-        listPercentDisplay2.clear();
+    listPercentDisplay.clear();
+    listPercentDisplay2.clear();
 
     List<OnSiteTrial> ost = [];
     List<OnSiteTrial> ostAll = [];
@@ -400,18 +398,14 @@ Future<bool> _onWillPop() async {
         listPercentDisplay2.add(listPercent2[i]);
 
         print("----------------------");
-
-      }
-      else {
-        
-      }
+      } else {}
     }
 
     await loadAllTrials(ost, listPercentDisplay, listPercentDisplay2);
   }
 
   int numPlot = 0;
-  int numImg = 0 ; 
+  int numImg = 0;
 
   double percentPath = 0.00;
   int numUploaded = 0;
@@ -425,86 +419,73 @@ Future<bool> _onWillPop() async {
   double allPercentI = 0;
   double allPercentU = 0;
 
-
   calculatePercent(ost) {
-    
     listPercent.clear();
     listPercent2.clear();
-  
-  setState(() {
-    
-    List<OnSiteTrial> ListTrial = _UserBox?.get(userNameNow).onSiteTrials;
 
-    for (int i = 0; i < ListTrial.length; i++) {
-      numPlot = 0 ;
-      numImg = 0 ;
-      numUploaded = 0;
-      print("Trial = " + (i+1).toString());
+    setState(() {
+      List<OnSiteTrial> ListTrial = _UserBox?.get(userNameNow).onSiteTrials;
 
-      for (int j = 0; j < ListTrial[i].onSitePlots.length; j++) {
-        // print("trial[i] = " +(i+1).toString() +" plot[j] = " + (j+1).toString() +" path : " + ListTrial[i].onSitePlots[j].plotImgPath);
-        numPlot++;
+      for (int i = 0; i < ListTrial.length; i++) {
+        numPlot = 0;
+        numImg = 0;
+        numUploaded = 0;
+        print("Trial = " + (i + 1).toString());
 
-        if(ListTrial[i].onSitePlots[j].plotImgPath != "null")
-        {
-          numImg++;
-          imgAllPlot++;
+        for (int j = 0; j < ListTrial[i].onSitePlots.length; j++) {
+          // print("trial[i] = " +(i+1).toString() +" plot[j] = " + (j+1).toString() +" path : " + ListTrial[i].onSitePlots[j].plotImgPath);
+          numPlot++;
+
+          if (ListTrial[i].onSitePlots[j].plotImgPath != "null") {
+            numImg++;
+            imgAllPlot++;
+          }
+          if (ListTrial[i].onSitePlots[j].isUpload == 1) {
+            numUploaded++;
+            uploadAllPlot++;
+          }
+          // print("numplot :" + numPlot.toString() + " numImg :" + numImg.toString());
+          // print("numplot :" + numPlot.toString() + " numupload :" + numUploaded.toString());
+          //print("Plot ID : " + ListTrial[i].onSitePlots[j].pltId.toString() + " isUpload : " + ListTrial[i].onSitePlots[j].isUpload.toString());
+
+          nPlot++;
         }
-        if(ListTrial[i].onSitePlots[j].isUpload == 1)
-        {
-          numUploaded++;
-          uploadAllPlot++;
-        }
-        // print("numplot :" + numPlot.toString() + " numImg :" + numImg.toString());
-        // print("numplot :" + numPlot.toString() + " numupload :" + numUploaded.toString());
-        //print("Plot ID : " + ListTrial[i].onSitePlots[j].pltId.toString() + " isUpload : " + ListTrial[i].onSitePlots[j].isUpload.toString());
-        
-        nPlot++;
+        percentPath = numImg.toDouble() / numPlot.toDouble();
+
+        percentUpload = numUploaded.toDouble() / numPlot.toDouble();
+
+        listPercent.add(percentPath);
+        listPercent2.add(percentUpload);
+
+        // print("percent Trial " + (i+1).toString() + " : " + percentPath.toString() + "%");
       }
-      percentPath = numImg.toDouble()/numPlot.toDouble();
 
-      percentUpload = numUploaded.toDouble()/numPlot.toDouble();
+      // print(listPercent);
+      // print(listPercent2);
 
+      // print(nPlot);
+      // print(imgAllPlot);
+      // print(uploadAllPlot);
 
-      listPercent.add(percentPath);
-      listPercent2.add(percentUpload);
+      allPercentI = imgAllPlot.toDouble() / nPlot.toDouble();
+      // print("All Image Percent : " + allPercentI.toString());
 
-      // print("percent Trial " + (i+1).toString() + " : " + percentPath.toString() + "%");
-    }
-
-  print(listPercent);
-  print(listPercent2);
-
-  print(nPlot);
-  print(imgAllPlot);
-  print(uploadAllPlot);
-  
-  allPercentI = imgAllPlot.toDouble()/nPlot.toDouble();
-  print("All Image Percent : " + allPercentI.toString());
-
-  allPercentU = uploadAllPlot.toDouble()/nPlot.toDouble();
-  print("All Upload Percent : " + allPercentU.toString());
-
-    
-  });
-
-
+      allPercentU = uploadAllPlot.toDouble() / nPlot.toDouble();
+      // print("All Upload Percent : " + allPercentU.toString());
+    });
   }
 
-  loadAllTrials(List<OnSiteTrial> ost, List<double> listP1,List<double> listP2) {
+  loadAllTrials(
+      List<OnSiteTrial> ost, List<double> listP1, List<double> listP2) {
     //print("load All");
     //print(ost.length);
 
-
-    
     // int i = 0;
     setState(() {
-      int i=0;
+      int i = 0;
       makeExperiments.clear();
 
-
       ost.forEach((e) {
-
         makeExperiments.addAll([
           makeExperiment(
               index: i,
@@ -519,9 +500,8 @@ Future<bool> _onWillPop() async {
               inprogressPercent: listP1[i],
               finishPercent: listP2[i],
               // percentText: 'inprogress: 90 % finished: 50 %')
-              percentText: "have photo: " + (listP1[i]*100).toString() + "%",
-              percentText2: "Uploaded: " + (listP2[i]*100).toString() + "%"
-              )
+              percentText: "have photo: " + (listP1[i] * 100).toString() + "%",
+              percentText2: "Uploaded: " + (listP2[i] * 100).toString() + "%")
         ]);
         i++;
         // i++;
@@ -569,10 +549,48 @@ Future<bool> _onWillPop() async {
         _UserBox?.get(userNameNow).save();
       }
     }
+    await compareUnmatchPlotAndUpdate();
+  }
+
+  compareUnmatchPlotAndUpdate() async {
+    List<OnSitePlot> ospUnmatch = _UserBox?.get(userNameNow).unMatchPlots;
+    List<OnSiteTrial> ostPhone = _UserBox?.get(userNameNow).onSiteTrials;
+    print("---------update unmatchplot---------");
+    // print(" unmatch : " +
+    //     ospUnmatch.length.toString() +
+    //     "trial :" +
+    //     ostPhone.length.toString());
+    for (int i = 0; i < ospUnmatch.length; i++) {
+      for (int j = 0; j < ostPhone.length; j++) {
+        for (int k = 0; k < ostPhone[j].onSitePlots.length; k++) {
+          // print(ostPhone[j].onSitePlots.length.toString() + " -=-");
+          print(ospUnmatch[i].barcode +
+              " || " +
+              ostPhone[j].onSitePlots[k].barcode +
+              "    " +
+              (ospUnmatch[i].barcode == ostPhone[j].onSitePlots[k].barcode)
+                  .toString());
+          if (ospUnmatch[i].barcode == ostPhone[j].onSitePlots[k].barcode) {
+            _UserBox?.get(userNameNow)
+                .onSiteTrials[j]
+                .onSitePlots[k]
+                .plotImgPath = ospUnmatch[i].plotImgPath;
+            _UserBox?.get(userNameNow).unMatchPlots.removeAt(i);
+            _UserBox?.get(userNameNow).save();
+            if (i == ospUnmatch.length) {
+              return;
+            }
+            break;
+          }
+        }
+      }
+    }
   }
 
   OnSiteTrial compareAndUpdateTrial(
       OnSiteTrial trialsOnSever, OnSiteTrial trialOnPhone) {
+    //
+    List<OnSitePlot> ospUnmatch = _UserBox?.get(userNameNow).unMatchPlots;
     for (int i = 0; i < trialOnPhone.onSitePlots.length; i++) {
       for (int j = 0; j < trialsOnSever.onSitePlots.length; j++) {
         if (trialOnPhone.onSitePlots[i].pltId ==
