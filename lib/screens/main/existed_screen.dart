@@ -107,7 +107,7 @@ class _ExistedScreen extends State<ExistedScreen> {
                   color: Color(0xFF398AE5),
                   width: 5,
                 ),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: CheckboxListTile(
                 value: experimentItems![index].value,
@@ -181,7 +181,7 @@ class _ExistedScreen extends State<ExistedScreen> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(60, 50, 0, 0),
                           child: Text(
-                            "EXISTED USER",
+                            "SETTING PROFILE",
                             //"Plot ID = " + dataCode,
                             style: TextStyle(
                                 color: Colors.grey[800],
