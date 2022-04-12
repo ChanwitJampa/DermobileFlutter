@@ -24,6 +24,7 @@ const String NEWLOGIN_ROUTE = '16';
 const String NEWFIRSTPAGE_ROUTE = '18';
 const String SETDIGIT_ROUTE = '19';
 const String CONFIRMDIGIT_ROUTE = '20';
+const String SETTING_ROUTE = '21';
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,

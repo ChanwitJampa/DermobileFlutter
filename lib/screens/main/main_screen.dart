@@ -330,10 +330,11 @@ class _MainScreenState extends State<MainScreen> {
                         child: InkWell(
                           child: makeMenu(
                               menuName: "Info",
-                              subMenuName: "SYNDERRARA",
+                              subMenuName: "Profile",
                               imageName: "assets/images/unknown_user.png"),
                           onTap: () {
-                            Navigator.of(context).pushNamed(EXISTED_ROUTE);
+                            //Navigator.of(context).pushNamed(EXISTED_ROUTE);
+                            Navigator.of(context).pushNamed(SETTING_ROUTE);
                             //Navigator.of(context).pushNamed(UNMATCH_PLOT_ROUTE);
                           },
                         ),
